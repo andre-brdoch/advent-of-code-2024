@@ -5,6 +5,9 @@ module.exports = {
   env: {
     node: true,
   },
+  globals: {
+    NodeJS: true,
+  },
   // unignore our custom dot files
   ignorePatterns: ['!.eslintrc.js', '!.prettierrc.js'],
   rules: {
