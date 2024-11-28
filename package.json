@@ -14,7 +14,8 @@
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "npm run prettier --- --check",
     "format:fix": "npm run prettier --- --write",
-    "prettier": "prettier . --ignore-path .gitignore"
+    "prettier": "prettier . --ignore-path .gitignore",
+    "validate": "run-s --continue-on-error --print-name ts:check lint:check format:check"
   },
   "repository": {
     "type": "git",
@@ -29,10 +30,11 @@
   "devDependencies": {
     "@andre-brdoch/eslint-config": "1.0.1",
     "@andre-brdoch/prettier-config": "0.0.1",
+    "@types/node": "22.9.3",
     "@typescript-eslint/eslint-plugin": "8.15.0",
     "@typescript-eslint/parser": "8.15.0",
-    "@types/node": "22.9.3",
     "eslint": "8.57.0",
+    "npm-run-all2": "7.0.1",
     "prettier": "3.3.3",
     "ts-node": "10.9.2",
     "typescript": "5.6.3"
