@@ -1,14 +1,12 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
 import { getSum, parseFile, solvePt1, solvePt2 } from './solution'
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { getTodaysData } from '../utils/read-data'
 
 describe('day-xx', () => {
   describe('utils', () => {
-    it('parses data', () => {
-      const path = join(__dirname, 'data/dev-input.txt')
-      const input = readFileSync(path, 'utf8')
+    it('parses data', async () => {
+      const input = await getTodaysData('dev-input.txt')
       const result = parseFile(input)
       assert.deepEqual(result, [1, 2])
     })
@@ -19,9 +17,8 @@ describe('day-xx', () => {
     })
   })
 
-  describe('example data', () => {
-    const path = join(__dirname, 'data/example-input.txt')
-    const input = readFileSync(path, 'utf8')
+  describe('example data', async () => {
+    const input = await getTodaysData('example-input.txt')
 
     it('solves pt 1', () => {
       const result = solvePt1(input)
@@ -34,9 +31,8 @@ describe('day-xx', () => {
     })
   })
 
-  describe('real data', () => {
-    const path = join(__dirname, 'data/real-input.txt')
-    const input = readFileSync(path, 'utf8')
+  describe('real data', async () => {
+    const input = await getTodaysData('real-input.txt')
 
     const result1 = solvePt1(input)
     console.log(`=== Result pt. 1: ${result1} ===`)
