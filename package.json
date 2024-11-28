@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=21.0.0"
   },
   "scripts": {
-    "test": "node --test --require ts-node/register src/**/test.ts",
-    "test:watch": "node --watch --test --require ts-node/register src/**/test.ts",
+    "test": "node --test --require ts-node/register ./src/**/test.ts",
+    "test:watch": "node --watch --test --require ts-node/register ./src/**/test.ts",
     "lint:check": "eslint . --ext .js,.ts,.cjs,.mjs --ignore-path .gitignore",
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "npm run prettier --- --check",
