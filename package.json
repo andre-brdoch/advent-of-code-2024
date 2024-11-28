@@ -27,15 +27,13 @@
   "homepage": "https://github.com/andre-brdoch/advent-of-code-2024#readme",
   "devDependencies": {
     "@andre-brdoch/eslint-config": "1.0.1",
-    "@andre-brdoch/prettier-config": "^0.0.1",
+    "@andre-brdoch/prettier-config": "0.0.1",
     "@typescript-eslint/eslint-plugin": "8.15.0",
     "@typescript-eslint/parser": "8.15.0",
+    "@types/node": "22.9.3",
     "eslint": "8.57.0",
-    "prettier": "^3.3.3",
-    "ts-node": "^10.9.2",
+    "prettier": "3.3.3",
+    "ts-node": "10.9.2",
     "typescript": "5.6.3"
-  },
-  "dependencies": {
-    "@types/node": "^22.9.3"
   }
 }
