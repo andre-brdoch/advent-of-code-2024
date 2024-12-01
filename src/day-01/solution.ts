@@ -1,3 +1,5 @@
+import { getSum } from '../utils/array'
+
 type Columns = [number[], number[]]
 type Pairs = [number, number][]
 
@@ -5,7 +7,7 @@ export function solvePt1(input: string): number {
   const columns = parseFile(input)
   const pairs = pairColumns(columns)
   const distances = getDistances(pairs)
-  return sum(distances)
+  return getSum(distances)
 }
 
 export function solvePt2(input: string): number {
@@ -24,10 +26,6 @@ export function getSimilarityScore(columns: Columns): number {
 
 export function getTimesIncluded(numbers: number[], targetNumber: number): number {
   return numbers.filter((n) => n === targetNumber).length
-}
-
-export function sum(numbers: number[]): number {
-  return numbers.reduce((result, current) => result + current, 0)
 }
 
 export function getDistances(pairs: Pairs): number[] {
