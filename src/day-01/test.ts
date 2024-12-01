@@ -19,15 +19,13 @@ describe('day-01', async () => {
   ])
 
   describe('helpers', () => {
-    it('parseFile()', async () => {
-      const input = await getTodaysData('example-input.txt')
-      console.log(input)
-
-      const result = parseFile(input)
-      assert.deepEqual(result, [
+    it('parseFile()', () => {
+      const result = parseFile(inputExample)
+      const expected = [
         [3, 4, 2, 1, 3, 3],
         [4, 3, 5, 3, 9, 3],
-      ])
+      ]
+      assert.deepEqual(result, expected)
     })
 
     it('pairColumns()', () => {
@@ -35,11 +33,12 @@ describe('day-01', async () => {
         [1, 2, 7],
         [4, 1, 3],
       ])
-      assert.deepEqual(result, [
+      const expected = [
         [1, 1],
         [2, 3],
         [7, 4],
-      ])
+      ]
+      assert.deepEqual(result, expected)
     })
 
     it('getDistances()', () => {
@@ -48,17 +47,20 @@ describe('day-01', async () => {
         [2, 3],
         [7, 4],
       ])
-      assert.deepEqual(result, [0, 1, 3])
+      const expected = [0, 1, 3]
+      assert.deepEqual(result, expected)
     })
 
     it('sum()', () => {
       const result = sum([2, 7, 4])
-      assert.strictEqual(result, 13)
+      const expected = 13
+      assert.strictEqual(result, expected)
     })
 
     it('getTimesIncluded()', () => {
       const result = getTimesIncluded([3, 4, 2, 1, 3, 3], 3)
-      assert.strictEqual(result, 3)
+      const expected = 3
+      assert.strictEqual(result, expected)
     })
 
     it('getSimilarityScore()', () => {
@@ -66,33 +68,38 @@ describe('day-01', async () => {
         [3, 4, 2, 1, 3, 3],
         [4, 3, 5, 3, 9, 3],
       ])
-      assert.strictEqual(result, 31)
+      const expected = 31
+      assert.strictEqual(result, expected)
     })
   })
 
   describe('part 1', () => {
     it('example data', () => {
       const result = solvePt1(inputExample)
-      assert.strictEqual(result, 11)
+      const expected = 11
+      assert.strictEqual(result, expected)
     })
 
     it('real data', () => {
       const result = solvePt1(inputReal)
       console.log(`=== Result pt. 1: ${result} ===`)
-      assert.strictEqual(result, 2756096)
+      const expected = 2756096
+      assert.strictEqual(result, expected)
     })
   })
 
   describe('part 2', () => {
     it('example data', () => {
       const result = solvePt2(inputExample)
-      assert.strictEqual(result, 31)
+      const expected = 31
+      assert.strictEqual(result, expected)
     })
 
     it('real data', () => {
       const result = solvePt2(inputReal)
       console.log(`=== Result pt. 2: ${result} ===`)
-      assert.strictEqual(result, 23117829)
+      const expected = 23117829
+      assert.strictEqual(result, expected)
     })
   })
 })
