@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getDistances, pairColumns, parseFile, solvePt1, solvePt2 } from './solution'
+import { getDistances, pairColumns, parseFile, solvePt1, solvePt2, sum } from './solution'
 import { getTodaysData } from '../utils/read-data'
 
 describe('day-xx', () => {
@@ -43,36 +43,35 @@ describe('day-xx', () => {
       })
     })
 
-    // it('getDistances()', () => {
-    //   const result = getDistances([
-    //     [1, 2, 7],
-    //     [4, 1, 3],
-    //   ])
-    //   assert.strictEqual(result, [0, 1, 3])
-    // })
+    describe('sum()', () => {
+      it('calculates sum', () => {
+        const result = sum([2, 7, 4])
+        assert.strictEqual(result, 13)
+      })
+    })
   })
 
-  // describe('example data', async () => {
-  //   const input = await getTodaysData('example-input.txt')
+  describe('example data', async () => {
+    const input = await getTodaysData('example-input.txt')
 
-  //   it('solves pt 1', () => {
-  //     const result = solvePt1(input)
-  //     assert.strictEqual(result, 6)
-  //   })
+    it('solves pt 1', () => {
+      const result = solvePt1(input)
+      assert.strictEqual(result, 11)
+    })
 
-  //   it('solves pt 2', () => {
-  //     const result = solvePt2(input)
-  //     assert.strictEqual(result, 12)
-  //   })
-  // })
+    //   it('solves pt 2', () => {
+    //     const result = solvePt2(input)
+    //     assert.strictEqual(result, 12)
+    //   })
+  })
 
-  // describe('real data', async () => {
-  //   const input = await getTodaysData('real-input.txt')
+  describe('real data', async () => {
+    const input = await getTodaysData('real-input.txt')
 
-  //   const result1 = solvePt1(input)
-  //   console.log(`=== Result pt. 1: ${result1} ===`)
+    const result1 = solvePt1(input)
+    console.log(`=== Result pt. 1: ${result1} ===`)
 
-  //   const result2 = solvePt2(input)
-  //   console.log(`=== Result pt. 2: ${result2} ===`)
-  // })
+    // const result2 = solvePt2(input)
+    // console.log(`=== Result pt. 2: ${result2} ===`)
+  })
 })

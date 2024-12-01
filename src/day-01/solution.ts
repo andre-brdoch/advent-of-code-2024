@@ -3,11 +3,18 @@ type Pairs = [number, number][]
 
 export function solvePt1(input: string): any {
   const parsed = parseFile(input)
+  const pairs = pairColumns(parsed)
+  const distances = getDistances(pairs)
+  return sum(distances)
 }
 
 // export function solvePt2(input: string): number {
 //   const parsed = parseFile(input)
 // }
+
+export function sum(numbers: number[]): number {
+  return numbers.reduce((result, current) => result + current, 0)
+}
 
 export function getDistances(pairs: Pairs): number[] {
   return pairs.map((pair) => {
