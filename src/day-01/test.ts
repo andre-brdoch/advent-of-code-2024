@@ -32,6 +32,17 @@ describe('day-xx', () => {
       })
     })
 
+    describe('getDistances()', () => {
+      it('gets distances', () => {
+        const result = getDistances([
+          [1, 1],
+          [2, 3],
+          [7, 4],
+        ])
+        assert.deepEqual(result, [0, 1, 3])
+      })
+    })
+
     // it('getDistances()', () => {
     //   const result = getDistances([
     //     [1, 2, 7],
