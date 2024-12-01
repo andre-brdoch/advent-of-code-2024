@@ -2,6 +2,7 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert'
 import { parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
+import consola from 'consola'
 
 describe('day-xx', async () => {
   const reader = new InputReader(__dirname)
@@ -24,7 +25,7 @@ describe('day-xx', async () => {
 
   //   // it('real data', () => {
   //   //   const result = solvePt1(inputReal)
-  //   //   console.log(`=== Result pt. 1: ${result} ===`)
+  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
   //   //   const expected = undefined
   //   //   assert.strictEqual(result, expected)
   //   // })
@@ -39,7 +40,7 @@ describe('day-xx', async () => {
 
   //   // it('real data', () => {
   //   //   const result = solvePt2(inputReal)
-  //   //   console.log(`=== Result pt. 2: ${result} ===`)
+  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
   //   //   const expected = undefined
   //   //   assert.strictEqual(result, expected)
   //   // })
