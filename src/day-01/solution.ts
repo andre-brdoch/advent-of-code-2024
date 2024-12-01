@@ -1,7 +1,7 @@
 type Columns = [number[], number[]]
 type Pairs = [number, number][]
 
-export function solvePt1(input: string): any {
+export function solvePt1(input: string): number {
   const columns = parseFile(input)
   const pairs = pairColumns(columns)
   const distances = getDistances(pairs)
