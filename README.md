@@ -40,3 +40,30 @@ https://adventofcode.com/2024
 23. TBD
 24. TBD
 25. TBD
+
+## Installation
+
+```bash
+# expected: 21.x.x
+node -v
+# otherwise, install
+nvm install 21
+nvm use 21
+
+# install dependencies
+npm i
+```
+
+## Development
+
+```bash
+# run all days
+npm run aoc
+# run a specific day
+npm run aoc -- --day=1
+# run in watch mode
+npm run aoc -- --watch
+
+# run all validations
+npm run validate
+```
