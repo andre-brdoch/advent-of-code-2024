@@ -17,7 +17,7 @@ async function run() {
 
   const files = await getTestFiles(day)
 
-  runTestRunner({ files, watch: watch })
+  runTestRunner({ files, watch, inspectPort: 4000 })
     .on('test:fail', () => {
       process.exitCode = 1
     })

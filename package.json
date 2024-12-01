@@ -8,6 +8,7 @@
   },
   "scripts": {
     "aoc": "ts-node --transpile-only \"./test/testRunner.ts\"",
+    "aoc:inspect": "node --inspect-brk=4000 -r ts-node/register/transpile-only \"./test/testRunner.ts\"",
     "ts:check": "tsc",
     "lint:check": "eslint . --ext .js,.ts,.cjs,.mjs --ignore-path .gitignore",
     "lint:fix": "npm run lint:check -- --fix",
