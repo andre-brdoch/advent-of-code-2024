@@ -1,13 +1,11 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
 import { parseFile } from './solution'
-import { getTodaysData } from '../utils/read-data'
+import { InputReader } from '../utils/InputReader'
 
 describe('day-xx', async () => {
-  const [
-    inputExample,
-    // inputReal
-  ] = await Promise.all([getTodaysData('example-input.txt'), getTodaysData('real-input.txt')])
+  const reader = new InputReader(__dirname)
+  const { inputExample, inputReal } = await reader.readAllInputFiles()
 
   describe('helpers', () => {
     it('parseFile()', () => {

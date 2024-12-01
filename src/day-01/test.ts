@@ -10,13 +10,11 @@ import {
   solvePt2,
   sum,
 } from './solution'
-import { getTodaysData } from '../utils/read-data'
+import { InputReader } from '../utils/InputReader'
 
 describe('day-01', async () => {
-  const [inputExample, inputReal] = await Promise.all([
-    getTodaysData('example-input.txt'),
-    getTodaysData('real-input.txt'),
-  ])
+  const reader = new InputReader(__dirname)
+  const { inputExample, inputReal } = await reader.readAllInputFiles()
 
   describe('helpers', () => {
     it('parseFile()', () => {
