@@ -1,6 +1,15 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getDistances, pairColumns, parseFile, solvePt1, solvePt2, sum } from './solution'
+import {
+  getDistances,
+  getSimilarityScore,
+  includesNumberNTimes,
+  pairColumns,
+  parseFile,
+  solvePt1,
+  solvePt2,
+  sum,
+} from './solution'
 import { getTodaysData } from '../utils/read-data'
 
 describe('day-xx', () => {
@@ -49,6 +58,23 @@ describe('day-xx', () => {
         assert.strictEqual(result, 13)
       })
     })
+
+    describe('includesNumberNTimes()', () => {
+      it('returns amount of occurences of number 3', () => {
+        const result = includesNumberNTimes([3, 4, 2, 1, 3, 3], 3)
+        assert.strictEqual(result, 3)
+      })
+    })
+
+    describe('getSimilarityScore()', () => {
+      it('calculates similarity score', () => {
+        const result = getSimilarityScore([
+          [3, 4, 2, 1, 3, 3],
+          [4, 3, 5, 3, 9, 3],
+        ])
+        assert.strictEqual(result, 31)
+      })
+    })
   })
 
   describe('example data', async () => {
@@ -59,10 +85,10 @@ describe('day-xx', () => {
       assert.strictEqual(result, 11)
     })
 
-    //   it('solves pt 2', () => {
-    //     const result = solvePt2(input)
-    //     assert.strictEqual(result, 12)
-    //   })
+    it('solves pt 2', () => {
+      const result = solvePt2(input)
+      assert.strictEqual(result, 31)
+    })
   })
 
   describe('real data', async () => {
@@ -71,7 +97,7 @@ describe('day-xx', () => {
     const result1 = solvePt1(input)
     console.log(`=== Result pt. 1: ${result1} ===`)
 
-    // const result2 = solvePt2(input)
-    // console.log(`=== Result pt. 2: ${result2} ===`)
+    const result2 = solvePt2(input)
+    console.log(`=== Result pt. 2: ${result2} ===`)
   })
 })
