@@ -8,8 +8,12 @@ module.exports = {
   globals: {
     NodeJS: true,
   },
-  // unignore our custom dot files
-  ignorePatterns: ['!.eslintrc.js', '!.prettierrc.js'],
+  ignorePatterns: [
+    'day-xx',
+    // unignore dot files
+    '!.eslintrc.js',
+    '!.prettierrc.js',
+  ],
   rules: {
     '@typescript-eslint/no-explicit-any': [2],
     '@typescript-eslint/no-unused-vars': [2],
