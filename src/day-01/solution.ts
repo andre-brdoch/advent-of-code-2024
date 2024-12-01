@@ -16,13 +16,13 @@ export function solvePt2(input: string): number {
 export function getSimilarityScore(columns: Columns): number {
   const [colLeft, colRight] = columns
   return colLeft.reduce((result, ln) => {
-    const hits = includesNumberNTimes(colRight, ln)
+    const hits = getTimesIncluded(colRight, ln)
     const increase = hits * ln
     return result + increase
   }, 0)
 }
 
-export function includesNumberNTimes(numbers: number[], targetNumber: number): number {
+export function getTimesIncluded(numbers: number[], targetNumber: number): number {
   return numbers.filter((n) => n === targetNumber).length
 }
 
