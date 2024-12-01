@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import { parse } from 'node:path'
 import { join } from 'path'
 
-const DATA_DIRNAME = 'data'
+const DATA_DIRNAME = 'input'
 
 export class InputReader {
   private dataDirPath: string
