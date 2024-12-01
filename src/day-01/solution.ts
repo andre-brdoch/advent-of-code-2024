@@ -43,7 +43,8 @@ export function pairColumns(columns: Columns): Pairs {
 }
 
 export function sortColumns(columns: Columns): Columns {
-  return columns.map((c) => c.sort())
+  const [colLeft, colRight] = columns
+  return [colLeft.sort(), colRight.sort()]
 }
 
 export function parseFile(file: string): Columns {
