@@ -11,6 +11,7 @@ import {
   sum,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
+import consola from 'consola'
 
 describe('day-01', async () => {
   const reader = new InputReader(__dirname)
@@ -80,7 +81,7 @@ describe('day-01', async () => {
 
     it('real data', () => {
       const result = solvePt1(inputReal)
-      console.log(`=== Result pt. 1: ${result} ===`)
+      consola.success(`=== Result pt. 1: ${result} ===\n`)
       const expected = 2756096
       assert.strictEqual(result, expected)
     })
@@ -95,7 +96,7 @@ describe('day-01', async () => {
 
     it('real data', () => {
       const result = solvePt2(inputReal)
-      console.log(`=== Result pt. 2: ${result} ===`)
+      consola.success(`=== Result pt. 2: ${result} ===\n`)
       const expected = 23117829
       assert.strictEqual(result, expected)
     })
