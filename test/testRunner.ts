@@ -7,16 +7,17 @@ type Day = number | 'all'
 
 interface CliArgs {
   day: Day
+  watch: boolean
 }
 
 run()
 
 async function run() {
-  const args = parseCliArgs()
+  const { day, watch } = parseCliArgs()
 
-  const files = await getTestFiles(args.day)
+  const files = await getTestFiles(day)
 
-  runTestRunner({ files })
+  runTestRunner({ files, watch: watch })
     .on('test:fail', () => {
       process.exitCode = 1
     })
@@ -40,19 +41,32 @@ function parseCliArgs(): CliArgs {
   const args = process.argv
   const startVal: CliArgs = {
     day: 'all',
+    watch: false,
   }
   // --[NAME]=[VALUE]
-  const argRegex = /^--(\w+)=(.+)$/
+  const argRegex = /^--(\w+)(=(.+))?$/
   const result = args
     .map((str) => str.match(argRegex))
     .filter((match) => match != null)
-    .reduce((result, [, name, val]) => {
+    .reduce((result, match) => {
+      const [, name, , val] = match
       if (name === 'day') {
         return { ...result, day: parseCliDay(val) }
+      }
+      if (name === 'watch') {
+        return { ...result, [name]: parseCliBool(val) }
       }
       return { ...result }
     }, startVal)
   return result
+}
+
+function parseCliBool(x: string): boolean {
+  return (
+    x === 'true' ||
+    // flag was passed without value
+    x === undefined
+  )
 }
 
 function parseCliDay(dayString: string): Day {
