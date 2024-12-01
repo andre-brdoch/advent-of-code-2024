@@ -8,7 +8,6 @@ import {
   parseFile,
   solvePt1,
   solvePt2,
-  sum,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
@@ -48,12 +47,6 @@ describe('day-01', async () => {
       ])
       const expected = [0, 1, 3]
       assert.deepEqual(result, expected)
-    })
-
-    it('sum()', () => {
-      const result = sum([2, 7, 4])
-      const expected = 13
-      assert.strictEqual(result, expected)
     })
 
     it('getTimesIncluded()', () => {
