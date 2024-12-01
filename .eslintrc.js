@@ -11,6 +11,7 @@ module.exports = {
   // unignore our custom dot files
   ignorePatterns: ['!.eslintrc.js', '!.prettierrc.js'],
   rules: {
+    '@typescript-eslint/no-explicit-any': [2],
     '@typescript-eslint/no-unused-vars': [2],
     'no-console': [0],
   },
