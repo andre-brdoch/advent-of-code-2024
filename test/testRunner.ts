@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { run as runTestRunner } from 'node:test'
-import { tap } from 'node:test/reporters'
+import { spec } from 'node:test/reporters'
 
 type Day = number | 'all'
 
@@ -21,7 +21,7 @@ async function run() {
     .on('test:fail', () => {
       process.exitCode = 1
     })
-    .compose(tap)
+    .compose(spec)
     .pipe(process.stdout)
 }
 
