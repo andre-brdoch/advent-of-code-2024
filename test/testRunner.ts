@@ -10,6 +10,8 @@ interface CliArgs {
   watch: boolean
 }
 
+process.env.NODE_OPTIONS = '--test-only'
+
 run()
 
 async function run() {
@@ -17,7 +19,11 @@ async function run() {
 
   const files = await getTestFiles(day)
 
-  runTestRunner({ files, watch: watch })
+  runTestRunner({
+    files,
+    watch, //isolation: 'none',
+    // only: true,
+  })
     .on('test:fail', () => {
       process.exitCode = 1
     })

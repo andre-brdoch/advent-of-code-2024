@@ -16,8 +16,8 @@ describe('day-02', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
-  describe('helpers', () => {
-    it('parseFile()', () => {
+  describe('helpers', { only: true }, () => {
+    it('parseFile()', { only: true }, () => {
       const input = '1 2 3 4 5\n6 7 8 9 8\n\n'
       const result = parseFile(input)
       const expected = [
