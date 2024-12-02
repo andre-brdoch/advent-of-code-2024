@@ -28,20 +28,24 @@ describe('day-02', async () => {
     })
 
     it('isSafeDistance()', () => {
-      // assert.strictEqual(isSafeDistance(0, 1), true)
-      // assert.strictEqual(isSafeDistance(3, 0), true)
-      // assert.strictEqual(isSafeDistance(0, 3), true)
-      // assert.strictEqual(isSafeDistance(8, 11), true)
-      // assert.strictEqual(isSafeDistance(11, 8), true)
-      // assert.strictEqual(isSafeDistance(1, 1), false)
-      // assert.strictEqual(isSafeDistance(1, 5), false)
-      // assert.strictEqual(isSafeDistance(5, 1), false)
+      assert.strictEqual(isSafeDistance(0, 1), true)
+      assert.strictEqual(isSafeDistance(3, 0), true)
+      assert.strictEqual(isSafeDistance(0, 3), true)
+      assert.strictEqual(isSafeDistance(8, 11), true)
+      assert.strictEqual(isSafeDistance(11, 8), true)
+      assert.strictEqual(isSafeDistance(1, 1), false)
+      assert.strictEqual(isSafeDistance(1, 5), false)
+      assert.strictEqual(isSafeDistance(5, 1), false)
     })
 
-    // it('reportIsSafe()', () => {
-    //   assert.strictEqual(reportIsSafe([1, 2, 3], 0), true)
-    //   assert.strictEqual(reportIsSafe([1, 2, 1], 0), false)
-    // })
+    it('reportIsSafe()', () => {
+      assert.strictEqual(reportIsSafe([7, 6, 4, 2, 1]), true)
+      assert.strictEqual(reportIsSafe([1, 2, 7, 8, 9]), false)
+      assert.strictEqual(reportIsSafe([9, 7, 6, 2, 1]), false)
+      assert.strictEqual(reportIsSafe([1, 3, 2, 4, 5]), false)
+      assert.strictEqual(reportIsSafe([8, 6, 4, 4, 1]), false)
+      assert.strictEqual(reportIsSafe([1, 3, 6, 7, 9]), true)
+    })
     it('possibleReportsWhenRemovingOne()', () => {
       const result = possibleReportsWhenRemovingOne([1, 2, 3, 4])
       const expected = [
@@ -63,17 +67,17 @@ describe('day-02', async () => {
   })
 
   describe('part 1', () => {
-    // it('example data', () => {
-    //   const result = solvePt1(inputExample)
-    //   const expected = 2
-    //   assert.strictEqual(result, expected)
-    // })
-    // it('real data', () => {
-    //   const result = solvePt1(inputReal)
-    //   consola.success(`=== Result pt. 1: ${result} ===`)
-    //   const expected = 549
-    //   assert.strictEqual(result, expected)
-    // })
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 2
+      assert.strictEqual(result, expected)
+    })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 549
+      assert.strictEqual(result, expected)
+    })
   })
 
   describe('part 2', () => {
@@ -85,8 +89,8 @@ describe('day-02', async () => {
     it('real data', () => {
       const result = solvePt2(inputReal)
       consola.success(`=== Result pt. 2: ${result} ===`)
-      //   const expected = undefined
-      //   assert.strictEqual(result, expected)
+      const expected = 589
+      assert.strictEqual(result, expected)
     })
   })
 })

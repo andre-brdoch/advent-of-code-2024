@@ -1,37 +1,26 @@
-import consola from 'consola'
-
 type Direction = 1 | -1
 
 export function solvePt1(input: string): number {
   const parsed = parseFile(input)
-  const save = parsed.filter(reportIsSafe)
-  return save.length
+  const saveReports = parsed.filter(reportIsSafe)
+  return saveReports.length
 }
 
 export function solvePt2(input: string): number {
   const parsed = parseFile(input)
-  const save = parsed.filter(reportIsSafeIfRemovingAtMostOne)
-  return save.length
+  const saveReports = parsed.filter(reportIsSafeIfRemovingAtMostOne)
+  return saveReports.length
 }
 
 export function reportIsSafeIfRemovingAtMostOne(report: number[]): boolean {
   const isSafe = reportIsSafe(report)
-  console.log('isSafe', isSafe)
-
   if (isSafe) return true
   const alternateReports = possibleReportsWhenRemovingOne(report)
-  console.log(alternateReports)
-
-  const someAreSafe = alternateReports.some(reportIsSafe)
-
-  if (!someAreSafe) {
-    consola.error('report', report, 'someAreSafe', someAreSafe)
-  }
-  return someAreSafe
+  return alternateReports.some(reportIsSafe)
 }
 
 export function possibleReportsWhenRemovingOne(report: number[]): number[][] {
-  return report.map((n, i) => {
+  return report.map((_, i) => {
     const copy = report.slice()
     copy.splice(i, 1)
     return copy
@@ -40,24 +29,19 @@ export function possibleReportsWhenRemovingOne(report: number[]): number[][] {
 
 export function reportIsSafe(report: number[]): boolean {
   let direction: Direction | undefined
-  for (let i = 0; i < report.length; i += 1) {
-    if (i === 0) continue
+  for (let i = 1; i < report.length; i += 1) {
     const prev = report[i - 1]
     const current = report[i]
-    if (!isSafeDistance(prev, current)) {
-      // consola.error('unsafe report', report, 'not save distance', prev, current)
-      return false
-    }
     const newDirection = current > prev ? 1 : -1
     if (i === 1) {
       direction = newDirection
     }
-    if (direction && newDirection !== direction) {
-      // consola.error('unsafe report', report, 'wrong dir, before', direction, ', now', newDirection)
+    const validDistance = isSafeDistance(prev, current)
+    const validDirection = newDirection === direction
+    if (!validDistance || !validDirection) {
       return false
     }
   }
-  // consola.success('save report', report)
   return true
 }
 
@@ -65,18 +49,12 @@ export function isSafeDistance(a: number, b: number): boolean {
   const [lower, higher] = [a, b].sort((aa, bb) => aa - bb)
   const diff = higher - lower
   const result = diff >= 1 && diff <= 3
-  // if (!result) console.log(lower, higher, diff)
   return result
 }
 
 export function parseFile(file: string): number[][] {
   return file
     .split('\n')
-    .map((line) =>
-      line
-        .split(/\s/)
-        .map((c) => parseInt(c))
-        .filter((n) => !isNaN(n))
-    )
-    .filter((line) => line.length > 1)
+    .filter((line) => line)
+    .map((line) => line.split(/\s/).map((c) => parseInt(c)))
 }
