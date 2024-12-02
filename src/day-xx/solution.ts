@@ -9,7 +9,10 @@ export function solvePt2(input: string): any {
 }
 
 export function parseFile(file: string): any {
-  return file.split('\n').map((line) => {
-    //
-  })
+  return file
+    .split('\n')
+    .filter((line) => line)
+    .map((line) => {
+      //
+    })
 }

@@ -16,7 +16,7 @@ https://adventofcode.com/2024
 ## Progress
 
 1. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-01) ⭐⭐
-2. TBD
+2. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-02) ⭐⭐
 3. TBD
 4. TBD
 5. TBD
