@@ -3,9 +3,12 @@ import { join } from 'node:path'
 import { run as runTestRunner } from 'node:test'
 import { spec } from 'node:test/reporters'
 
-console.log('HELLO FROM RUNNER ===========')
+type Day = number | 'all'
 
-process.env.NODE_OPTIONS = '--loader ts-node/esm'
+interface CliArgs {
+  day: Day
+  watch: boolean
+}
 
 run()
 
@@ -13,9 +16,8 @@ async function run() {
   const { day, watch } = parseCliArgs()
 
   const files = await getTestFiles(day)
-  console.log(files)
 
-  runTestRunner({ files, watch, isolation: 'none' })
+  runTestRunner({ files, watch: watch })
     .on('test:fail', () => {
       process.exitCode = 1
     })
@@ -23,7 +25,7 @@ async function run() {
     .pipe(process.stdout)
 }
 
-async function getTestFiles(day) {
+async function getTestFiles(day: Day): Promise<string[]> {
   if (typeof day === 'number') {
     const dayPadded = String(day).padStart(2, '0')
     return [join(process.cwd(), `src/day-${dayPadded}/test.ts`)]
@@ -35,9 +37,9 @@ async function getTestFiles(day) {
   return targetDirs.map((targetDir) => join(srcDir, targetDir, 'test.ts'))
 }
 
-function parseCliArgs() {
+function parseCliArgs(): CliArgs {
   const args = process.argv
-  const startVal = {
+  const startVal: CliArgs = {
     day: 'all',
     watch: false,
   }
@@ -59,15 +61,15 @@ function parseCliArgs() {
   return result
 }
 
-function parseCliBool(val) {
+function parseCliBool(x: string): boolean {
   return (
-    val === 'true' ||
+    x === 'true' ||
     // flag was passed without value
-    val === undefined
+    x === undefined
   )
 }
 
-function parseCliDay(dayString) {
+function parseCliDay(dayString: string): Day {
   if (dayString === 'all') return dayString
   const day = parseInt(dayString)
   if (isNaN(day) || day < 1 || day > 25) {

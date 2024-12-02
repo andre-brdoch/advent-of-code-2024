@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=23.0.0"
+    "node": ">=21.0.0"
   },
   "scripts": {
-    "aoc": "node \"./test/testRunner.mjs\"",
+    "aoc": "ts-node --transpile-only \"./test/testRunner.ts\"",
     "ts:check": "tsc",
     "lint:check": "eslint . --ext .js,.ts,.cjs,.mjs --ignore-path .gitignore",
     "lint:fix": "npm run lint:check -- --fix",
