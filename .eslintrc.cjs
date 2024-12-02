@@ -11,8 +11,8 @@ module.exports = {
   ignorePatterns: [
     'day-xx',
     // unignore dot files
-    '!.eslintrc.js',
-    '!.prettierrc.js',
+    '!.eslintrc.cjs',
+    '!.prettierrc.cjs',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': [2],
