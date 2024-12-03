@@ -43,11 +43,25 @@ https://adventofcode.com/2024
 
 ## Learnings
 
-- Read the challenges carefully! Solving the wrong problem is a big waste of time
-- The challenges give us free tests cases - use those exact ones in unit tests
-- `[11, 2].sort()` does NOT yield `[2, 11]` - They get sorted by their first digit. Need to do `[11, 2].sort((a, b) => a - b)`
-- Being able to isolate/skip test cases is important when debugging (yes, looking at you, Node test runner! Why is this such a pain with you?)
-- Make sure the test data does not have an empty extra line at the end, or consider it when parsing it. When testing the parsing, use if possible the real input files and not inline strings, as they might be missing small details like that additional empty extra line.
+### Read the challenges carefully
+
+Solving the wrong problem is a big waste of time!
+
+### The challenges give us free tests cases
+
+Use those exact ones in unit tests
+
+### Sorting number in JS
+
+`[11, 2].sort()` does NOT yield `[2, 11]` - They get sorted by their first digit. Need to do `[11, 2].sort((a, b) => a - b)`
+
+### Being able to isolate/skip test cases is important when debugging
+
+Yes, looking at you, Node test runner! Why is this such a pain with you?
+
+### Ensure clean input data
+
+Make sure the test data does not have an empty extra line at the end, or consider those when parsing. When testing the parsing, use if possible the real input files and not inline strings, as they might be missing small details like that additional empty extra line.
 
 ## Installation
 
