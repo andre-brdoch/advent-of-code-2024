@@ -63,6 +63,8 @@ npm run aoc
 npm run aoc -- --day=1
 # run in watch mode
 npm run aoc -- --watch
+# run only tests marked as only
+npm run aoc -- --only
 
 # run all validations
 npm run validate

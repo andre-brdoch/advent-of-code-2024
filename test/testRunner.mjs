@@ -3,21 +3,20 @@ import { join } from 'node:path'
 import { run as runTestRunner } from 'node:test'
 import { spec } from 'node:test/reporters'
 
-type Day = number | 'all'
-
-interface CliArgs {
-  day: Day
-  watch: boolean
-}
+process.env.NODE_OPTIONS = '--require ts-node/register/transpile-only'
 
 run()
 
 async function run() {
-  const { day, watch } = parseCliArgs()
+  const { day, watch, only } = parseCliArgs()
 
   const files = await getTestFiles(day)
 
-  runTestRunner({ files, watch: watch })
+  runTestRunner({
+    files,
+    watch,
+    only,
+  })
     .on('test:fail', () => {
       process.exitCode = 1
     })
@@ -25,7 +24,7 @@ async function run() {
     .pipe(process.stdout)
 }
 
-async function getTestFiles(day: Day): Promise<string[]> {
+async function getTestFiles(day) {
   if (typeof day === 'number') {
     const dayPadded = String(day).padStart(2, '0')
     return [join(process.cwd(), `src/day-${dayPadded}/test.ts`)]
@@ -37,9 +36,9 @@ async function getTestFiles(day: Day): Promise<string[]> {
   return targetDirs.map((targetDir) => join(srcDir, targetDir, 'test.ts'))
 }
 
-function parseCliArgs(): CliArgs {
+function parseCliArgs() {
   const args = process.argv
-  const startVal: CliArgs = {
+  const startVal = {
     day: 'all',
     watch: false,
   }
@@ -53,7 +52,7 @@ function parseCliArgs(): CliArgs {
       if (name === 'day') {
         return { ...result, day: parseCliDay(val) }
       }
-      if (name === 'watch') {
+      if (['watch', 'only']) {
         return { ...result, [name]: parseCliBool(val) }
       }
       return { ...result }
@@ -61,15 +60,15 @@ function parseCliArgs(): CliArgs {
   return result
 }
 
-function parseCliBool(x: string): boolean {
+function parseCliBool(val) {
   return (
-    x === 'true' ||
+    val === 'true' ||
     // flag was passed without value
-    x === undefined
+    val === undefined
   )
 }
 
-function parseCliDay(dayString: string): Day {
+function parseCliDay(dayString) {
   if (dayString === 'all') return dayString
   const day = parseInt(dayString)
   if (isNaN(day) || day < 1 || day > 25) {
