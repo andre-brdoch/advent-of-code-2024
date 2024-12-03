@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { mul, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -13,6 +13,10 @@ describe('day-03', async () => {
       const result = parseFile(inputExample)
       const expected = ['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']
       assert.deepEqual(result, expected)
+    })
+    it('mul()', () => {
+      assert.deepEqual(mul('mul(44,46)'), 2024)
+      assert.deepEqual(mul('mul(123,4)'), 492)
     })
   })
 
