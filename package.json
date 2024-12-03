@@ -7,7 +7,7 @@
     "node": ">=21.0.0"
   },
   "scripts": {
-    "aoc": "ts-node --transpile-only \"./test/testRunner.ts\"",
+    "aoc": "node \"./test/testRunner.mjs\"",
     "ts:check": "tsc",
     "lint:check": "eslint . --ext .js,.ts,.cjs,.mjs --ignore-path .gitignore",
     "lint:fix": "npm run lint:check -- --fix",
