@@ -56,5 +56,10 @@ export function parseFile(file: string): number[][] {
   return file
     .split('\n')
     .filter((line) => line)
-    .map((line) => line.split(/\s/).map((c) => parseInt(c)))
+    .map((line) =>
+      line
+        .split(/\s/)
+        .filter((c) => c)
+        .map((c) => parseInt(c))
+    )
 }

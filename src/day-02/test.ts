@@ -16,13 +16,16 @@ describe('day-02', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
-  describe('helpers', { only: true }, () => {
-    it('parseFile()', { only: true }, () => {
-      const input = '1 2 3 4 5\n6 7 8 9 8\n\n'
-      const result = parseFile(input)
+  describe('helpers', () => {
+    it('parseFile()', () => {
+      const result = parseFile(inputExample)
       const expected = [
-        [1, 2, 3, 4, 5],
-        [6, 7, 8, 9, 8],
+        [7, 6, 4, 2, 1],
+        [1, 2, 7, 8, 9],
+        [9, 7, 6, 2, 1],
+        [1, 3, 2, 4, 5],
+        [8, 6, 4, 4, 1],
+        [1, 3, 6, 7, 9],
       ]
       assert.deepEqual(result, expected)
     })
