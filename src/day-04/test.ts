@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile, setHasXmas } from './solution'
+import { parseFile, countXmasInSet } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -19,12 +19,17 @@ describe('day-04', async () => {
       ])
     })
     it('setHasXmas()', () => {
-      assert.strictEqual(setHasXmas(['.', 'X', 'M', 'A', 'S', '.']), true)
-      assert.strictEqual(setHasXmas(['X', 'M', 'A', 'S', '.', '.']), true)
-      assert.strictEqual(setHasXmas(['.', '.', 'X', 'M', 'A', 'S']), true)
-      assert.strictEqual(setHasXmas(['.', 'X', '.', 'A', 'S', '.']), false)
-      assert.strictEqual(setHasXmas(['X', 'M', 'A', '.', '.', '.']), false)
-      assert.strictEqual(setHasXmas(['.', '.', '.', 'M', 'A', 'S']), false)
+      assert.strictEqual(countXmasInSet(['.', 'X', '.', 'A', 'S', '.']), 0)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', '.', '.', '.']), 0)
+      assert.strictEqual(countXmasInSet(['.', '.', '.', 'M', 'A', 'S']), 0)
+      assert.strictEqual(countXmasInSet(['.', 'X', 'M', 'A', 'S', '.']), 1)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'S', '.', '.']), 1)
+      assert.strictEqual(countXmasInSet(['.', '.', 'X', 'M', 'A', 'S']), 1)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'S', 'X', 'M', 'A', 'S']), 2)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'S', '.', 'X', 'M', 'A', 'S']), 2)
+      assert.strictEqual(countXmasInSet(['.', 'X', 'M', 'A', 'S', '.', 'X', 'M', 'A', 'S', '.']), 2)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', '.', 'X', 'M', 'A', 'S']), 1)
+      assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'X', 'M', 'A', 'S']), 1)
     })
   })
 
