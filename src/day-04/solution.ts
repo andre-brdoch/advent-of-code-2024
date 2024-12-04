@@ -21,10 +21,11 @@ export function solvePt2(input: string): number {
 
 export function countAllCrossMas(table: string[][]): number {
   const centerPoints = findAllCenterPoints(table)
-  return getSum(centerPoints.map((point) => amountMasAroundPoint(table, point)))
+  const hits = centerPoints.filter((point) => hasCrossMasAroundPoint(table, point))
+  return hits.length
 }
 
-export function amountMasAroundPoint(table: string[][], { x, y }: Coordinate): number {
+export function hasCrossMasAroundPoint(table: string[][], { x, y }: Coordinate): boolean {
   const dirs = ['down', 'up'] as const
   const pointsToCheck = [
     { x: x - 1, y: y - 1, dir: 'down' as const },
@@ -33,17 +34,12 @@ export function amountMasAroundPoint(table: string[][], { x, y }: Coordinate): n
     { x: x + 1, y: y - 1, dir: 'up' as const },
   ]
   const withoutOffBoard = pointsToCheck.filter((point) => isOnTable(table, point.x, point.y))
-  let result = 0
-  dirs.forEach((dir) => {
+  return dirs.every((dir) => {
     const points = withoutOffBoard.filter((point) => point.dir === dir)
-    if (points.length !== 2) return
+    if (points.length !== 2) return false
     const [val1, val2] = points.map((point) => table[point.y][point.x])
-    const isHit = (val1 === 'M' && val2 === 'S') || (val1 === 'S' && val2 === 'M')
-    if (isHit) {
-      result += 1
-    }
+    return (val1 === 'M' && val2 === 'S') || (val1 === 'S' && val2 === 'M')
   })
-  return result
 }
 
 export function findAllCenterPoints(table: string[][]): Coordinate[] {

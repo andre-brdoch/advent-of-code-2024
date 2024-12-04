@@ -10,7 +10,7 @@ import {
   getAllForwardSets,
   solvePt1,
   findAllCenterPoints,
-  amountMasAroundPoint,
+  hasCrossMasAroundPoint,
   solvePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
@@ -128,9 +128,9 @@ describe('day-04', async () => {
         ]
       )
     })
-    it('amountMasAroundPoint()', () => {
+    it('hasCrossMasAroundPoint()', () => {
       assert.strictEqual(
-        amountMasAroundPoint(
+        hasCrossMasAroundPoint(
           [
             ['M', '.', 'M'],
             ['.', 'A', '.'],
@@ -138,7 +138,40 @@ describe('day-04', async () => {
           ],
           { x: 1, y: 1 }
         ),
-        1
+        false
+      )
+      assert.strictEqual(
+        hasCrossMasAroundPoint(
+          [
+            ['M', '.', 'S'],
+            ['.', 'A', '.'],
+            ['M', 'A', 'S'],
+          ],
+          { x: 1, y: 1 }
+        ),
+        true
+      )
+      assert.strictEqual(
+        hasCrossMasAroundPoint(
+          [
+            ['S', '.', 'M'],
+            ['.', 'A', '.'],
+            ['S', 'A', 'M'],
+          ],
+          { x: 1, y: 1 }
+        ),
+        true
+      )
+      assert.strictEqual(
+        hasCrossMasAroundPoint(
+          [
+            ['S', '.', 'S'],
+            ['.', 'A', '.'],
+            ['M', 'A', 'M'],
+          ],
+          { x: 1, y: 1 }
+        ),
+        true
       )
     })
   })
@@ -165,11 +198,11 @@ describe('day-04', async () => {
       assert.strictEqual(result, expected)
     })
 
-    // it('real data', () => {
-    //   const result = solvePt2(inputReal)
-    //   consola.success(`=== Result pt. 2: ${result} ===`)
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
+    it('real data', () => {
+      const result = solvePt2(inputReal)
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = 1824
+      assert.strictEqual(result, expected)
+    })
   })
 })
