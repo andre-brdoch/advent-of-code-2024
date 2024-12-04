@@ -9,13 +9,16 @@ import {
   downDiagonalsToSets,
   getAllForwardSets,
   solvePt1,
+  findAllCenterPoints,
+  amountMasAroundPoint,
+  solvePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
 describe('day-04', async () => {
   const reader = new InputReader(__dirname)
-  const { inputMini, inputExample, inputReal } = await reader.readAllInputFiles()
+  const { inputMini, inputMiniPt2, inputExample, inputReal } = await reader.readAllInputFiles()
 
   describe('helpers', () => {
     it('parseFile()', () => {
@@ -40,78 +43,104 @@ describe('day-04', async () => {
       assert.strictEqual(countXmasInSet(['X', 'M', 'A', '.', 'X', 'M', 'A', 'S']), 1)
       assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'X', 'M', 'A', 'S']), 1)
     })
-  })
-  it('isOnTable()', () => {
-    const table = [
-      ['1', '2', '3'],
-      ['4', '5', '6'],
-    ]
-    assert.strictEqual(isOnTable(table, 0, 0), true)
-    assert.strictEqual(isOnTable(table, 1, 0), true)
-    assert.strictEqual(isOnTable(table, 0, 2), true)
-    assert.strictEqual(isOnTable(table, 2, 0), false)
-    assert.strictEqual(isOnTable(table, 0, 3), false)
-    assert.strictEqual(isOnTable(table, -1, -1), false)
-  })
-  it('columnsToSets()', () => {
-    assert.deepEqual(
-      columnsToSets([
+    it('isOnTable()', () => {
+      const table = [
         ['1', '2', '3'],
         ['4', '5', '6'],
-      ]),
-      [
-        ['1', '4'],
-        ['2', '5'],
-        ['3', '6'],
       ]
-    )
-  })
-  it('upDiagonalsToSets()', () => {
-    assert.deepEqual(
-      upDiagonalsToSets([
-        ['1', '2', '3'],
-        ['4', '5', '6'],
-        ['7', '8', '9'],
-      ]),
-      [['1'], ['4', '2'], ['7', '5', '3'], ['8', '6'], ['9']]
-    )
-  })
-  it('downDiagonalsToSets()', () => {
-    assert.deepEqual(
-      downDiagonalsToSets([
-        ['1', '2', '3'],
-        ['4', '5', '6'],
-        ['7', '8', '9'],
-      ]),
-      [['3'], ['2', '6'], ['1', '5', '9'], ['4', '8'], ['7']]
-    )
-  })
-  it('getAllForwardSets()', () => {
-    assert.deepEqual(
-      getAllForwardSets([
-        ['1', '2', '3'],
-        ['4', '5', '6'],
-        ['7', '8', '9'],
-      ]),
-      [
-        ['1', '2', '3'],
-        ['4', '5', '6'],
-        ['7', '8', '9'],
-        ['1', '4', '7'],
-        ['2', '5', '8'],
-        ['3', '6', '9'],
-        ['1'],
-        ['4', '2'],
-        ['7', '5', '3'],
-        ['8', '6'],
-        ['9'],
-        ['3'],
-        ['2', '6'],
-        ['1', '5', '9'],
-        ['4', '8'],
-        ['7'],
-      ]
-    )
+      assert.strictEqual(isOnTable(table, 0, 0), true)
+      assert.strictEqual(isOnTable(table, 1, 0), true)
+      assert.strictEqual(isOnTable(table, 0, 2), true)
+      assert.strictEqual(isOnTable(table, 2, 0), false)
+      assert.strictEqual(isOnTable(table, 0, 3), false)
+      assert.strictEqual(isOnTable(table, -1, -1), false)
+    })
+    it('columnsToSets()', () => {
+      assert.deepEqual(
+        columnsToSets([
+          ['1', '2', '3'],
+          ['4', '5', '6'],
+        ]),
+        [
+          ['1', '4'],
+          ['2', '5'],
+          ['3', '6'],
+        ]
+      )
+    })
+    it('upDiagonalsToSets()', () => {
+      assert.deepEqual(
+        upDiagonalsToSets([
+          ['1', '2', '3'],
+          ['4', '5', '6'],
+          ['7', '8', '9'],
+        ]),
+        [['1'], ['4', '2'], ['7', '5', '3'], ['8', '6'], ['9']]
+      )
+    })
+    it('downDiagonalsToSets()', () => {
+      assert.deepEqual(
+        downDiagonalsToSets([
+          ['1', '2', '3'],
+          ['4', '5', '6'],
+          ['7', '8', '9'],
+        ]),
+        [['3'], ['2', '6'], ['1', '5', '9'], ['4', '8'], ['7']]
+      )
+    })
+    it('getAllForwardSets()', () => {
+      assert.deepEqual(
+        getAllForwardSets([
+          ['1', '2', '3'],
+          ['4', '5', '6'],
+          ['7', '8', '9'],
+        ]),
+        [
+          ['1', '2', '3'],
+          ['4', '5', '6'],
+          ['7', '8', '9'],
+          ['1', '4', '7'],
+          ['2', '5', '8'],
+          ['3', '6', '9'],
+          ['1'],
+          ['4', '2'],
+          ['7', '5', '3'],
+          ['8', '6'],
+          ['9'],
+          ['3'],
+          ['2', '6'],
+          ['1', '5', '9'],
+          ['4', '8'],
+          ['7'],
+        ]
+      )
+    })
+    it('findAllCenterPoints()', () => {
+      assert.deepEqual(
+        findAllCenterPoints([
+          ['A', '.', 'A'],
+          ['.', 'A', '.'],
+        ]),
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 1 },
+          { x: 2, y: 0 },
+        ]
+      )
+    })
+    it('amountMasAroundPoint()', () => {
+      assert.strictEqual(
+        amountMasAroundPoint(
+          [
+            ['M', '.', 'M'],
+            ['.', 'A', '.'],
+            ['M', 'A', 'S'],
+          ],
+          { x: 1, y: 1 }
+        ),
+        1
+      )
+    })
   })
 
   describe('part 1', () => {
@@ -129,18 +158,18 @@ describe('day-04', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 2', () => {
+    it('example data', () => {
+      const result = solvePt2(inputMiniPt2)
+      const expected = 9
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    // it('real data', () => {
+    //   const result = solvePt2(inputReal)
+    //   consola.success(`=== Result pt. 2: ${result} ===`)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 })

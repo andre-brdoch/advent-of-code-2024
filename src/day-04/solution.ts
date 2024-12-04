@@ -1,6 +1,12 @@
 import { getSum } from '../utils/array'
 
+interface Coordinate {
+  x: number
+  y: number
+}
+
 const XMAS = 'XMAS'
+const CENTER_LETTER = 'A'
 
 export function solvePt1(input: string): number {
   const table = parseFile(input)
@@ -8,8 +14,48 @@ export function solvePt1(input: string): number {
   return countXmasInAllSets(sets)
 }
 
-export function solvePt2(input: string): any {
+export function solvePt2(input: string): number {
   const table = parseFile(input)
+  return countAllCrossMas(table)
+}
+
+export function countAllCrossMas(table: string[][]): number {
+  const centerPoints = findAllCenterPoints(table)
+  return getSum(centerPoints.map((point) => amountMasAroundPoint(table, point)))
+}
+
+export function amountMasAroundPoint(table: string[][], { x, y }: Coordinate): number {
+  const dirs = ['down', 'up'] as const
+  const pointsToCheck = [
+    { x: x - 1, y: y - 1, dir: 'down' as const },
+    { x: x + 1, y: y + 1, dir: 'down' as const },
+    { x: x - 1, y: y + 1, dir: 'up' as const },
+    { x: x + 1, y: y - 1, dir: 'up' as const },
+  ]
+  const withoutOffBoard = pointsToCheck.filter((point) => isOnTable(table, point.x, point.y))
+  let result = 0
+  dirs.forEach((dir) => {
+    const points = withoutOffBoard.filter((point) => point.dir === dir)
+    if (points.length !== 2) return
+    const [val1, val2] = points.map((point) => table[point.y][point.x])
+    const isHit = (val1 === 'M' && val2 === 'S') || (val1 === 'S' && val2 === 'M')
+    if (isHit) {
+      result += 1
+    }
+  })
+  return result
+}
+
+export function findAllCenterPoints(table: string[][]): Coordinate[] {
+  const result: Coordinate[] = []
+  for (let x = 0; x <= table[0].length - 1; x += 1) {
+    for (let y = 0; y <= table.length - 1; y += 1) {
+      if (table[y][x] === CENTER_LETTER) {
+        result.push({ x, y })
+      }
+    }
+  }
+  return result
 }
 
 export function countXmasInAllSets(sets: string[][]): number {
