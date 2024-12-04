@@ -6,6 +6,20 @@ export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
+export function columnsToSets(table: string[][]): string[][] {
+  const result: string[][] = []
+  for (let y = 0; y <= table[0].length - 1; y += 1) {
+    const newRow: string[] = []
+    for (let x = 0; x <= table.length - 1; x += 1) {
+      newRow.push(table[x][y])
+    }
+    result.push(newRow)
+  }
+  return result
+  }
+  return result
+}
+
 export function countXmasInSet(set: string[]): number {
   let total = 0
   const sequence = [null, 'X', 'M', 'A', 'S']

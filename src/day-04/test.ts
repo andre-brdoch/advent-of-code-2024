@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile, countXmasInSet } from './solution'
+import { parseFile, countXmasInSet, columnsToSets } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -31,6 +31,19 @@ describe('day-04', async () => {
       assert.strictEqual(countXmasInSet(['X', 'M', 'A', '.', 'X', 'M', 'A', 'S']), 1)
       assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'X', 'M', 'A', 'S']), 1)
     })
+  })
+  it('columnsToSets()', () => {
+    assert.deepEqual(
+      columnsToSets([
+        ['1', '2', '3'],
+        ['4', '5', '6'],
+      ]),
+      [
+        ['1', '4'],
+        ['2', '5'],
+        ['3', '6'],
+      ]
+    )
   })
 
   // describe('part 1', () => {
