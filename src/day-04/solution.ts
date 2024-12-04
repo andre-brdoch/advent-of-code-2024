@@ -1,9 +1,26 @@
-export function solvePt1(input: string): any {
-  const parsed = parseFile(input)
+import { getSum } from '../utils/array'
+
+const XMAS = 'XMAS'
+
+export function solvePt1(input: string): number {
+  const table = parseFile(input)
+  const sets = getAllSets(table)
+  return countXmasInAllSets(sets)
 }
 
 export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+  const table = parseFile(input)
+}
+
+export function countXmasInAllSets(sets: string[][]): number {
+  return getSum(sets.map(countXmasInSet))
+}
+
+export function getAllSets(table: string[][]): string[][] {
+  const forwardSets = getAllForwardSets(table)
+  const filteredForwardSets = filterSets(forwardSets)
+  const backwards = filteredForwardSets.map((set) => set.slice().reverse())
+  return [...filteredForwardSets, ...backwards]
 }
 
 export function getAllForwardSets(table: string[][]): string[][] {
@@ -12,6 +29,10 @@ export function getAllForwardSets(table: string[][]): string[][] {
   const diagonalUp = upDiagonalsToSets(table)
   const diagonalDown = downDiagonalsToSets(table)
   return [...horizontal, ...vertical, ...diagonalUp, ...diagonalDown]
+}
+
+export function filterSets(sets: string[][]): string[][] {
+  return sets.filter((set) => set.length >= XMAS.length)
 }
 
 export function columnsToSets(table: string[][]): string[][] {
@@ -74,7 +95,6 @@ export function downDiagonalsToSets(table: string[][]): string[][] {
 
   for (; x >= 0; x -= 1) {
     const newRow: string[] = [table[y][x]]
-    console.log('newRow', newRow)
 
     let i = y
     let j = x
@@ -116,7 +136,7 @@ export function isOnTable(table: string[][], x: number, y: number): boolean {
 
 export function countXmasInSet(set: string[]): number {
   let total = 0
-  const sequence = [null, 'X', 'M', 'A', 'S']
+  const sequence = [null, ...XMAS.split('')]
   let progress = 0
   for (let i = 0; i <= set.length - 1; i += 1) {
     if (set[i] === sequence[progress + 1]) {
@@ -138,5 +158,5 @@ export function parseFile(file: string): string[][] {
   return file
     .split('\n')
     .filter((line) => line)
-    .map((line) => line.split(''))
+    .map((line) => line.split('').filter((char) => !char.match(/\r/)))
 }
