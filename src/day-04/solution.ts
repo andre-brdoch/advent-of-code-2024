@@ -16,8 +16,94 @@ export function columnsToSets(table: string[][]): string[][] {
     result.push(newRow)
   }
   return result
+}
+
+export function upDiagonalsToSets(table: string[][]): string[][] {
+  const result: string[][] = []
+  let y = 0
+  let x = 0
+
+  for (; y <= table.length - 1; y += 1) {
+    const newRow: string[] = [table[y][x]]
+    let i = y
+    let j = x
+    while (true) {
+      i -= 1
+      j += 1
+      if (!isOnTable(table, i, j)) {
+        break
+      }
+      newRow.push(table[i][j])
+    }
+    result.push(newRow)
+  }
+
+  y = table.length - 1
+  x = 1
+
+  for (; x <= table[0].length - 1; x += 1) {
+    const newRow: string[] = [table[y][x]]
+
+    let i = y
+    let j = x
+    while (true) {
+      i -= 1
+      j += 1
+      if (!isOnTable(table, i, j)) {
+        break
+      }
+      newRow.push(table[i][j])
+    }
+    result.push(newRow)
   }
   return result
+}
+
+export function downDiagonalsToSets(table: string[][]): string[][] {
+  const result: string[][] = []
+  let y = 0
+  let x = table[0].length - 1
+
+  for (; x >= 0; x -= 1) {
+    const newRow: string[] = [table[y][x]]
+    console.log('newRow', newRow)
+
+    let i = y
+    let j = x
+    while (true) {
+      i += 1
+      j += 1
+      if (!isOnTable(table, i, j)) {
+        break
+      }
+      newRow.push(table[i][j])
+    }
+    result.push(newRow)
+  }
+
+  y = 1
+  x = 0
+
+  for (; y <= table.length - 1; y += 1) {
+    const newRow: string[] = [table[y][x]]
+    let i = y
+    let j = x
+    while (true) {
+      i += 1
+      j += 1
+      if (!isOnTable(table, i, j)) {
+        break
+      }
+      newRow.push(table[i][j])
+    }
+    result.push(newRow)
+  }
+
+  return result
+}
+
+export function isOnTable(table: string[][], x: number, y: number): boolean {
+  return table?.[x]?.[y] != null
 }
 
 export function countXmasInSet(set: string[]): number {

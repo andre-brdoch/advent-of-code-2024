@@ -1,6 +1,13 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile, countXmasInSet, columnsToSets } from './solution'
+import {
+  parseFile,
+  countXmasInSet,
+  columnsToSets,
+  upDiagonalsToSets,
+  isOnTable,
+  downDiagonalsToSets,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -32,6 +39,18 @@ describe('day-04', async () => {
       assert.strictEqual(countXmasInSet(['X', 'M', 'A', 'X', 'M', 'A', 'S']), 1)
     })
   })
+  it('isOnTable()', () => {
+    const table = [
+      ['1', '2', '3'],
+      ['4', '5', '6'],
+    ]
+    assert.strictEqual(isOnTable(table, 0, 0), true)
+    assert.strictEqual(isOnTable(table, 1, 0), true)
+    assert.strictEqual(isOnTable(table, 0, 2), true)
+    assert.strictEqual(isOnTable(table, 2, 0), false)
+    assert.strictEqual(isOnTable(table, 0, 3), false)
+    assert.strictEqual(isOnTable(table, -1, -1), false)
+  })
   it('columnsToSets()', () => {
     assert.deepEqual(
       columnsToSets([
@@ -43,6 +62,26 @@ describe('day-04', async () => {
         ['2', '5'],
         ['3', '6'],
       ]
+    )
+  })
+  it('upDiagonalsToSets()', () => {
+    assert.deepEqual(
+      upDiagonalsToSets([
+        ['1', '2', '3'],
+        ['4', '5', '6'],
+        ['7', '8', '9'],
+      ]),
+      [['1'], ['4', '2'], ['7', '5', '3'], ['8', '6'], ['9']]
+    )
+  })
+  it('downDiagonalsToSets()', () => {
+    assert.deepEqual(
+      downDiagonalsToSets([
+        ['1', '2', '3'],
+        ['4', '5', '6'],
+        ['7', '8', '9'],
+      ]),
+      [['3'], ['2', '6'], ['1', '5', '9'], ['4', '8'], ['7']]
     )
   })
 
