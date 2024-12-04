@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { parseFile, setHasXmas } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -17,6 +17,14 @@ describe('day-04', async () => {
         ['X', 'M', 'A', 'S', '.', 'S'],
         ['.', 'X', '.', '.', '.', '.'],
       ])
+    })
+    it('setHasXmas()', () => {
+      assert.strictEqual(setHasXmas(['.', 'X', 'M', 'A', 'S', '.']), true)
+      assert.strictEqual(setHasXmas(['X', 'M', 'A', 'S', '.', '.']), true)
+      assert.strictEqual(setHasXmas(['.', '.', 'X', 'M', 'A', 'S']), true)
+      assert.strictEqual(setHasXmas(['.', 'X', '.', 'A', 'S', '.']), false)
+      assert.strictEqual(setHasXmas(['X', 'M', 'A', '.', '.', '.']), false)
+      assert.strictEqual(setHasXmas(['.', '.', '.', 'M', 'A', 'S']), false)
     })
   })
 
