@@ -6,6 +6,14 @@ export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
+export function getAllForwardSets(table: string[][]): string[][] {
+  const horizontal = table
+  const vertical = columnsToSets(table)
+  const diagonalUp = upDiagonalsToSets(table)
+  const diagonalDown = downDiagonalsToSets(table)
+  return [...horizontal, ...vertical, ...diagonalUp, ...diagonalDown]
+}
+
 export function columnsToSets(table: string[][]): string[][] {
   const result: string[][] = []
   for (let y = 0; y <= table[0].length - 1; y += 1) {
