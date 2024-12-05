@@ -9,7 +9,6 @@ run()
 
 async function run() {
   const { day, watch, only } = parseCliArgs()
-
   const files = await getTestFiles(day)
 
   runTestRunner({
@@ -37,14 +36,15 @@ async function getTestFiles(day) {
 }
 
 function parseCliArgs() {
-  const args = process.argv
+  const customArgs = process.argv.slice(2)
   const startVal = {
     day: 'all',
     watch: false,
   }
-  // --[NAME]=[VALUE]
-  const argRegex = /^--(\w+)(=(.+))?$/
-  const result = args
+  // [NAME]=[VALUE]
+  // [BOOLEAN_VALUE]
+  const argRegex = /^(\w+)(=(.+))?$/
+  const result = customArgs
     .map((str) => str.match(argRegex))
     .filter((match) => match != null)
     .reduce((result, match) => {

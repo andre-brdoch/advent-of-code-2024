@@ -69,11 +69,11 @@ Related to this, make sure to use LF line endings! Actually had a couple of bugs
 ## Installation
 
 ```bash
-# expected: 21.x.x
+# expected: 22.x.x
 node -v
 # otherwise, install
-nvm install 21
-nvm use 21
+nvm install 22
+nvm use 22
 
 # install dependencies
 npm i
