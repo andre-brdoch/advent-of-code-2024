@@ -13,7 +13,7 @@
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "npm run prettier --- --check",
     "format:fix": "npm run prettier --- --write",
-    "prettier": "prettier . --ignore-path .gitignore",
+    "prettier": "prettier './**/*.{js,ts,mjs,cjs,json,md}' --ignore-path .gitignore",
     "validate": "run-s --continue-on-error --print-name ts:check lint:check format:check"
   },
   "repository": {
