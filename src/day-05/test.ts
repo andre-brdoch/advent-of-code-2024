@@ -2,10 +2,12 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
   getCommonRule,
+  getMiddlePage,
   getRulesDictionary,
   parseFile,
   Rule,
   RulesDictionary,
+  solvePt1,
   updateIsOrderedCorrectly,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
@@ -145,22 +147,27 @@ describe('day-05', async () => {
       assert.strictEqual(updateIsOrderedCorrectly([61, 13, 29], exampleRulesDict), false)
       assert.strictEqual(updateIsOrderedCorrectly([97, 13, 75, 29, 47], exampleRulesDict), false)
     })
+    it('getMiddlePage()', () => {
+      assert.strictEqual(getMiddlePage([3]), 3)
+      assert.strictEqual(getMiddlePage([1, 7, 3]), 7)
+      assert.strictEqual(getMiddlePage([1, 165, 99, 42, 2]), 99)
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 143
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 4569
+      assert.strictEqual(result, expected)
+    })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {

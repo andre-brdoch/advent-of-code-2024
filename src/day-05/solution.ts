@@ -1,12 +1,29 @@
+import { getSum } from '../utils/array'
+
 export type Rule = [number, number]
 export type RulesDictionary = Record<number, Rule[]>
 
-export function solvePt1(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt1(input: string): number {
+  const { rules, updates } = parseFile(input)
+  const rulesDict = getRulesDictionary(rules)
+  const correctUpdates = updates.filter((update) => updateIsOrderedCorrectly(update, rulesDict))
+  console.log('correctUpdates')
+  console.log(correctUpdates)
+
+  const middleNumbers = correctUpdates.map(getMiddlePage)
+  console.log('middleNumbers', middleNumbers)
+
+  const sum = getSum(middleNumbers)
+  return sum
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
+}
+
+export function getMiddlePage(update: number[]): number {
+  const i = (update.length - 1) / 2
+  return update[i]
 }
 
 export function updateIsOrderedCorrectly(update: number[], rulesDict: RulesDictionary): boolean {
@@ -16,7 +33,6 @@ export function updateIsOrderedCorrectly(update: number[], rulesDict: RulesDicti
       const a = update[i]
       const b = update[j]
       const commonRule = getCommonRule(a, b, rulesDict)
-      console.log('a:', a, 'b:', b, 'rule:', commonRule)
       if (commonRule == null) continue
       if (commonRule[0] === b) return false
     }
