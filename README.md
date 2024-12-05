@@ -19,7 +19,7 @@ https://adventofcode.com/2024
 2. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-02) ⭐⭐
 3. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-03) ⭐⭐
 4. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-04) ⭐⭐
-5. TBD
+5. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-05) ⭐⭐
 6. TBD
 7. TBD
 8. TBD
