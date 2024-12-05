@@ -1,2 +1,6 @@
 const config = require('@andre-brdoch/prettier-config')
-module.exports = config
+
+module.exports = {
+  ...config,
+  endOfLine: 'lf',
+}
