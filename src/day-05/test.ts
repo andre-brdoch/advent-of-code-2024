@@ -1,6 +1,13 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getRulesDictionary, parseFile, updateIsOrderedCorrectly } from './solution'
+import {
+  getCommonRule,
+  getRulesDictionary,
+  parseFile,
+  Rule,
+  RulesDictionary,
+  updateIsOrderedCorrectly,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -8,32 +15,92 @@ describe('day-05', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
+  const exampleRules: Rule[] = [
+    [47, 53],
+    [97, 13],
+    [97, 61],
+    [97, 47],
+    [75, 29],
+    [61, 13],
+    [75, 53],
+    [29, 13],
+    [97, 29],
+    [53, 29],
+    [61, 53],
+    [97, 53],
+    [61, 29],
+    [47, 13],
+    [75, 47],
+    [97, 75],
+    [47, 61],
+    [75, 61],
+    [47, 29],
+    [75, 13],
+    [53, 13],
+  ]
+  const exampleRulesDict: RulesDictionary = {
+    '13': [
+      [97, 13],
+      [61, 13],
+      [29, 13],
+      [47, 13],
+      [75, 13],
+      [53, 13],
+    ],
+    '29': [
+      [75, 29],
+      [29, 13],
+      [97, 29],
+      [53, 29],
+      [61, 29],
+      [47, 29],
+    ],
+    '47': [
+      [47, 53],
+      [97, 47],
+      [47, 13],
+      [75, 47],
+      [47, 61],
+      [47, 29],
+    ],
+    '53': [
+      [47, 53],
+      [75, 53],
+      [53, 29],
+      [61, 53],
+      [97, 53],
+      [53, 13],
+    ],
+    '61': [
+      [97, 61],
+      [61, 13],
+      [61, 53],
+      [61, 29],
+      [47, 61],
+      [75, 61],
+    ],
+    '75': [
+      [75, 29],
+      [75, 53],
+      [75, 47],
+      [97, 75],
+      [75, 61],
+      [75, 13],
+    ],
+    '97': [
+      [97, 13],
+      [97, 61],
+      [97, 47],
+      [97, 29],
+      [97, 53],
+      [97, 75],
+    ],
+  }
+
   describe('helpers', () => {
     it('parseFile()', () => {
       const { rules, updates } = parseFile(inputExample)
-      assert.deepEqual(rules, [
-        [47, 53],
-        [97, 13],
-        [97, 61],
-        [97, 47],
-        [75, 29],
-        [61, 13],
-        [75, 53],
-        [29, 13],
-        [97, 29],
-        [53, 29],
-        [61, 53],
-        [97, 53],
-        [61, 29],
-        [47, 13],
-        [75, 47],
-        [97, 75],
-        [47, 61],
-        [75, 61],
-        [47, 29],
-        [75, 13],
-        [53, 13],
-      ])
+      assert.deepEqual(rules, exampleRules)
       assert.deepEqual(updates, [
         [75, 47, 61, 53, 29],
         [97, 61, 53, 29, 13],
@@ -65,10 +132,19 @@ describe('day-05', async () => {
           ],
         }
       )
+      assert.deepEqual(getRulesDictionary(exampleRules), exampleRulesDict)
     })
-    // it('updateIsOrderedCorrectly()', () => {
-    //   assert.strictEqual(updateIsOrderedCorrectly([75, 47, 61, 53, 29]), true)
-    // })
+    it('getCommonRule()', () => {
+      assert.deepEqual(getCommonRule(75, 47, exampleRulesDict), [75, 47])
+    })
+    it('updateIsOrderedCorrectly()', () => {
+      assert.strictEqual(updateIsOrderedCorrectly([75, 47, 61, 53, 29], exampleRulesDict), true)
+      assert.strictEqual(updateIsOrderedCorrectly([97, 61, 53, 29, 13], exampleRulesDict), true)
+      assert.strictEqual(updateIsOrderedCorrectly([75, 29, 13], exampleRulesDict), true)
+      assert.strictEqual(updateIsOrderedCorrectly([75, 97, 47, 61, 53], exampleRulesDict), false)
+      assert.strictEqual(updateIsOrderedCorrectly([61, 13, 29], exampleRulesDict), false)
+      assert.strictEqual(updateIsOrderedCorrectly([97, 13, 75, 29, 47], exampleRulesDict), false)
+    })
   })
 
   // describe('part 1', () => {
