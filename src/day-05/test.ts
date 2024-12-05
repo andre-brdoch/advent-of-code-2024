@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { getRulesDictionary, parseFile, updateIsOrderedCorrectly } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -43,6 +43,32 @@ describe('day-05', async () => {
         [97, 13, 75, 29, 47],
       ])
     })
+    it('getRulesDictionary()', () => {
+      assert.deepEqual(
+        getRulesDictionary([
+          [1, 2],
+          [1, 3],
+          [3, 2],
+        ]),
+        {
+          1: [
+            [1, 2],
+            [1, 3],
+          ],
+          2: [
+            [1, 2],
+            [3, 2],
+          ],
+          3: [
+            [1, 3],
+            [3, 2],
+          ],
+        }
+      )
+    })
+    // it('updateIsOrderedCorrectly()', () => {
+    //   assert.strictEqual(updateIsOrderedCorrectly([75, 47, 61, 53, 29]), true)
+    // })
   })
 
   // describe('part 1', () => {
