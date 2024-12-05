@@ -64,6 +64,8 @@ Yes, looking at you, Node test runner! Why is this such a pain with you?
 
 Make sure the test data does not have an empty extra line at the end, or consider those when parsing. When testing the parsing, use if possible the real input files and not inline strings, as they might be missing small details like that additional empty extra line.
 
+Related to this, make sure to use LF line endings! Actually had a couple of bugs in some of the parsing functions due to CRLF being used instead of LF. Unfortunately, prettier can not parse `.txt` files, so we also added an `.editorconfig` just for line endings.
+
 ## Installation
 
 ```bash

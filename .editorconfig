@@ -1,0 +1,6 @@
+# since prettier can not parse .txt files, we are adding an .editorconfig too
+# to ensure new files use lf line endings. The CRLF line endings actually 
+# caused bugs in some of the parsing functions! 😠
+root = true
+[*]
+end_of_line = lf
