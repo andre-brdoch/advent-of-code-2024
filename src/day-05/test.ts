@@ -1,4 +1,4 @@
-import { describe, it } from 'node:test'
+import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
   getCommonRule,
@@ -8,7 +8,9 @@ import {
   Rule,
   RulesDictionary,
   solvePt1,
+  sortUpdate,
   updateIsOrderedCorrectly,
+  solvePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
@@ -17,87 +19,92 @@ describe('day-05', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
-  const exampleRules: Rule[] = [
-    [47, 53],
-    [97, 13],
-    [97, 61],
-    [97, 47],
-    [75, 29],
-    [61, 13],
-    [75, 53],
-    [29, 13],
-    [97, 29],
-    [53, 29],
-    [61, 53],
-    [97, 53],
-    [61, 29],
-    [47, 13],
-    [75, 47],
-    [97, 75],
-    [47, 61],
-    [75, 61],
-    [47, 29],
-    [75, 13],
-    [53, 13],
-  ]
-  const exampleRulesDict: RulesDictionary = {
-    '13': [
-      [97, 13],
-      [61, 13],
-      [29, 13],
-      [47, 13],
-      [75, 13],
-      [53, 13],
-    ],
-    '29': [
-      [75, 29],
-      [29, 13],
-      [97, 29],
-      [53, 29],
-      [61, 29],
-      [47, 29],
-    ],
-    '47': [
+  let exampleRules: Rule[]
+  let exampleRulesDict: RulesDictionary
+
+  beforeEach(() => {
+    exampleRules = [
       [47, 53],
-      [97, 47],
-      [47, 13],
-      [75, 47],
-      [47, 61],
-      [47, 29],
-    ],
-    '53': [
-      [47, 53],
-      [75, 53],
-      [53, 29],
-      [61, 53],
-      [97, 53],
-      [53, 13],
-    ],
-    '61': [
-      [97, 61],
-      [61, 13],
-      [61, 53],
-      [61, 29],
-      [47, 61],
-      [75, 61],
-    ],
-    '75': [
-      [75, 29],
-      [75, 53],
-      [75, 47],
-      [97, 75],
-      [75, 61],
-      [75, 13],
-    ],
-    '97': [
       [97, 13],
       [97, 61],
       [97, 47],
+      [75, 29],
+      [61, 13],
+      [75, 53],
+      [29, 13],
       [97, 29],
+      [53, 29],
+      [61, 53],
       [97, 53],
+      [61, 29],
+      [47, 13],
+      [75, 47],
       [97, 75],
-    ],
-  }
+      [47, 61],
+      [75, 61],
+      [47, 29],
+      [75, 13],
+      [53, 13],
+    ]
+    exampleRulesDict = {
+      '13': [
+        [97, 13],
+        [61, 13],
+        [29, 13],
+        [47, 13],
+        [75, 13],
+        [53, 13],
+      ],
+      '29': [
+        [75, 29],
+        [29, 13],
+        [97, 29],
+        [53, 29],
+        [61, 29],
+        [47, 29],
+      ],
+      '47': [
+        [47, 53],
+        [97, 47],
+        [47, 13],
+        [75, 47],
+        [47, 61],
+        [47, 29],
+      ],
+      '53': [
+        [47, 53],
+        [75, 53],
+        [53, 29],
+        [61, 53],
+        [97, 53],
+        [53, 13],
+      ],
+      '61': [
+        [97, 61],
+        [61, 13],
+        [61, 53],
+        [61, 29],
+        [47, 61],
+        [75, 61],
+      ],
+      '75': [
+        [75, 29],
+        [75, 53],
+        [75, 47],
+        [97, 75],
+        [75, 61],
+        [75, 13],
+      ],
+      '97': [
+        [97, 13],
+        [97, 61],
+        [97, 47],
+        [97, 29],
+        [97, 53],
+        [97, 75],
+      ],
+    }
+  })
 
   describe('helpers', () => {
     it('parseFile()', () => {
@@ -152,6 +159,12 @@ describe('day-05', async () => {
       assert.strictEqual(getMiddlePage([1, 7, 3]), 7)
       assert.strictEqual(getMiddlePage([1, 165, 99, 42, 2]), 99)
     })
+    it('sortUpdate()', () => {
+      assert.deepEqual(sortUpdate([75, 97, 47, 61, 53], exampleRulesDict), [97, 75, 47, 61, 53])
+      assert.deepEqual(sortUpdate([61, 13, 29], exampleRulesDict), [61, 29, 13])
+      assert.deepEqual(sortUpdate([97, 13, 75, 29, 47], exampleRulesDict), [97, 75, 47, 29, 13])
+      // actual :[ 97, 75, 29, 47, 13 ]
+    })
   })
 
   describe('part 1', () => {
@@ -169,18 +182,18 @@ describe('day-05', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 2', () => {
+    it('example data', () => {
+      const result = solvePt2(inputExample)
+      const expected = 123
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt2(inputReal)
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = 6456
+      assert.strictEqual(result, expected)
+    })
+  })
 })

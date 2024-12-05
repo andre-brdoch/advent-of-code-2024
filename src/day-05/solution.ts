@@ -7,18 +7,28 @@ export function solvePt1(input: string): number {
   const { rules, updates } = parseFile(input)
   const rulesDict = getRulesDictionary(rules)
   const correctUpdates = updates.filter((update) => updateIsOrderedCorrectly(update, rulesDict))
-  console.log('correctUpdates')
-  console.log(correctUpdates)
-
   const middleNumbers = correctUpdates.map(getMiddlePage)
-  console.log('middleNumbers', middleNumbers)
-
   const sum = getSum(middleNumbers)
   return sum
 }
 
-export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt2(input: string): number {
+  const { rules, updates } = parseFile(input)
+  const rulesDict = getRulesDictionary(rules)
+  const wrongUpdates = updates.filter((update) => !updateIsOrderedCorrectly(update, rulesDict))
+  const sorted = wrongUpdates.map((update) => sortUpdate(update, rulesDict))
+  const middleNumbers = sorted.map(getMiddlePage)
+  const sum = getSum(middleNumbers)
+  return sum
+}
+
+export function sortUpdate(update: number[], rulesDict: RulesDictionary): number[] {
+  const result = update.sort((a, b) => {
+    const commonRule = getCommonRule(a, b, rulesDict)
+    if (!commonRule) throw new Error(`No common rule for ${a} and ${b}`)
+    return commonRule[0] === a ? -1 : 1
+  })
+  return result
 }
 
 export function getMiddlePage(update: number[]): number {
