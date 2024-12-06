@@ -21,12 +21,41 @@ const VECTOR_BY_GUARD: Record<Guard, Vector> = {
   '>': { x: 1, y: 0 },
 }
 
-export function solvePt1(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt1(input: string): number {
+  const map = parseFile(input)
+  const history = moveUntilOffMap(map)
+  const historyNoDupes = removeDuplicatePositions(history)
+  // need to remove final off-board position
+  const result = historyNoDupes.length - 1
+  return result
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
+}
+
+export function removeDuplicatePositions(history: Point[]): Point[] {
+  const stringified = history.map((point) => `${point.x}/${point.y}`)
+  const set = new Set(stringified)
+  const stringifiedNoDupes = Array.from(set)
+  return stringifiedNoDupes.map((str) => {
+    const [x, y] = str.split('/').map((n) => Number(n))
+    return { x, y }
+  })
+}
+
+export function moveUntilOffMap(inputMap: Cell[][]): Point[] {
+  const payload = removeGuardFromMap(inputMap)
+  const { map, startPosition } = payload
+  let guard: Guard | null = payload.guard
+  let history: Point[] = [startPosition]
+  while (guard != null) {
+    const { guard: newGuard, history: newHistory } = moveGuard(map, guard, history)
+    history = newHistory
+    guard = newGuard
+    console.log('newHistory', newHistory)
+  }
+  return history
 }
 
 export function moveGuard(
@@ -38,10 +67,14 @@ export function moveGuard(
   const moveVector = VECTOR_BY_GUARD[guard]
   const targetPosition = addPoints(currentPosition, moveVector)
   if (!isOnMap(map, targetPosition)) {
-    return { history, guard: null }
+    // console.log(`Off board: ${targetPosition.x}/${targetPosition.y}`)
+    return {
+      history: [...history, targetPosition],
+      guard: null,
+    }
   }
   const targetCell = getCell(map, targetPosition)
-  console.log(`Target ${targetPosition.x}/${targetPosition.y}: ${targetCell}`)
+  // console.log(`Target ${targetPosition.x}/${targetPosition.y}: ${targetCell}`)
   if (isFree(targetCell)) {
     return {
       history: [...history, targetPosition],
@@ -104,12 +137,18 @@ export function isOnMap(map: Cell[][], point: Point): boolean {
   return Boolean(map[point.y]?.[point.x])
 }
 
-export function removeGuardFromMap(map: Cell[][]): { map: Cell[][]; currentPosition: Point } {
+export function removeGuardFromMap(map: Cell[][]): {
+  map: Cell[][]
+  startPosition: Point
+  guard: Guard
+} {
   const currentPosition = findGuardPosition(map)
+  const guard = getCell(map, currentPosition)
+  if (!isGuard(guard)) throw new Error('Not a guard :(')
   const mapWithoutGuard = map.map((row, y) =>
     row.map((cell, x) => (x === currentPosition.x && y === currentPosition.y ? '.' : cell))
   )
-  return { currentPosition, map: mapWithoutGuard }
+  return { startPosition: currentPosition, guard, map: mapWithoutGuard }
 }
 
 export function parseFile(file: string): Cell[][] {
