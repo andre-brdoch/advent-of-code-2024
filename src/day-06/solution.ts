@@ -1,3 +1,6 @@
+// Part 2 is solved with brute force unfortunately.
+// Did not have time to optimize.
+
 export const GUARD_UP = '^' as const
 export const GUARD_DOWN = 'v' as const
 export const GUARD_LEFT = '<' as const
@@ -25,22 +28,66 @@ const VECTOR_BY_GUARD: Record<Guard, Vector> = {
 }
 
 export function solvePt1(input: string): number {
-  const map = parseFile(input)
+  const inputMap = parseFile(input)
+  const { map, firstHistoryEntry } = removeGuardFromMap(inputMap)
   const history = moveUntilConditionMeet(
     map,
+    firstHistoryEntry,
     (history) => history[history.length - 1].guard == null
   )
-  const historyNoDupes = removeDuplicatePositions(history)
-  // need to remove final off-board position
-  const result = historyNoDupes.length - 1
+  const uniquePoints = historyToUniquePoints(history)
+  const result = uniquePoints.length
   return result
 }
 
-export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt2(input: string): number {
+  const inputMap = parseFile(input)
+  const { map, firstHistoryEntry } = removeGuardFromMap(inputMap)
+  const history = moveUntilConditionMeet(
+    map,
+    firstHistoryEntry,
+    (history) => history[history.length - 1].guard == null
+  )
+  const uniquePoints = historyToUniquePoints(history)
+  const possibleBarriers = uniquePoints.filter((point) =>
+    barrierWouldCauseLoop(map, firstHistoryEntry, point)
+  )
+  return possibleBarriers.length
 }
 
-export function hasLoop(history: HistoryEntry[]): boolean {
+export function historyToUniquePoints(history: HistoryEntry[]): Point[] {
+  const uniquePoints = [...removeDuplicatePositions(history)]
+  // need to remove final off-board position
+  uniquePoints.pop()
+  return uniquePoints
+}
+
+export function barrierWouldCauseLoop(
+  inputMap: Cell[][],
+  firstHistoryEntry: HistoryEntry,
+  barrierPosition: Point
+): boolean {
+  // modify map
+  const mapCopy = inputMap.map((row) => [...row])
+  const mapWithBarrier = mapCopy
+  mapWithBarrier[barrierPosition.y][barrierPosition.x] = '#'
+
+  // walk until off board or in a loop
+  const history = moveUntilConditionMeet(
+    mapWithBarrier,
+    firstHistoryEntry,
+    (h) =>
+      // walked off the board
+      h[h.length - 1].guard == null ||
+      // stuck in a loop
+      historyHasLoop(h)
+  )
+  const latest = history[history.length - 1]
+  const isStillOnBoard = latest.guard != null
+  return isStillOnBoard
+}
+
+export function historyHasLoop(history: HistoryEntry[]): boolean {
   const latest = history[history.length - 1]
   const other = history.slice(0, history.length - 2)
   // we know it's a loop if the exact same history entry already exists
@@ -49,8 +96,8 @@ export function hasLoop(history: HistoryEntry[]): boolean {
   )
 }
 
-export function removeDuplicatePositions(history: Point[]): Point[] {
-  const stringified = history.map((point) => `${point.x}/${point.y}`)
+export function removeDuplicatePositions(points: Point[]): Point[] {
+  const stringified = points.map((point) => `${point.x}/${point.y}`)
   const set = new Set(stringified)
   const stringifiedNoDupes = Array.from(set)
   return stringifiedNoDupes.map((str) => {
@@ -60,15 +107,13 @@ export function removeDuplicatePositions(history: Point[]): Point[] {
 }
 
 export function moveUntilConditionMeet(
-  inputMap: Cell[][],
+  map: Cell[][],
+  firstHistoryEntry: HistoryEntry,
   conditionCb: (history: HistoryEntry[]) => boolean
 ): HistoryEntry[] {
-  const { map, firstHistoryEntry } = removeGuardFromMap(inputMap)
   const history: HistoryEntry[] = [firstHistoryEntry]
   while (!conditionCb(history)) {
     const newHistoryEntry = moveGuard(map, history)
-    // console.log('new entry', newHistoryEntry.x, newHistoryEntry.y, newHistoryEntry.guard)
-
     history.push(newHistoryEntry)
   }
   return history
@@ -82,14 +127,12 @@ export function moveGuard(map: Cell[][], history: HistoryEntry[]): HistoryEntry 
   const moveVector = VECTOR_BY_GUARD[latestHistory.guard]
   const targetPosition = addPoints(latestHistory, moveVector)
   if (!isOnMap(map, targetPosition)) {
-    // console.log(`Off board: ${targetPosition.x}/${targetPosition.y}`)
     return {
       ...targetPosition,
       guard: null,
     }
   }
   const targetCell = getCell(map, targetPosition)
-  // console.log(`Target ${targetPosition.x}/${targetPosition.y}: ${targetCell}`)
   if (isFree(targetCell)) {
     return {
       ...targetPosition,
