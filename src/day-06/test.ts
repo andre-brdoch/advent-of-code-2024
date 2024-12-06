@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { Cell, getGuardPosition, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -9,7 +9,7 @@ describe('day-06', async () => {
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
   describe('helpers', () => {
-    let exampleMap
+    let exampleMap: Cell[][]
 
     beforeEach(() => {
       exampleMap = [
@@ -25,8 +25,12 @@ describe('day-06', async () => {
         ['.', '.', '.', '.', '.', '.', '#', '.', '.', '.'],
       ]
     })
+
     it('parseFile()', () => {
       assert.deepEqual(parseFile(inputExample), exampleMap)
+    })
+    it('getGuardPosition()', () => {
+      assert.deepEqual(getGuardPosition(exampleMap), { x: 4, y: 6 })
     })
   })
 
