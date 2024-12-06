@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Cell, getGuardPosition, parseFile } from './solution'
+import { Cell, findGuardPosition, moveGuard, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -10,6 +10,7 @@ describe('day-06', async () => {
 
   describe('helpers', () => {
     let exampleMap: Cell[][]
+    let guardStartPoint: Point
 
     beforeEach(() => {
       exampleMap = [
@@ -24,14 +25,53 @@ describe('day-06', async () => {
         ['#', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
         ['.', '.', '.', '.', '.', '.', '#', '.', '.', '.'],
       ]
+      guardStartPoint = { x: 4, y: 6 }
     })
 
     it('parseFile()', () => {
       assert.deepEqual(parseFile(inputExample), exampleMap)
     })
-    it('getGuardPosition()', () => {
-      assert.deepEqual(getGuardPosition(exampleMap), { x: 4, y: 6 })
+    it('findGuardPosition()', () => {
+      assert.deepEqual(findGuardPosition(exampleMap), guardStartPoint)
     })
+    it('moveGuard()', () => {
+      assert.deepEqual(
+        moveGuard(
+          [
+            ['.', '#', '.'],
+            ['.', '.', '.'],
+            ['.', '^', '.'],
+          ],
+          [{ x: 1, y: 2 }]
+        ),
+        {
+          guard: '^',
+          history: [
+            { x: 1, y: 2 },
+            { x: 1, y: 1 },
+          ],
+        }
+      )
+      assert.deepEqual(
+        moveGuard(
+          [
+            ['.', '#', '.'],
+            ['.', '^', '.'],
+            ['.', '.', '.'],
+          ],
+          [{ x: 1, y: 1 }]
+        ),
+        {
+          guard: '>',
+          history: [{ x: 1, y: 1 }],
+        }
+      )
+    })
+    // it('moveGuard()', () => {
+    //   const { guard: guard1, history: history1 } = moveGuard(exampleMap, [guardStartPoint])
+    //   assert.strictEqual(guard1, '^')
+    //   assert.deepEqual(history1, [guardStartPoint, { x: 4, y: 5 }])
+    // })
   })
 
   // describe('part 1', () => {
