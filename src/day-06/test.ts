@@ -1,6 +1,15 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Cell, findGuardPosition, moveGuard, parseFile, removeGuardFromMap } from './solution'
+import {
+  Cell,
+  findGuardPosition,
+  moveGuard,
+  moveUntilOffMap,
+  parseFile,
+  removeDuplicatePositions,
+  removeGuardFromMap,
+  solvePt1,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -42,7 +51,8 @@ describe('day-06', async () => {
           ['.', '^', '.'],
         ]),
         {
-          currentPosition: { x: 1, y: 2 },
+          startPosition: { x: 1, y: 2 },
+          guard: '^',
           map: [
             ['.', '#', '.'],
             ['.', '.', '.'],
@@ -72,30 +82,54 @@ describe('day-06', async () => {
       // running over edge
       assert.deepEqual(moveGuard(map, '^', [{ x: 0, y: 0 }]), {
         guard: null,
-        history: [{ x: 0, y: 0 }],
+        history: [
+          { x: 0, y: 0 },
+          { x: 0, y: -1 },
+        ],
       })
     })
-    // it('moveGuard()', () => {
-    //   const { guard: guard1, history: history1 } = moveGuard(exampleMap, [guardStartPoint])
-    //   assert.strictEqual(guard1, '^')
-    //   assert.deepEqual(history1, [guardStartPoint, { x: 4, y: 5 }])
-    // })
+    it('moveUntilOffMap()', () => {
+      const map: Cell[][] = [
+        ['.', '#', '.'],
+        ['.', '.', '.'],
+        ['.', '^', '.'],
+      ]
+      assert.deepEqual(moveUntilOffMap(map), [
+        { x: 1, y: 2 },
+        { x: 1, y: 1 },
+        { x: 2, y: 1 },
+        { x: 3, y: 1 },
+      ])
+    })
+    it('removeDuplicatePositions()', () => {
+      assert.deepEqual(
+        removeDuplicatePositions([
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 0, y: 0 },
+        ]),
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+        ]
+      )
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 41
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {
