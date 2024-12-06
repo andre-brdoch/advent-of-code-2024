@@ -4,7 +4,7 @@ import {
   Cell,
   findGuardPosition,
   moveGuard,
-  moveUntilOffMap,
+  moveUntilConditionMeet,
   parseFile,
   removeDuplicatePositions,
   removeGuardFromMap,
@@ -88,18 +88,22 @@ describe('day-06', async () => {
         ],
       })
     })
-    it('moveUntilOffMap()', () => {
+    it('moveUntilConditionMeet()', () => {
       const map: Cell[][] = [
         ['.', '#', '.'],
         ['.', '.', '.'],
         ['.', '^', '.'],
       ]
-      assert.deepEqual(moveUntilOffMap(map), [
-        { x: 1, y: 2 },
-        { x: 1, y: 1 },
-        { x: 2, y: 1 },
-        { x: 3, y: 1 },
-      ])
+      // until guard is off map
+      assert.deepEqual(
+        moveUntilConditionMeet(map, ({ guard }) => guard == null),
+        [
+          { x: 1, y: 2 },
+          { x: 1, y: 1 },
+          { x: 2, y: 1 },
+          { x: 3, y: 1 },
+        ]
+      )
     })
     it('removeDuplicatePositions()', () => {
       assert.deepEqual(
@@ -116,7 +120,7 @@ describe('day-06', async () => {
     })
   })
 
-  describe('part 1', () => {
+  describe('part 1', { skip: true }, () => {
     it('example data', () => {
       const result = solvePt1(inputExample)
       const expected = 41

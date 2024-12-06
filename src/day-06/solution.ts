@@ -23,7 +23,7 @@ const VECTOR_BY_GUARD: Record<Guard, Vector> = {
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
-  const history = moveUntilOffMap(map)
+  const history = moveUntilConditionMeet(map)
   const historyNoDupes = removeDuplicatePositions(history)
   // need to remove final off-board position
   const result = historyNoDupes.length - 1
@@ -44,12 +44,16 @@ export function removeDuplicatePositions(history: Point[]): Point[] {
   })
 }
 
-export function moveUntilOffMap(inputMap: Cell[][]): Point[] {
+export function moveUntilConditionMeet(
+  inputMap: Cell[][],
+  conditionCb: (context: ReturnType<typeof moveGuard>) => boolean
+): Point[] {
   const payload = removeGuardFromMap(inputMap)
   const { map, startPosition } = payload
   let guard: Guard | null = payload.guard
   let history: Point[] = [startPosition]
-  while (guard != null) {
+  while (!conditionCb({ guard, history })) {
+    // while (guard != null) {
     const { guard: newGuard, history: newHistory } = moveGuard(map, guard, history)
     history = newHistory
     guard = newGuard
