@@ -3,9 +3,11 @@ import assert from 'node:assert'
 import {
   Cell,
   findGuardPosition,
+  HistoryEntry,
   moveGuard,
   moveUntilConditionMeet,
   parseFile,
+  Point,
   removeDuplicatePositions,
   removeGuardFromMap,
   solvePt1,
@@ -51,8 +53,7 @@ describe('day-06', async () => {
           ['.', '^', '.'],
         ]),
         {
-          startPosition: { x: 1, y: 2 },
-          guard: '^',
+          firstHistoryEntry: { x: 1, y: 2, guard: '^' },
           map: [
             ['.', '#', '.'],
             ['.', '.', '.'],
@@ -67,44 +68,53 @@ describe('day-06', async () => {
         ['.', '.', '.'],
         ['.', '.', '.'],
       ]
-      assert.deepEqual(moveGuard(map, '^', [{ x: 1, y: 2 }]), {
-        guard: '^',
-        history: [
-          { x: 1, y: 2 },
-          { x: 1, y: 1 },
-        ],
-      })
+      assert.deepEqual(moveGuard(map, [{ x: 1, y: 2, guard: '^' }]), { x: 1, y: 1, guard: '^' })
       // running into barrier
-      assert.deepEqual(moveGuard(map, '^', [{ x: 1, y: 1 }]), {
-        guard: '>',
-        history: [{ x: 1, y: 1 }],
-      })
-      // running over edge
-      assert.deepEqual(moveGuard(map, '^', [{ x: 0, y: 0 }]), {
-        guard: null,
-        history: [
-          { x: 0, y: 0 },
-          { x: 0, y: -1 },
-        ],
-      })
+      assert.deepEqual(moveGuard(map, [{ x: 1, y: 1, guard: '^' }]), { x: 1, y: 1, guard: '>' })
+      // // running over edge
+      assert.deepEqual(moveGuard(map, [{ x: 0, y: 0, guard: '^' }]), { x: 0, y: -1, guard: null })
     })
     it('moveUntilConditionMeet()', () => {
+      // until guard is off map
       const map: Cell[][] = [
         ['.', '#', '.'],
         ['.', '.', '.'],
         ['.', '^', '.'],
       ]
-      // until guard is off map
       assert.deepEqual(
-        moveUntilConditionMeet(map, ({ guard }) => guard == null),
+        moveUntilConditionMeet(
+          map,
+          (history: HistoryEntry[]) => history[history.length - 1].guard == null
+        ),
         [
-          { x: 1, y: 2 },
-          { x: 1, y: 1 },
-          { x: 2, y: 1 },
-          { x: 3, y: 1 },
+          { x: 1, y: 2, guard: '^' },
+          { x: 1, y: 1, guard: '^' },
+          { x: 1, y: 1, guard: '>' },
+          { x: 2, y: 1, guard: '>' },
+          { x: 3, y: 1, guard: null },
         ]
       )
+      // until guard is caught in loop
+      // assert.deepEqual(
+      //   moveUntilConditionMeet(
+      //     [
+      //       ['.', '#', '.', '.'],
+      //       ['.', '.', '.', '#'],
+      //       ['#', '^', '#', '.'],
+      //     ],
+      //     ({ guard, history }) => guard == null
+      //   ),
+      //   [
+      //     { x: 1, y: 2 },
+      //     { x: 1, y: 1 },
+      //     { x: 2, y: 1 },
+      //     { x: 3, y: 1 },
+      //   ]
+      // )
     })
+    // it ('hasLoop()', () => {
+    //   assert.strictEqual(hasLoop([], [], '^'), true)
+    // })
     it('removeDuplicatePositions()', () => {
       assert.deepEqual(
         removeDuplicatePositions([
@@ -120,7 +130,7 @@ describe('day-06', async () => {
     })
   })
 
-  describe('part 1', { skip: true }, () => {
+  describe('part 1', () => {
     it('example data', () => {
       const result = solvePt1(inputExample)
       const expected = 41
@@ -130,7 +140,7 @@ describe('day-06', async () => {
     it('real data', () => {
       const result = solvePt1(inputReal)
       consola.success(`=== Result pt. 1: ${result} ===`)
-      const expected = undefined
+      const expected = 4988
       assert.strictEqual(result, expected)
     })
   })
