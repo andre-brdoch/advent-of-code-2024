@@ -3,6 +3,7 @@ import assert from 'node:assert'
 import {
   Cell,
   findGuardPosition,
+  hasLoop,
   HistoryEntry,
   moveGuard,
   moveUntilConditionMeet,
@@ -95,26 +96,53 @@ describe('day-06', async () => {
         ]
       )
       // until guard is caught in loop
-      // assert.deepEqual(
-      //   moveUntilConditionMeet(
-      //     [
-      //       ['.', '#', '.', '.'],
-      //       ['.', '.', '.', '#'],
-      //       ['#', '^', '#', '.'],
-      //     ],
-      //     ({ guard, history }) => guard == null
-      //   ),
-      //   [
-      //     { x: 1, y: 2 },
-      //     { x: 1, y: 1 },
-      //     { x: 2, y: 1 },
-      //     { x: 3, y: 1 },
-      //   ]
-      // )
+      assert.deepEqual(
+        moveUntilConditionMeet(
+          [
+            ['.', '#', '.', '.'],
+            ['#', '.', '.', '#'],
+            ['.', '^', '#', '.'],
+          ],
+          (history) => hasLoop(history)
+        ),
+        [
+          { x: 1, y: 2, guard: '^' },
+          { x: 1, y: 1, guard: '^' },
+          { x: 1, y: 1, guard: '>' },
+          { x: 2, y: 1, guard: '>' },
+          { x: 2, y: 1, guard: 'v' },
+          { x: 2, y: 1, guard: '<' },
+          { x: 1, y: 1, guard: '<' },
+          { x: 1, y: 1, guard: '^' },
+        ]
+      )
     })
-    // it ('hasLoop()', () => {
-    //   assert.strictEqual(hasLoop([], [], '^'), true)
-    // })
+    it('hasLoop()', () => {
+      assert.strictEqual(
+        hasLoop([
+          { x: 0, y: 0, guard: '^' },
+          { x: 0, y: 1, guard: '^' },
+          { x: 0, y: 0, guard: '^' },
+        ]),
+        true
+      )
+      assert.strictEqual(
+        hasLoop([
+          { x: 0, y: 0, guard: '^' },
+          { x: 0, y: 1, guard: '^' },
+          { x: 0, y: 2, guard: '^' },
+        ]),
+        false
+      )
+      assert.strictEqual(
+        hasLoop([
+          { x: 0, y: 0, guard: '^' },
+          { x: 0, y: 1, guard: '^' },
+          { x: 0, y: 0, guard: '>' },
+        ]),
+        false
+      )
+    })
     it('removeDuplicatePositions()', () => {
       assert.deepEqual(
         removeDuplicatePositions([

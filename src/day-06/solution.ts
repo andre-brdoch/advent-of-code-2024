@@ -40,9 +40,14 @@ export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-// export function hasLoop(map: Cell[][], history: Point[], guard: Guard): boolean {
-//   //
-// }
+export function hasLoop(history: HistoryEntry[]): boolean {
+  const latest = history[history.length - 1]
+  const other = history.slice(0, history.length - 2)
+  // we know it's a loop if the exact same history entry already exists
+  return other.some(
+    (entry) => entry.x === latest.x && entry.y === latest.y && entry.guard === latest.guard
+  )
+}
 
 export function removeDuplicatePositions(history: Point[]): Point[] {
   const stringified = history.map((point) => `${point.x}/${point.y}`)
