@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Cell, findGuardPosition, moveGuard, parseFile } from './solution'
+import { Cell, findGuardPosition, moveGuard, parseFile, removeGuardFromMap } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -34,38 +34,46 @@ describe('day-06', async () => {
     it('findGuardPosition()', () => {
       assert.deepEqual(findGuardPosition(exampleMap), guardStartPoint)
     })
+    it('removeGuardFromMap()', () => {
+      assert.deepEqual(
+        removeGuardFromMap([
+          ['.', '#', '.'],
+          ['.', '.', '.'],
+          ['.', '^', '.'],
+        ]),
+        {
+          currentPosition: { x: 1, y: 2 },
+          map: [
+            ['.', '#', '.'],
+            ['.', '.', '.'],
+            ['.', '.', '.'],
+          ],
+        }
+      )
+    })
     it('moveGuard()', () => {
-      assert.deepEqual(
-        moveGuard(
-          [
-            ['.', '#', '.'],
-            ['.', '.', '.'],
-            ['.', '^', '.'],
-          ],
-          [{ x: 1, y: 2 }]
-        ),
-        {
-          guard: '^',
-          history: [
-            { x: 1, y: 2 },
-            { x: 1, y: 1 },
-          ],
-        }
-      )
-      assert.deepEqual(
-        moveGuard(
-          [
-            ['.', '#', '.'],
-            ['.', '^', '.'],
-            ['.', '.', '.'],
-          ],
-          [{ x: 1, y: 1 }]
-        ),
-        {
-          guard: '>',
-          history: [{ x: 1, y: 1 }],
-        }
-      )
+      const map: Cell[][] = [
+        ['.', '#', '.'],
+        ['.', '.', '.'],
+        ['.', '.', '.'],
+      ]
+      assert.deepEqual(moveGuard(map, '^', [{ x: 1, y: 2 }]), {
+        guard: '^',
+        history: [
+          { x: 1, y: 2 },
+          { x: 1, y: 1 },
+        ],
+      })
+      // running into barrier
+      assert.deepEqual(moveGuard(map, '^', [{ x: 1, y: 1 }]), {
+        guard: '>',
+        history: [{ x: 1, y: 1 }],
+      })
+      // running over edge
+      assert.deepEqual(moveGuard(map, '^', [{ x: 0, y: 0 }]), {
+        guard: null,
+        history: [{ x: 0, y: 0 }],
+      })
     })
     // it('moveGuard()', () => {
     //   const { guard: guard1, history: history1 } = moveGuard(exampleMap, [guardStartPoint])

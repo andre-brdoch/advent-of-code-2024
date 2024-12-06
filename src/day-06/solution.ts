@@ -29,17 +29,22 @@ export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-export function moveGuard(map: Cell[][], history: Point[]): { history: Point[]; guard: Guard } {
+export function moveGuard(
+  map: Cell[][],
+  guard: Guard,
+  history: Point[]
+): { history: Point[]; guard: Guard | null } {
   const currentPosition = history[history.length - 1]
-  const guard = getCell(map, currentPosition)
-  if (!isGuard(guard)) throw new Error('Not a guard!')
   const moveVector = VECTOR_BY_GUARD[guard]
-  const newTargetPosition = addPoints(currentPosition, moveVector)
-  const targetCell = getCell(map, newTargetPosition)
-  console.log(`Target ${newTargetPosition.x}/${newTargetPosition.y}: ${targetCell}`)
+  const targetPosition = addPoints(currentPosition, moveVector)
+  if (!isOnMap(map, targetPosition)) {
+    return { history, guard: null }
+  }
+  const targetCell = getCell(map, targetPosition)
+  console.log(`Target ${targetPosition.x}/${targetPosition.y}: ${targetCell}`)
   if (isFree(targetCell)) {
     return {
-      history: [...history, newTargetPosition],
+      history: [...history, targetPosition],
       guard,
     }
   }
@@ -93,6 +98,18 @@ export function isGuard(cell: Cell): cell is Guard {
 
 export function isFree(cell: Cell): cell is typeof FREE | typeof VISITED {
   return cell === FREE || cell === VISITED
+}
+
+export function isOnMap(map: Cell[][], point: Point): boolean {
+  return Boolean(map[point.y]?.[point.x])
+}
+
+export function removeGuardFromMap(map: Cell[][]): { map: Cell[][]; currentPosition: Point } {
+  const currentPosition = findGuardPosition(map)
+  const mapWithoutGuard = map.map((row, y) =>
+    row.map((cell, x) => (x === currentPosition.x && y === currentPosition.y ? '.' : cell))
+  )
+  return { currentPosition, map: mapWithoutGuard }
 }
 
 export function parseFile(file: string): Cell[][] {
