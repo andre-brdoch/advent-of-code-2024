@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getMinMax, parseFile } from './solution'
+import { parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -23,10 +23,6 @@ describe('day-07', async () => {
         { result: 292, parts: [11, 6, 16, 20] },
       ]
       assert.deepEqual(result, expected)
-    })
-    it('getMinMax()', () => {
-      assert.deepEqual(getMinMax([10, 19], 190), [29, 190, false])
-      assert.deepEqual(getMinMax([81, 40, 27], 3267), [148, 87480, false])
     })
   })
 
