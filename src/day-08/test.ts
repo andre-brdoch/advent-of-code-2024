@@ -5,8 +5,9 @@ import {
   getAntinodesBetween,
   mapToLookup,
   parseFile,
-  getAllPairs,
   solvePt1,
+  getAntinodesBetweenPt2,
+  solvePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
@@ -57,6 +58,14 @@ describe('day-08', async () => {
         { x: 6, y: 7 },
       ])
     })
+    it('getAntinodesBetweenPt2()', () => {
+      assert.deepEqual(getAntinodesBetweenPt2(exampleMap, { x: 0, y: 0 }, { x: 3, y: 1 }), [
+        { x: 0, y: 0 },
+        { x: 3, y: 1 },
+        { x: 6, y: 2 },
+        { x: 9, y: 3 },
+      ])
+    })
     it('getPairsOfSameFreq()', () => {
       assert.deepEqual(
         getPairsOfSameFreq([
@@ -97,18 +106,18 @@ describe('day-08', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 2', () => {
+    it('example data', () => {
+      const result = solvePt2(inputExample)
+      const expected = 34
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt2(inputReal)
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = 1285
+      assert.strictEqual(result, expected)
+    })
+  })
 })
