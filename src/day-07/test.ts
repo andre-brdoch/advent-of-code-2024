@@ -12,15 +12,15 @@ describe('day-07', async () => {
     it('parseFile()', () => {
       const result = parseFile(inputExample)
       const expected = [
-        { result: 190, parts: [10, 19] },
-        { result: 3267, parts: [81, 40, 27] },
-        { result: 83, parts: [17, 5] },
-        { result: 156, parts: [15, 6] },
-        { result: 7290, parts: [6, 8, 6, 15] },
-        { result: 161011, parts: [16, 10, 13] },
-        { result: 192, parts: [17, 8, 14] },
-        { result: 21037, parts: [9, 7, 18, 13] },
-        { result: 292, parts: [11, 6, 16, 20] },
+        { result: 190n, parts: [10n, 19n] },
+        { result: 3267n, parts: [81n, 40n, 27n] },
+        { result: 83n, parts: [17n, 5n] },
+        { result: 156n, parts: [15n, 6n] },
+        { result: 7290n, parts: [6n, 8n, 6n, 15n] },
+        { result: 161011n, parts: [16n, 10n, 13n] },
+        { result: 192n, parts: [17n, 8n, 14n] },
+        { result: 21037n, parts: [9n, 7n, 18n, 13n] },
+        { result: 292n, parts: [11n, 6n, 16n, 20n] },
       ]
       assert.deepEqual(result, expected)
     })
