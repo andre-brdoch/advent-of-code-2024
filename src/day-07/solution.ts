@@ -39,10 +39,13 @@ export function hasEquation(result: bigint, parts: bigint[], withConcat = false)
               ? a + b
               : action === '||'
                 ? BigInt(`${a}${b}`)
-                : null
+                : (() => {
+                    throw new Error(`Invalid action: ${action}`)
+                  })()
+        // found result
         if (val === result && i === parts.length - 1) return true
-        if (val == null) throw new Error(`Invalid action: ${action}`)
-        newResults.push(val)
+        // no point in continuing if already too large
+        if (val <= result) newResults.push(val)
       }
     }
     possibleResults = newResults
