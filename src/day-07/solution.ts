@@ -13,10 +13,7 @@ export function sumValidEquations(
   withConcat = false
 ): bigint {
   return equations.reduce((total, current) => {
-    const valid = (withConcat ? hasEquationWithConcatenation : hasEquation)(
-      current.result,
-      current.parts
-    )
+    const valid = hasEquation(current.result, current.parts, withConcat)
     if (!valid) {
       return total
     }
@@ -24,24 +21,7 @@ export function sumValidEquations(
   }, 0n)
 }
 
-export function hasEquationWithConcatenation(result: bigint, parts: bigint[]): boolean {
-  let possibleResults: bigint[] = [parts[0]]
-  for (let i = 1; i <= parts.length - 1; i += 1) {
-    const b = parts[i]
-    const newResults = []
-    for (let j = 0; j <= possibleResults.length - 1; j += 1) {
-      const a = possibleResults[j]
-      const addition = a + b
-      const multiplication = a * b
-      const concat = BigInt(`${a}${b}`)
-      newResults.push(addition, multiplication, concat)
-    }
-    possibleResults = newResults
-  }
-  return possibleResults.some((r) => r === result)
-}
-
-export function hasEquation(result: bigint, parts: bigint[]): boolean {
+export function hasEquation(result: bigint, parts: bigint[], withConcat = false): boolean {
   let possibleResults: bigint[] = [parts[0]]
   for (let i = 1; i <= parts.length - 1; i += 1) {
     const b = parts[i]
@@ -51,6 +31,10 @@ export function hasEquation(result: bigint, parts: bigint[]): boolean {
       const addition = a + b
       const multiplication = a * b
       newResults.push(addition, multiplication)
+      if (withConcat) {
+        const concat = BigInt(`${a}${b}`)
+        newResults.push(concat)
+      }
     }
     possibleResults = newResults
   }

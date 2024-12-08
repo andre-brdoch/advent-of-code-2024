@@ -1,12 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import {
-  hasEquation,
-  hasEquationWithConcatenation,
-  parseFile,
-  solvePt1,
-  solvePt2,
-} from './solution'
+import { hasEquation, parseFile, solvePt1, solvePt2 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -40,17 +34,18 @@ describe('day-07', async () => {
       assert.strictEqual(hasEquation(192n, [17n, 8n, 14n]), false)
       assert.strictEqual(hasEquation(21037n, [9n, 7n, 18n, 13n]), false)
       assert.strictEqual(hasEquation(292n, [11n, 6n, 16n, 20n]), true)
-    })
-    describe('hasEquationWithConcatenation()', () => {
-      assert.strictEqual(hasEquationWithConcatenation(190n, [10n, 19n]), true)
-      assert.strictEqual(hasEquationWithConcatenation(3267n, [81n, 40n, 27n]), true)
-      assert.strictEqual(hasEquationWithConcatenation(83n, [17n, 5n]), false)
-      assert.strictEqual(hasEquationWithConcatenation(156n, [15n, 6n]), true)
-      assert.strictEqual(hasEquationWithConcatenation(7290n, [6n, 8n, 6n, 15n]), true)
-      assert.strictEqual(hasEquationWithConcatenation(161011n, [16n, 10n, 13n]), false)
-      assert.strictEqual(hasEquationWithConcatenation(192n, [17n, 8n, 14n]), true)
-      assert.strictEqual(hasEquationWithConcatenation(21037n, [9n, 7n, 18n, 13n]), false)
-      assert.strictEqual(hasEquationWithConcatenation(292n, [11n, 6n, 16n, 20n]), true)
+
+      describe('with concatenation', () => {
+        assert.strictEqual(hasEquation(190n, [10n, 19n], true), true)
+        assert.strictEqual(hasEquation(3267n, [81n, 40n, 27n], true), true)
+        assert.strictEqual(hasEquation(83n, [17n, 5n], true), false)
+        assert.strictEqual(hasEquation(156n, [15n, 6n], true), true)
+        assert.strictEqual(hasEquation(7290n, [6n, 8n, 6n, 15n], true), true)
+        assert.strictEqual(hasEquation(161011n, [16n, 10n, 13n], true), false)
+        assert.strictEqual(hasEquation(192n, [17n, 8n, 14n], true), true)
+        assert.strictEqual(hasEquation(21037n, [9n, 7n, 18n, 13n], true), false)
+        assert.strictEqual(hasEquation(292n, [11n, 6n, 16n, 20n], true), true)
+      })
     })
   })
 
