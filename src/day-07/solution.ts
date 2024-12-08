@@ -3,17 +3,42 @@ export function solvePt1(input: string): bigint {
   return sumValidEquations(parsed)
 }
 
-export function solvePt2(input: string): any {
+export function solvePt2(input: string): bigint {
   const parsed = parseFile(input)
+  return sumValidEquations(parsed, true)
 }
 
-export function sumValidEquations(equations: { result: bigint; parts: bigint[] }[]): bigint {
+export function sumValidEquations(
+  equations: { result: bigint; parts: bigint[] }[],
+  withConcat = false
+): bigint {
   return equations.reduce((total, current) => {
-    if (!hasEquation(current.result, current.parts)) {
+    const valid = (withConcat ? hasEquationWithConcatenation : hasEquation)(
+      current.result,
+      current.parts
+    )
+    if (!valid) {
       return total
     }
     return total + current.result
   }, 0n)
+}
+
+export function hasEquationWithConcatenation(result: bigint, parts: bigint[]): boolean {
+  let possibleResults: bigint[] = [parts[0]]
+  for (let i = 1; i <= parts.length - 1; i += 1) {
+    const b = parts[i]
+    const newResults = []
+    for (let j = 0; j <= possibleResults.length - 1; j += 1) {
+      const a = possibleResults[j]
+      const addition = a + b
+      const multiplication = a * b
+      const concat = BigInt(`${a}${b}`)
+      newResults.push(addition, multiplication, concat)
+    }
+    possibleResults = newResults
+  }
+  return possibleResults.some((r) => r === result)
 }
 
 export function hasEquation(result: bigint, parts: bigint[]): boolean {

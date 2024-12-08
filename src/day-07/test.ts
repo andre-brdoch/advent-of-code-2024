@@ -1,6 +1,12 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { hasEquation, parseFile, solvePt1 } from './solution'
+import {
+  hasEquation,
+  hasEquationWithConcatenation,
+  parseFile,
+  solvePt1,
+  solvePt2,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -35,6 +41,17 @@ describe('day-07', async () => {
       assert.strictEqual(hasEquation(21037n, [9n, 7n, 18n, 13n]), false)
       assert.strictEqual(hasEquation(292n, [11n, 6n, 16n, 20n]), true)
     })
+    describe('hasEquationWithConcatenation()', () => {
+      assert.strictEqual(hasEquationWithConcatenation(190n, [10n, 19n]), true)
+      assert.strictEqual(hasEquationWithConcatenation(3267n, [81n, 40n, 27n]), true)
+      assert.strictEqual(hasEquationWithConcatenation(83n, [17n, 5n]), false)
+      assert.strictEqual(hasEquationWithConcatenation(156n, [15n, 6n]), true)
+      assert.strictEqual(hasEquationWithConcatenation(7290n, [6n, 8n, 6n, 15n]), true)
+      assert.strictEqual(hasEquationWithConcatenation(161011n, [16n, 10n, 13n]), false)
+      assert.strictEqual(hasEquationWithConcatenation(192n, [17n, 8n, 14n]), true)
+      assert.strictEqual(hasEquationWithConcatenation(21037n, [9n, 7n, 18n, 13n]), false)
+      assert.strictEqual(hasEquationWithConcatenation(292n, [11n, 6n, 16n, 20n]), true)
+    })
   })
 
   describe('part 1', () => {
@@ -51,18 +68,18 @@ describe('day-07', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 2', () => {
+    it('example data', () => {
+      const result = solvePt2(inputExample)
+      const expected = 11387n
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt2(inputReal)
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = 70597497486371n
+      assert.strictEqual(result, expected)
+    })
+  })
 })
