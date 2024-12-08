@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { hasEquation, parseFile, solvePt1 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -24,22 +24,32 @@ describe('day-07', async () => {
       ]
       assert.deepEqual(result, expected)
     })
+    describe('hasEquation()', () => {
+      assert.strictEqual(hasEquation(190n, [10n, 19n]), true)
+      assert.strictEqual(hasEquation(3267n, [81n, 40n, 27n]), true)
+      assert.strictEqual(hasEquation(83n, [17n, 5n]), false)
+      assert.strictEqual(hasEquation(156n, [15n, 6n]), false)
+      assert.strictEqual(hasEquation(7290n, [6n, 8n, 6n, 15n]), false)
+      assert.strictEqual(hasEquation(161011n, [16n, 10n, 13n]), false)
+      assert.strictEqual(hasEquation(192n, [17n, 8n, 14n]), false)
+      assert.strictEqual(hasEquation(21037n, [9n, 7n, 18n, 13n]), false)
+      assert.strictEqual(hasEquation(292n, [11n, 6n, 16n, 20n]), true)
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
-
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 3749n
+      assert.strictEqual(result, expected)
+    })
+    // it('real data', () => {
+    //   const result = solvePt1(inputReal)
+    //   consola.success(`=== Result pt. 1: ${result} ===`)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {
