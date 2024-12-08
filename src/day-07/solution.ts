@@ -32,16 +32,20 @@ export function hasEquation(result: bigint, parts: bigint[], withConcat = false)
       const a = possibleResults[j]
       for (let k = 0; k <= actions.length - 1; k += 1) {
         const action = actions[k]
-        const val =
-          action === '*'
-            ? a * b
-            : action === '+'
-              ? a + b
-              : action === '||'
-                ? BigInt(`${a}${b}`)
-                : (() => {
-                    throw new Error(`Invalid action: ${action}`)
-                  })()
+        let val
+        switch (action) {
+          case '*':
+            val = a * b
+            break
+          case '+':
+            val = a + b
+            break
+          case '||':
+            val = BigInt(`${a}${b}`)
+            break
+          default:
+            throw new Error(`Invalid action: ${action}`)
+        }
         // found result
         if (val === result && i === parts.length - 1) return true
         // no point in continuing if already too large
