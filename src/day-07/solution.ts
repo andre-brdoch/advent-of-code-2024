@@ -1,18 +1,16 @@
 export function solvePt1(input: string): any {
   const parsed = parseFile(input)
-  return
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
-  return
 }
 
-export function parseFile(file: string): any {
-  return file
-    .split('\n')
-    .filter((line) => line)
-    .map((line) => {
-      //
-    })
+export function parseFile(file: string): { result: number; parts: number[] }[] {
+  return file.split('\n').map((line) => {
+    const [resultStr, partsStr] = line.split(': ')
+    const result = Number(resultStr)
+    const parts = partsStr.split(' ').map((partStr) => Number(partStr))
+    return { result, parts }
+  })
 }
