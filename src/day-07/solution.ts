@@ -23,22 +23,31 @@ export function sumValidEquations(
 
 export function hasEquation(result: bigint, parts: bigint[], withConcat = false): boolean {
   let possibleResults: bigint[] = [parts[0]]
+  const actions = ['*', '+']
+  if (withConcat) actions.push('||')
   for (let i = 1; i <= parts.length - 1; i += 1) {
     const b = parts[i]
     const newResults = []
     for (let j = 0; j <= possibleResults.length - 1; j += 1) {
       const a = possibleResults[j]
-      const addition = a + b
-      const multiplication = a * b
-      newResults.push(addition, multiplication)
-      if (withConcat) {
-        const concat = BigInt(`${a}${b}`)
-        newResults.push(concat)
+      for (let k = 0; k <= actions.length - 1; k += 1) {
+        const action = actions[k]
+        const val =
+          action === '*'
+            ? a * b
+            : action === '+'
+              ? a + b
+              : action === '||'
+                ? BigInt(`${a}${b}`)
+                : null
+        if (val === result && i === parts.length - 1) return true
+        if (val == null) throw new Error(`Invalid action: ${action}`)
+        newResults.push(val)
       }
     }
     possibleResults = newResults
   }
-  return possibleResults.some((r) => r === result)
+  return false
 }
 
 export function parseFile(file: string): { result: bigint; parts: bigint[] }[] {
