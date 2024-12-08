@@ -43,12 +43,12 @@ describe('day-07', async () => {
       const expected = 3749n
       assert.strictEqual(result, expected)
     })
-    // it('real data', () => {
-    //   const result = solvePt1(inputReal)
-    //   consola.success(`=== Result pt. 1: ${result} ===`)
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 465126289353n
+      assert.strictEqual(result, expected)
+    })
   })
 
   // describe('part 2', () => {
