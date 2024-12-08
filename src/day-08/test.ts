@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { mapToLookup, parseFile } from './solution'
+import { getPairsOfSameFreq, getAntinodesBetween, mapToLookup, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -42,6 +42,35 @@ describe('day-08', async () => {
           { x: 9, y: 9 },
         ],
       })
+    })
+    it('getAntinodesBetween()', () => {
+      assert.deepEqual(getAntinodesBetween(map, { x: 4, y: 3 }, { x: 5, y: 5 }), [
+        { x: 3, y: 1 },
+        { x: 6, y: 7 },
+      ])
+    })
+    it('getPairsOfSameFreq()', () => {
+      assert.deepEqual(
+        getPairsOfSameFreq([
+          { x: 4, y: 3 },
+          { x: 8, y: 4 },
+          { x: 5, y: 5 },
+        ]),
+        [
+          [
+            { x: 4, y: 3 },
+            { x: 8, y: 4 },
+          ],
+          [
+            { x: 4, y: 3 },
+            { x: 5, y: 5 },
+          ],
+          [
+            { x: 8, y: 4 },
+            { x: 5, y: 5 },
+          ],
+        ]
+      )
     })
   })
 
