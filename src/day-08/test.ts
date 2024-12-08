@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { mapToLookup, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -26,8 +26,22 @@ describe('day-08', async () => {
   describe('helpers', () => {
     it('parseFile()', () => {
       const result = parseFile(inputExample)
-      const expected = undefined
       assert.deepEqual(result, map)
+    })
+    it('mapToLookup()', () => {
+      assert.deepEqual(mapToLookup(map), {
+        0: [
+          { x: 8, y: 1 },
+          { x: 5, y: 2 },
+          { x: 7, y: 3 },
+          { x: 4, y: 4 },
+        ],
+        A: [
+          { x: 6, y: 5 },
+          { x: 8, y: 8 },
+          { x: 9, y: 9 },
+        ],
+      })
     })
   })
 
