@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile, uncondense } from './solution'
+import { moveBlock, moveBlocks, parseFile, unCondense } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -10,10 +10,14 @@ describe('day-09', async () => {
 
   let discMapMini: number[]
   let discMapExample: number[]
+  let unCondensedMini: string
+  let unCondensedExample: string
 
   beforeEach(() => {
     discMapMini = [1, 2, 3, 4, 5]
     discMapExample = [2, 3, 3, 3, 1, 3, 3, 1, 2, 1, 4, 1, 4, 1, 3, 1, 4, 0, 2]
+    unCondensedMini = '0..111....22222'
+    unCondensedExample = '00...111...2...333.44.5555.6666.777.888899'
   })
 
   describe('helpers', () => {
@@ -21,9 +25,21 @@ describe('day-09', async () => {
       assert.deepEqual(parseFile(inputMini), discMapMini)
       assert.deepEqual(parseFile(inputExample), discMapExample)
     })
-    it('uncondense()', () => {
-      assert.deepEqual(uncondense(discMapMini), '0..111....22222')
-      assert.deepEqual(uncondense(discMapExample), '00...111...2...333.44.5555.6666.777.888899')
+    it('unCondense()', () => {
+      assert.deepEqual(unCondense(discMapMini), unCondensedMini)
+      assert.deepEqual(unCondense(discMapExample), unCondensedExample)
+    })
+    it('moveBlock()', () => {
+      assert.deepEqual(moveBlock(unCondensedMini), ['02.111....2222.', false])
+      assert.deepEqual(moveBlock('02.111....2222.'), ['022111....222..', false])
+      assert.deepEqual(moveBlock('022111....222..'), ['0221112...22...', false])
+      assert.deepEqual(moveBlock('0221112...22...'), ['02211122..2....', false])
+      assert.deepEqual(moveBlock('02211122..2....'), ['022111222......', false])
+      assert.deepEqual(moveBlock('022111222......'), ['022111222......', true])
+    })
+    it('moveBlocks()', () => {
+      assert.deepEqual(moveBlocks(unCondensedMini), '022111222......')
+      assert.deepEqual(moveBlocks(unCondensedExample), '0099811188827773336446555566..............')
     })
   })
 
