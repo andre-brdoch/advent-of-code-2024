@@ -24,31 +24,29 @@ export function getChecksum(moved: string): number {
 
 export function moveBlocks(unCondensed: string): string {
   let result: string = unCondensed
-  let isDone = false
-  while (!isDone) {
-    const [newResult, newIsDone] = moveBlock(result)
+  all: while (true) {
+    const leftIndex = result.indexOf('.')
+    let rightIndex: number = leftIndex
+    if (leftIndex === -1) {
+      break all
+    }
+    single: for (let i = result.length - 1; i >= 0 && i >= leftIndex; i -= 1) {
+      const char = result[i]
+      const isFree = char === '.'
+      if (!isFree) {
+        rightIndex = i
+        break single
+      }
+    }
+
+    if (leftIndex === rightIndex) {
+      break all
+    }
+    let newResult = replaceCharAt(result, leftIndex, result[rightIndex])
+    newResult = replaceCharAt(newResult, rightIndex, '.')
     result = newResult
-    isDone = newIsDone
   }
   return result
-}
-
-export function moveBlock(unCondensed: string): [result: string, isDone: boolean] {
-  const leftIndex = unCondensed.indexOf('.')
-  let rightIndex: number = leftIndex
-  if (leftIndex === -1) return [unCondensed, true]
-  for (let i = unCondensed.length - 1; i >= 0 && i >= leftIndex; i -= 1) {
-    const char = unCondensed[i]
-    const isFree = char === '.'
-    if (!isFree) {
-      rightIndex = i
-      break
-    }
-  }
-  if (leftIndex === rightIndex) return [unCondensed, true]
-  let result = replaceCharAt(unCondensed, leftIndex, unCondensed[rightIndex])
-  result = replaceCharAt(result, rightIndex, '.')
-  return [result, false]
 }
 
 function replaceCharAt(str: string, index: number, char: string): string {
