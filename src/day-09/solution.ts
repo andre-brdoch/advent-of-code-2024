@@ -1,9 +1,10 @@
 export function solvePt1(input: string): number {
   const parsed = parseFile(input)
-  const unCondensed = unCondense(parsed)
-  const moved = moveBlocks(unCondensed)
-  const checksum = getChecksum(moved)
-  return checksum
+  const unCondensed = unCondense(parsed.slice(0, 10))
+  console.log(unCondensed)
+  // const moved = moveBlocks(unCondensed)
+  // const checksum = getChecksum(moved)
+  // return checksum
 }
 
 export function solvePt2(input: string): any {
@@ -62,8 +63,8 @@ export function unCondense(mapDisc: number[]): string {
   for (let i = 0; i <= mapDisc.length - 1; i += 1) {
     const n = mapDisc[i]
     const isFree = i % 2 !== 0
+    const add = isFree ? '.' : currentId
     for (let j = 0; j <= n - 1; j += 1) {
-      const add = isFree ? '.' : currentId
       result += add
     }
     if (!isFree) currentId += 1

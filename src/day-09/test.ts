@@ -28,6 +28,7 @@ describe('day-09', async () => {
     it('unCondense()', () => {
       assert.deepEqual(unCondense(discMapMini), unCondensedMini)
       assert.deepEqual(unCondense(discMapExample), unCondensedExample)
+      assert.deepEqual(unCondense([9, 0, 9, 0, 9, 0]), '000000000111111111222222222')
     })
     it('moveBlock()', () => {
       assert.deepEqual(moveBlock(unCondensedMini), ['02.111....2222.', false])
