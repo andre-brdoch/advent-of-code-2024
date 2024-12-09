@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { moveBlock, moveBlocks, parseFile, unCondense } from './solution'
+import { moveBlock, moveBlocks, parseFile, solvePt1, Spot, unCondense } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -10,14 +10,57 @@ describe('day-09', async () => {
 
   let discMapMini: number[]
   let discMapExample: number[]
-  let unCondensedMini: string
-  let unCondensedExample: string
+  let unCondensedMini: Spot[]
+  let unCondensedExample: Spot[]
 
   beforeEach(() => {
     discMapMini = [1, 2, 3, 4, 5]
     discMapExample = [2, 3, 3, 3, 1, 3, 3, 1, 2, 1, 4, 1, 4, 1, 3, 1, 4, 0, 2]
-    unCondensedMini = '0..111....22222'
-    unCondensedExample = '00...111...2...333.44.5555.6666.777.888899'
+    unCondensedMini = [0, '.', '.', 1, 1, 1, '.', '.', '.', '.', 2, 2, 2, 2, 2]
+    unCondensedExample = [
+      0,
+      0,
+      '.',
+      '.',
+      '.',
+      1,
+      1,
+      1,
+      '.',
+      '.',
+      '.',
+      2,
+      '.',
+      '.',
+      '.',
+      3,
+      3,
+      3,
+      '.',
+      4,
+      4,
+      '.',
+      5,
+      5,
+      5,
+      5,
+      '.',
+      6,
+      6,
+      6,
+      6,
+      '.',
+      7,
+      7,
+      7,
+      '.',
+      8,
+      8,
+      8,
+      8,
+      9,
+      9,
+    ]
   })
 
   describe('helpers', () => {
@@ -28,36 +71,47 @@ describe('day-09', async () => {
     it('unCondense()', () => {
       assert.deepEqual(unCondense(discMapMini), unCondensedMini)
       assert.deepEqual(unCondense(discMapExample), unCondensedExample)
-      assert.deepEqual(unCondense([9, 0, 9, 0, 9, 0]), '000000000111111111222222222')
     })
     it('moveBlock()', () => {
-      assert.deepEqual(moveBlock(unCondensedMini), ['02.111....2222.', false])
-      assert.deepEqual(moveBlock('02.111....2222.'), ['022111....222..', false])
-      assert.deepEqual(moveBlock('022111....222..'), ['0221112...22...', false])
-      assert.deepEqual(moveBlock('0221112...22...'), ['02211122..2....', false])
-      assert.deepEqual(moveBlock('02211122..2....'), ['022111222......', false])
-      assert.deepEqual(moveBlock('022111222......'), ['022111222......', true])
+      assert.deepEqual(moveBlock(unCondensedMini), [
+        [0, 2, '.', 1, 1, 1, '.', '.', '.', '.', 2, 2, 2, 2, '.'],
+        false,
+      ])
     })
     it('moveBlocks()', () => {
-      assert.deepEqual(moveBlocks(unCondensedMini), '022111222......')
-      assert.deepEqual(moveBlocks(unCondensedExample), '0099811188827773336446555566..............')
+      assert.deepEqual(moveBlocks(unCondensedMini), [
+        0,
+        2,
+        2,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        '.',
+        '.',
+        '.',
+        '.',
+        '.',
+        '.',
+      ])
     })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
-
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 1928
+      assert.strictEqual(result, expected)
+    })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 6259790630969
+      assert.strictEqual(result, expected)
+    })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {

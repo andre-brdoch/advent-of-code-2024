@@ -1,17 +1,18 @@
+export type Spot = number | '.'
+
 export function solvePt1(input: string): number {
   const parsed = parseFile(input)
-  const unCondensed = unCondense(parsed.slice(0, 10))
-  console.log(unCondensed)
-  // const moved = moveBlocks(unCondensed)
-  // const checksum = getChecksum(moved)
-  // return checksum
+  const unCondensed = unCondense(parsed)
+  const moved = moveBlocks(unCondensed)
+  const checksum = getChecksum(moved)
+  return checksum
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-export function getChecksum(moved: string): number {
+export function getChecksum(moved: Spot[]): number {
   let result = 0
   for (let i = 0; i <= moved.length - 1; i += 1) {
     const n = moved[i]
@@ -23,8 +24,8 @@ export function getChecksum(moved: string): number {
   return result
 }
 
-export function moveBlocks(unCondensed: string): string {
-  let result: string = unCondensed
+export function moveBlocks(unCondensed: Spot[]): Spot[] {
+  let result: Spot[] = unCondensed
   let isDone = false
   while (!isDone) {
     const [newResult, newIsDone] = moveBlock(result)
@@ -34,7 +35,7 @@ export function moveBlocks(unCondensed: string): string {
   return result
 }
 
-export function moveBlock(unCondensed: string): [result: string, isDone: boolean] {
+export function moveBlock(unCondensed: Spot[]): [result: Spot[], isDone: boolean] {
   const leftIndex = unCondensed.indexOf('.')
   let rightIndex: number = leftIndex
   if (leftIndex === -1) return [unCondensed, true]
@@ -47,25 +48,21 @@ export function moveBlock(unCondensed: string): [result: string, isDone: boolean
     }
   }
   if (leftIndex === rightIndex) return [unCondensed, true]
-  let result = replaceCharAt(unCondensed, leftIndex, unCondensed[rightIndex])
-  result = replaceCharAt(result, rightIndex, '.')
+  const result = [...unCondensed]
+  result[leftIndex] = unCondensed[rightIndex]
+  result[rightIndex] = '.'
   return [result, false]
 }
 
-function replaceCharAt(str: string, index: number, char: string): string {
-  const result = str.substring(0, index) + char + str.substring(index + 1)
-  return result
-}
-
-export function unCondense(mapDisc: number[]): string {
-  let result = ''
+export function unCondense(mapDisc: number[]): Spot[] {
+  const result: Spot[] = []
   let currentId = 0
   for (let i = 0; i <= mapDisc.length - 1; i += 1) {
     const n = mapDisc[i]
     const isFree = i % 2 !== 0
     const add = isFree ? '.' : currentId
     for (let j = 0; j <= n - 1; j += 1) {
-      result += add
+      result.push(add)
     }
     if (!isFree) currentId += 1
   }
