@@ -1,9 +1,25 @@
-export function solvePt1(input: string): any {
+export function solvePt1(input: string): number {
   const parsed = parseFile(input)
+  const unCondensed = unCondense(parsed)
+  const moved = moveBlocks(unCondensed)
+  const checksum = getChecksum(moved)
+  return checksum
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
+}
+
+export function getChecksum(moved: string): number {
+  let result = 0
+  for (let i = 0; i <= moved.length - 1; i += 1) {
+    const n = moved[i]
+    const isFree = n === '.'
+    if (isFree) break
+    const add = Number(n) * i
+    result += add
+  }
+  return result
 }
 
 export function moveBlocks(unCondensed: string): string {
@@ -29,16 +45,15 @@ export function moveBlock(unCondensed: string): [result: string, isDone: boolean
       break
     }
   }
-  console.log('left', leftIndex, 'right', rightIndex)
-
   if (leftIndex === rightIndex) return [unCondensed, true]
-  const result =
-    unCondensed.substring(0, leftIndex) +
-    unCondensed[rightIndex] +
-    unCondensed.substring(leftIndex + 1, rightIndex) +
-    '.' +
-    unCondensed.substring(rightIndex + 1)
+  let result = replaceCharAt(unCondensed, leftIndex, unCondensed[rightIndex])
+  result = replaceCharAt(result, rightIndex, '.')
   return [result, false]
+}
+
+function replaceCharAt(str: string, index: number, char: string): string {
+  const result = str.substring(0, index) + char + str.substring(index + 1)
+  return result
 }
 
 export function unCondense(mapDisc: number[]): string {
