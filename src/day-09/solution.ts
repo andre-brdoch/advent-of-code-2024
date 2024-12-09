@@ -54,6 +54,14 @@ export function moveBlock(unCondensed: Spot[]): [result: Spot[], isDone: boolean
   return [result, false]
 }
 
+export function stringToArray(str: string): Spot[] {
+  return str.split('').map((char) => (char === '.' ? char : Number(char)))
+}
+
+export function arrayToString(arr: Spot[]): string {
+  return arr.join('')
+}
+
 export function unCondense(mapDisc: number[]): Spot[] {
   const result: Spot[] = []
   let currentId = 0
