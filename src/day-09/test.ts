@@ -1,18 +1,29 @@
-import { describe, it } from 'node:test'
+import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { parseFile, uncondense } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
 describe('day-09', async () => {
   const reader = new InputReader(__dirname)
-  const { inputExample, inputReal } = await reader.readAllInputFiles()
+  const { inputMini, inputExample, inputReal } = await reader.readAllInputFiles()
+
+  let discMapMini: number[]
+  let discMapExample: number[]
+
+  beforeEach(() => {
+    discMapMini = [1, 2, 3, 4, 5]
+    discMapExample = [2, 3, 3, 3, 1, 3, 3, 1, 2, 1, 4, 1, 4, 1, 3, 1, 4, 0, 2]
+  })
 
   describe('helpers', () => {
     it('parseFile()', () => {
-      const result = parseFile(inputExample)
-      const expected = [2, 3, 3, 3, 1, 3, 3, 1, 2, 1, 4, 1, 4, 1, 3, 1, 4, 0, 2]
-      assert.deepEqual(result, expected)
+      assert.deepEqual(parseFile(inputMini), discMapMini)
+      assert.deepEqual(parseFile(inputExample), discMapExample)
+    })
+    it('uncondense()', () => {
+      assert.deepEqual(uncondense(discMapMini), '0..111....22222')
+      assert.deepEqual(uncondense(discMapExample), '00...111...2...333.44.5555.6666.777.888899')
     })
   })
 
