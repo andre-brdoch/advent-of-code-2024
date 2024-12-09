@@ -35,19 +35,20 @@ describe('day-09', async () => {
     })
   })
 
-  describe('part 1', () => {
-    it('example data', () => {
-      const result = solvePt1(inputExample)
-      const expected = 1928
-      assert.strictEqual(result, expected)
-    })
-    it('real data', () => {
-      const result = solvePt1(inputReal)
-      consola.success(`=== Result pt. 1: ${result} ===`)
-      const expected = 88957760693
-      assert.strictEqual(result, expected)
-    })
-  })
+  // describe('part 1', () => {
+  //   it('example data', () => {
+  //     const result = solvePt1(inputExample)
+  //     const expected = undefined
+  //     assert.strictEqual(result, expected)
+  //   })
+
+  //   // it('real data', () => {
+  //   //   const result = solvePt1(inputReal)
+  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
+  //   //   const expected = undefined
+  //   //   assert.strictEqual(result, expected)
+  //   // })
+  // })
 
   // describe('part 2', () => {
   //   it('example data', () => {

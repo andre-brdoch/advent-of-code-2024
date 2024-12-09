@@ -24,38 +24,22 @@ export function getChecksum(moved: string): number {
 
 export function moveBlocks(unCondensed: string): string {
   let result: string = unCondensed
-  let leftIndexLatest = 0
-  let rightIndexLatest = result.length - 1
   all: while (true) {
-    let leftIndex = leftIndexLatest
-    let rightIndex = rightIndexLatest
-    left: for (let i = leftIndexLatest; i <= rightIndexLatest; i += 1) {
-      const char = result[i]
-      const isFree = char === '.'
-      if (isFree) {
-        console.log('found left', i, 'right', rightIndexLatest)
-
-        leftIndex = i
-        leftIndexLatest = i
-
-        break left
-      } else if (i >= rightIndex) break left
-    }
+    const leftIndex = result.indexOf('.')
+    let rightIndex: number = leftIndex
     if (leftIndex === -1) {
       break all
     }
-    right: for (let i = rightIndexLatest; i >= 0 && i >= leftIndex; i -= 1) {
+    single: for (let i = result.length - 1; i >= 0 && i >= leftIndex; i -= 1) {
       const char = result[i]
-      console.log('irght', i, char)
       const isFree = char === '.'
       if (!isFree) {
         rightIndex = i
-        rightIndexLatest = i
-        console.log('found right', i, 'left', leftIndexLatest)
-        break right
-      } else if (i <= leftIndex) break
+        break single
+      }
     }
-    if (leftIndex >= rightIndex) {
+
+    if (leftIndex === rightIndex) {
       break all
     }
     let newResult = replaceCharAt(result, leftIndex, result[rightIndex])
