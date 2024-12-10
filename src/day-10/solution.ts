@@ -8,18 +8,17 @@ type Cell = number | '.'
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
-  const score = solve(map)
-  return score
+  const startingPoints = getStartingPoints(map)
+  const reachableTops = startingPoints.map((point) => analyzeTrailHeadBreadthFirst(map, point))
+  const scores = reachableTops.map((tops) => tops.length)
+  return getSum(scores)
 }
 
-export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
-}
-
-export function solve(map: Cell[][]): number {
+export function solvePt2(input: string): number {
+  const map = parseFile(input)
   const startingPoints = getStartingPoints(map)
   console.log('startingPoints', startingPoints.length, startingPoints)
-  const reachableTops = startingPoints.map((point) => analyzeTrailHeadBreadthFirst(map, point))
+  const reachableTops = startingPoints.map((point) => analyzeTrailHeadUniquePaths(map, point))
   console.log('reachableTops', reachableTops.length, reachableTops)
   const scores = reachableTops.map((tops) => tops.length)
   console.log('scores', scores.length, scores)
@@ -31,14 +30,32 @@ export function removeDuplicateCoord(coords: Coord[]): Coord[] {
   return Array.from(set).map(parseCoord)
 }
 
+export function analyzeTrailHeadUniquePaths(map: Cell[][], start: Coord): Coord[] {
+  const queue = [start]
+  const reachableTops: Coord[] = []
+  while (queue.length) {
+    const current = queue.shift()
+    if (!current) continue
+    if (map[current.y][current.x] === 9) {
+      reachableTops.push(current)
+    } else {
+      const neighbors = getNeighbors(map, current)
+      queue.push(...neighbors)
+    }
+  }
+  return reachableTops
+}
+
 export function analyzeTrailHeadBreadthFirst(map: Cell[][], start: Coord): Coord[] {
   const queue = [start]
   const visited = new Set<string>()
   const reachableTops: Coord[] = []
   while (queue.length) {
     const current = queue.shift()
-    if (current && !visited.has(stringifyCoord(current))) {
-      visited.add(stringifyCoord(current))
+    if (!current) continue
+    const currentKey = stringifyCoord(current)
+    if (!visited.has(currentKey)) {
+      visited.add(currentKey)
       if (map[current.y][current.x] === 9) {
         reachableTops.push(current)
       } else {
@@ -60,10 +77,7 @@ export function getNeighbors(map: Cell[][], coord: Coord): Coord[] {
   const currentHeight = map[coord.y][coord.x]
   if (currentHeight === '.') return []
   return vectors
-    .map((vector) => {
-      const point = { x: coord.x + vector.x, y: coord.y + vector.y }
-      return point
-    })
+    .map((vector) => ({ x: coord.x + vector.x, y: coord.y + vector.y }))
     .filter(({ x, y }) => {
       const val = map[y]?.[x]
       return val != null && val === currentHeight + 1
