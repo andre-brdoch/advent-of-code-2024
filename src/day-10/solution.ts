@@ -6,6 +6,9 @@ interface Coord {
 }
 type Cell = number | '.'
 
+const START = 0
+const END = 9
+
 export function solvePt1(input: string): number {
   const map = parseFile(input)
   return solve(map, false)
@@ -39,7 +42,7 @@ export function analyzeTrailHeadBreadthFirst(
     const currentKey = stringifyCoord(current)
     if (unique || !visited.has(currentKey)) {
       if (!unique) visited.add(currentKey)
-      if (map[current.y][current.x] === 9) {
+      if (map[current.y][current.x] === END) {
         reachableTops.push(current)
       } else {
         const neighbors = getNeighbors(map, current)
@@ -68,18 +71,13 @@ export function getNeighbors(map: Cell[][], coord: Coord): Coord[] {
 }
 
 export function getStartingPoints(map: Cell[][]): Coord[] {
-  const startVal: Coord[] = []
-  return map.reduce((result, row, y) => {
-    const rowStartVal: Coord[] = []
-    const add = row.reduce((rowResult, val, x) => {
-      if (val === 0) {
-        rowResult.push({ x, y })
-      }
-      return rowResult
-    }, rowStartVal)
-    result.push(...add)
-    return result
-  }, startVal)
+  const result: Coord[] = []
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      if (map[y][x] === START) result.push({ x, y })
+    }
+  }
+  return result
 }
 
 function stringifyCoord(coord: Coord): string {
