@@ -8,21 +8,12 @@ type Cell = number | '.'
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
-  const startingPoints = getStartingPoints(map)
-  const reachableTops = startingPoints.map((point) => analyzeTrailHeadBreadthFirst(map, point))
-  const scores = reachableTops.map((tops) => tops.length)
-  return getSum(scores)
+  return solve(map, false)
 }
 
 export function solvePt2(input: string): number {
   const map = parseFile(input)
-  const startingPoints = getStartingPoints(map)
-  console.log('startingPoints', startingPoints.length, startingPoints)
-  const reachableTops = startingPoints.map((point) => analyzeTrailHeadUniquePaths(map, point))
-  console.log('reachableTops', reachableTops.length, reachableTops)
-  const scores = reachableTops.map((tops) => tops.length)
-  console.log('scores', scores.length, scores)
-  return getSum(scores)
+  return solve(map, true)
 }
 
 export function removeDuplicateCoord(coords: Coord[]): Coord[] {
@@ -30,23 +21,20 @@ export function removeDuplicateCoord(coords: Coord[]): Coord[] {
   return Array.from(set).map(parseCoord)
 }
 
-export function analyzeTrailHeadUniquePaths(map: Cell[][], start: Coord): Coord[] {
-  const queue = [start]
-  const reachableTops: Coord[] = []
-  while (queue.length) {
-    const current = queue.shift()
-    if (!current) continue
-    if (map[current.y][current.x] === 9) {
-      reachableTops.push(current)
-    } else {
-      const neighbors = getNeighbors(map, current)
-      queue.push(...neighbors)
-    }
-  }
-  return reachableTops
+export function solve(map: Cell[][], unique: boolean): number {
+  const startingPoints = getStartingPoints(map)
+  const reachableTops = startingPoints.map((point) =>
+    analyzeTrailHeadBreadthFirst(map, point, unique)
+  )
+  const scores = reachableTops.map((tops) => tops.length)
+  return getSum(scores)
 }
 
-export function analyzeTrailHeadBreadthFirst(map: Cell[][], start: Coord): Coord[] {
+export function analyzeTrailHeadBreadthFirst(
+  map: Cell[][],
+  start: Coord,
+  unique: boolean
+): Coord[] {
   const queue = [start]
   const visited = new Set<string>()
   const reachableTops: Coord[] = []
@@ -54,8 +42,8 @@ export function analyzeTrailHeadBreadthFirst(map: Cell[][], start: Coord): Coord
     const current = queue.shift()
     if (!current) continue
     const currentKey = stringifyCoord(current)
-    if (!visited.has(currentKey)) {
-      visited.add(currentKey)
+    if (unique || !visited.has(currentKey)) {
+      if (!unique) visited.add(currentKey)
       if (map[current.y][current.x] === 9) {
         reachableTops.push(current)
       } else {
