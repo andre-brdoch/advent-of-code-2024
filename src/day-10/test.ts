@@ -6,12 +6,11 @@ import consola from 'consola'
 
 describe('day-10', async () => {
   const reader = new InputReader(__dirname)
-  const { inputMini1, inputMini2, inputExample, inputReal } = await reader.readAllInputFiles()
+  const { inputMini1, inputMini2, inputMini3, inputMini4, inputExample, inputReal } =
+    await reader.readAllInputFiles()
 
   describe('helpers', () => {
     it('parseFile()', () => {
-      const result = parseFile(inputExample)
-      const expected = undefined
       assert.deepEqual(parseFile(inputExample), [
         [0, 1, 2, 3],
         [1, 2, 3, 4],
@@ -41,19 +40,23 @@ describe('day-10', async () => {
     })
 
     it('mini data 3', () => {
-      const result = solvePt1(inputMini2)
+      const result = solvePt1(inputMini3)
       const expected = 3
       assert.strictEqual(result, expected)
     })
 
-    // it('real data', () => {
-    //   const result = solvePt1(inputReal)
-    //   consola.success(`=== Result pt. 1: ${result} ===`)
-    //   // 37
-    //   // 48
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
+    it('mini data 4', () => {
+      const result = solvePt1(inputMini4)
+      const expected = 36
+      assert.strictEqual(result, expected)
+    })
+
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
   })
 
   // describe('part 2', () => {

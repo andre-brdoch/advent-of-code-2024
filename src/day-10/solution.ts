@@ -1,3 +1,5 @@
+import { getSum } from '../utils/array'
+
 interface Coord {
   x: number
   y: number
@@ -6,22 +8,22 @@ type Cell = number | '.'
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
-  const reachable = getAllReachableTops(map)
-  return reachable.length
+  const score = solve(map)
+  return score
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-export function getAllReachableTops(map: number[][]): Coord[] {
+export function solve(map: Cell[][]): number {
   const startingPoints = getStartingPoints(map)
-  console.log('startingPoints', startingPoints)
-  console.log('startingPoints length', startingPoints.length)
-  const possibleDupes = startingPoints.flatMap((point) => analyzeTrailHeadBreadthFirst(map, point))
-  console.log('possibleDupes', possibleDupes.length, possibleDupes)
-
-  return removeDuplicateCoord(possibleDupes)
+  console.log('startingPoints', startingPoints.length, startingPoints)
+  const reachableTops = startingPoints.map((point) => analyzeTrailHeadBreadthFirst(map, point))
+  console.log('reachableTops', reachableTops.length, reachableTops)
+  const scores = reachableTops.map((tops) => tops.length)
+  console.log('scores', scores.length, scores)
+  return getSum(scores)
 }
 
 export function removeDuplicateCoord(coords: Coord[]): Coord[] {
@@ -35,21 +37,16 @@ export function analyzeTrailHeadBreadthFirst(map: Cell[][], start: Coord): Coord
   const reachableTops: Coord[] = []
   while (queue.length) {
     const current = queue.shift()
-    // console.log('current', current)
-
     if (current && !visited.has(stringifyCoord(current))) {
       visited.add(stringifyCoord(current))
       if (map[current.y][current.x] === 9) {
         reachableTops.push(current)
       } else {
         const neighbors = getNeighbors(map, current)
-        // console.log('neighbors', neighbors)
-
         queue.push(...neighbors)
       }
     }
   }
-  console.log('reachable tops:', reachableTops)
   return reachableTops
 }
 
@@ -78,9 +75,7 @@ export function getStartingPoints(map: Cell[][]): Coord[] {
   return map.reduce((result, row, y) => {
     const rowStartVal: Coord[] = []
     const add = row.reduce((rowResult, val, x) => {
-      const isFirstOrLastRow = y === 0 || y === map.length - 1
-      const isFirstOrLastCol = x === 0 || x === map[0].length - 1
-      if ((isFirstOrLastRow || isFirstOrLastCol) && val === 0) {
+      if (val === 0) {
         rowResult.push({ x, y })
       }
       return rowResult
