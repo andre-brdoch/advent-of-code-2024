@@ -26,10 +26,10 @@ async function run() {
 async function getTestFiles(day) {
   if (typeof day === 'number') {
     const dayPadded = String(day).padStart(2, '0')
-    return [join(process.cwd(), `src/day-${dayPadded}/test.ts`)]
+    return [join(process.cwd(), `day-${dayPadded}/test.ts`)]
   }
   // all
-  const srcDir = join(process.cwd(), 'src')
+  const srcDir = process.cwd()
   const subDirs = await readdir(srcDir)
   const targetDirs = subDirs.filter((dir) => dir.startsWith('day-') && dir !== 'day-xx')
   return targetDirs.map((targetDir) => join(srcDir, targetDir, 'test.ts'))
