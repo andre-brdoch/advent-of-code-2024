@@ -35,31 +35,26 @@ describe('day-10', async () => {
       const expected = 1
       assert.strictEqual(result, expected)
     })
-
     it('mini data 1', () => {
       const result = solvePt1(inputMini1)
       const expected = 2
       assert.strictEqual(result, expected)
     })
-
     it('mini data 2', () => {
       const result = solvePt1(inputMini2)
       const expected = 4
       assert.strictEqual(result, expected)
     })
-
     it('mini data 3', () => {
       const result = solvePt1(inputMini3)
       const expected = 3
       assert.strictEqual(result, expected)
     })
-
     it('mini data 4', () => {
       const result = solvePt1(inputMini4)
       const expected = 36
       assert.strictEqual(result, expected)
     })
-
     it('real data', () => {
       const result = solvePt1(inputReal)
       consola.success(`=== Result pt. 1: ${result} ===`)
@@ -69,30 +64,26 @@ describe('day-10', async () => {
   })
 
   describe('part 2', () => {
-    // it('example data', () => {
-    //   const result = solvePt2(inputExample)
-    //   const expected = 81
-    //   assert.strictEqual(result, expected)
-    // })
-
+    it('example data', () => {
+      const result = solvePt2(inputMini4)
+      const expected = 81
+      assert.strictEqual(result, expected)
+    })
     it('mini data 5', () => {
       const result = solvePt2(inputMini5)
       const expected = 3
       assert.strictEqual(result, expected)
     })
-
     it('mini data 6', () => {
       const result = solvePt2(inputMini6)
       const expected = 13
       assert.strictEqual(result, expected)
     })
-
     it('mini data 7', () => {
       const result = solvePt2(inputMini7)
       const expected = 227
       assert.strictEqual(result, expected)
     })
-
     it('real data', () => {
       const result = solvePt2(inputReal)
       consola.success(`=== Result pt. 2: ${result} ===`)
