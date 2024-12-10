@@ -1,12 +1,12 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { parseFile, solvePt1 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
 describe('day-10', async () => {
   const reader = new InputReader(__dirname)
-  const { inputExample, inputReal } = await reader.readAllInputFiles()
+  const { inputMini1, inputMini2, inputExample, inputReal } = await reader.readAllInputFiles()
 
   describe('helpers', () => {
     it('parseFile()', () => {
@@ -21,20 +21,40 @@ describe('day-10', async () => {
     })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 1
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('mini data 1', () => {
+      const result = solvePt1(inputMini1)
+      const expected = 2
+      assert.strictEqual(result, expected)
+    })
+
+    it('mini data 2', () => {
+      const result = solvePt1(inputMini2)
+      const expected = 4
+      assert.strictEqual(result, expected)
+    })
+
+    it('mini data 3', () => {
+      const result = solvePt1(inputMini2)
+      const expected = 3
+      assert.strictEqual(result, expected)
+    })
+
+    // it('real data', () => {
+    //   const result = solvePt1(inputReal)
+    //   consola.success(`=== Result pt. 1: ${result} ===`)
+    //   // 37
+    //   // 48
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {
