@@ -4,7 +4,7 @@ import { parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
-describe('day-xx', async () => {
+describe('day-11', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
