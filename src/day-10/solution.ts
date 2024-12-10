@@ -16,11 +16,6 @@ export function solvePt2(input: string): number {
   return solve(map, true)
 }
 
-export function removeDuplicateCoord(coords: Coord[]): Coord[] {
-  const set = new Set(coords.map(stringifyCoord))
-  return Array.from(set).map(parseCoord)
-}
-
 export function solve(map: Cell[][], unique: boolean): number {
   const startingPoints = getStartingPoints(map)
   const reachableTops = startingPoints.map((point) =>
@@ -85,12 +80,6 @@ export function getStartingPoints(map: Cell[][]): Coord[] {
     result.push(...add)
     return result
   }, startVal)
-}
-
-function parseCoord(coordStr: string): Coord {
-  // x/7
-  const [x, y] = coordStr.split('/')
-  return { x: Number(x), y: Number(y) }
 }
 
 function stringifyCoord(coord: Coord): string {
