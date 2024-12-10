@@ -1,4 +1,4 @@
-![advent of code banner](/public/header.png)
+![advent of code banner](/header.png)
 
 # advent-of-code-2024
 
@@ -15,16 +15,16 @@ https://adventofcode.com/2024
 
 ## Progress
 
-1. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-01) ⭐⭐
-2. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-02) ⭐⭐
-3. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-03) ⭐⭐
-4. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-04) ⭐⭐
-5. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-05) ⭐⭐
-6. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-06) ⭐⭐
-7. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-07) ⭐⭐
-8. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-08) ⭐⭐
-9. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-09) ⭐⭐
-10. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/src/day-10) ⭐⭐
+1. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-01) ⭐⭐
+2. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-02) ⭐⭐
+3. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-03) ⭐⭐
+4. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-04) ⭐⭐
+5. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-05) ⭐⭐
+6. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-06) ⭐⭐
+7. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-07) ⭐⭐
+8. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-08) ⭐⭐
+9. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-09) ⭐⭐
+10. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-10) ⭐⭐
 11. TBD
 12. TBD
 13. TBD
