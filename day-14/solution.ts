@@ -1,5 +1,8 @@
+import { appendFileSync, rmSync } from 'fs'
 import { addCoords, stringifyCoord } from '../utils/coordinates'
 import { getTypedKeys } from '../utils/object'
+import { join } from 'path'
+import { createFileSync } from '../utils/fs'
 
 export interface Coord {
   x: number
@@ -23,15 +26,20 @@ export function solvePt1(input: string, gridSizes: GridSizes): number {
   return safetyFactor
 }
 
-export function solvePt2(input: string, gridSizes: GridSizes): number {
+export function solvePt2(input: string, gridSizes: GridSizes, outputFile: string): number {
   const robots = parseFile(input)
   const n = 100
+  const path = join(__dirname, 'output', outputFile)
+  rmSync(path)
+  createFileSync(path)
+
   for (let i = 0; i <= n - 1; i += 1) {
     robots.forEach((robot) => {
       moveRobotNTimes(robot, 1, gridSizes)
     })
-    console.log('=====================')
-    console.log(visualize(robots, gridSizes))
+    const content = '\n=============\n' + visualize(robots, gridSizes)
+    console.log(content)
+    appendFileSync(path, content)
   }
 }
 

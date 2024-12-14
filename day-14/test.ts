@@ -142,7 +142,7 @@ describe('day-14', async () => {
 
   describe('part 2', () => {
     it('example data', () => {
-      const result = solvePt2(inputExample, gridSizesExample)
+      const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
       const expected = undefined
       assert.strictEqual(result, expected)
     })
