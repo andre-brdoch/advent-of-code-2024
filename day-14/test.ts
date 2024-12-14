@@ -141,17 +141,17 @@ describe('day-14', async () => {
   })
 
   describe('part 2', () => {
-    it('example data', () => {
-      const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
-      const expected = undefined
-      assert.strictEqual(result, expected)
-    })
-
-    // it('real data', () => {
-    //   const result = solvePt2(inputReal)
-    //   consola.success(`=== Result pt. 2: ${result} ===`)
+    // it('example data', () => {
+    //   const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
     //   const expected = undefined
     //   assert.strictEqual(result, expected)
     // })
+
+    it('real data', () => {
+      const result = solvePt2(inputReal, gridSizesReal, 'outputReal.txt')
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
   })
 })

@@ -1,4 +1,4 @@
-import { openSync, writeFileSync } from 'fs'
+import { openSync, rmSync, writeFileSync } from 'fs'
 
 export function createFileSync(fileName: string): void {
   try {
@@ -7,5 +7,14 @@ export function createFileSync(fileName: string): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     writeFileSync(fileName, '')
+  }
+}
+
+export function removeFileSync(fileName: string): void {
+  try {
+    rmSync(fileName)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (err) {
+    // file did not exist
   }
 }
