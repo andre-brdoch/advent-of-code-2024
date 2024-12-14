@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile, Robot } from './solution'
+import { findIdenticalVectors, getNextCoord, GridSizes, parseFile, Robot } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -8,9 +8,13 @@ describe('day-14', async () => {
   const reader = new InputReader(__dirname)
   const { inputExample, inputReal } = await reader.readAllInputFiles()
 
+  let gridSizesExample: GridSizes
+  let gridSizesReal: GridSizes
   let robotsExample: Robot[]
 
   beforeEach(() => {
+    gridSizesExample = [11, 7]
+    gridSizesReal = [101, 103]
     robotsExample = [
       { vector: { x: 3, y: -3 }, history: [{ x: 0, y: 4 }] },
       { vector: { x: -1, y: -3 }, history: [{ x: 6, y: 3 }] },
@@ -30,6 +34,23 @@ describe('day-14', async () => {
   describe('helpers', () => {
     it('parseFile()', () => {
       assert.deepEqual(parseFile(inputExample), robotsExample)
+    })
+    it('getNextCoord()', () => {
+      const robot = { vector: { x: 2, y: -3 }, history: [{ x: 2, y: 4 }] }
+      const next1 = { x: 4, y: 1 }
+      assert.deepEqual(getNextCoord(robot, gridSizesExample), next1)
+      robot.history.push(next1)
+      const next2 = { x: 6, y: 5 }
+      assert.deepEqual(getNextCoord(robot, gridSizesExample), next2)
+      robot.history.push(next2)
+      const next3 = { x: 8, y: 2 }
+      assert.deepEqual(getNextCoord(robot, gridSizesExample), next3)
+      robot.history.push(next3)
+      const next4 = { x: 10, y: 6 }
+      assert.deepEqual(getNextCoord(robot, gridSizesExample), next4)
+      robot.history.push(next4)
+      const next5 = { x: 1, y: 3 }
+      assert.deepEqual(getNextCoord(robot, gridSizesExample), next5)
     })
   })
 
