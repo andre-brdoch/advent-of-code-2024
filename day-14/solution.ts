@@ -2,7 +2,7 @@ import { appendFileSync } from 'fs'
 import { addCoords, stringifyCoord } from '../utils/coordinates'
 import { getTypedKeys } from '../utils/object'
 import { join } from 'path'
-import { createFileSync, removeFileSync } from '../utils/fs'
+import { createFileSync, prependFileSync, removeFileSync } from '../utils/fs'
 
 export interface Coord {
   x: number
@@ -53,7 +53,7 @@ export function visualizePt2(
     })
     if ((i - 24) % 103 === 0 || (i - 61) % 101 === 0) {
       const content = `\n============= n=${i} =============\n` + visualize(robots, gridSizes)
-      appendFileSync(path, content)
+      prependFileSync(path, content)
     }
   }
 }

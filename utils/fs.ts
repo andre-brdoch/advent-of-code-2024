@@ -1,4 +1,4 @@
-import { openSync, rmSync, writeFileSync } from 'fs'
+import { openSync, readFileSync, rmSync, writeFileSync, writeSync } from 'fs'
 
 export function createFileSync(fileName: string): void {
   try {
@@ -17,4 +17,12 @@ export function removeFileSync(fileName: string): void {
   } catch (err) {
     // file did not exist
   }
+}
+
+export function prependFileSync(fileName: string, contentToAdd: string): void {
+  const existing = readFileSync(fileName)
+  const fileDescriptor = openSync(fileName, 'w+')
+  const insert = Buffer.from(contentToAdd)
+  writeSync(fileDescriptor, insert, 0, insert.length, 0)
+  writeSync(fileDescriptor, existing, 0, existing.length, insert.length)
 }

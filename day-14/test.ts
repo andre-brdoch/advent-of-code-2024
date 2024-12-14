@@ -147,9 +147,6 @@ describe('day-14', async () => {
   })
 
   describe('visualize part 2', () => {
-    it('example data', () => {
-      visualizePt2(inputExample, gridSizesExample, 5, 'outputExample.txt')
-    })
     it('real data', () => {
       visualizePt2(inputReal, gridSizesReal, 7131 + 1, 'outputReal.txt')
     })
