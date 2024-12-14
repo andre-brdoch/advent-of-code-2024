@@ -1,6 +1,15 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { findIdenticalVectors, getNextCoord, GridSizes, parseFile, Robot } from './solution'
+import {
+  findIdenticalVectors,
+  getHistoryAfterNTurns,
+  getNextCoord,
+  getRobotsPerQuadrant,
+  GridSizes,
+  parseFile,
+  Robot,
+  solvePt1,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -52,22 +61,83 @@ describe('day-14', async () => {
       const next5 = { x: 1, y: 3 }
       assert.deepEqual(getNextCoord(robot, gridSizesExample), next5)
     })
+    it('getHistoryAfterNTurns', () => {
+      const start = { x: 2, y: 4 }
+      const robot = { vector: { x: 2, y: -3 }, history: [start] }
+      const next1 = { x: 4, y: 1 }
+      const next2 = { x: 6, y: 5 }
+      const next3 = { x: 8, y: 2 }
+      const next4 = { x: 10, y: 6 }
+      const next5 = { x: 1, y: 3 }
+
+      assert.deepEqual(getHistoryAfterNTurns(robot, 1, gridSizesExample), [start, next1])
+      assert.deepEqual(getHistoryAfterNTurns(robot, 2, gridSizesExample), [start, next1, next2])
+      assert.deepEqual(getHistoryAfterNTurns(robot, 3, gridSizesExample), [
+        start,
+        next1,
+        next2,
+        next3,
+      ])
+      assert.deepEqual(getHistoryAfterNTurns(robot, 4, gridSizesExample), [
+        start,
+        next1,
+        next2,
+        next3,
+        next4,
+      ])
+      assert.deepEqual(getHistoryAfterNTurns(robot, 5, gridSizesExample), [
+        start,
+        next1,
+        next2,
+        next3,
+        next4,
+        next5,
+      ])
+    })
+    it('getRobotsPerQuadrant()', () => {
+      const vector = { x: 0, y: 0 }
+      const r1: Robot = { history: [{ x: 6, y: 0 }], vector }
+      const r2: Robot = { history: [{ x: 6, y: 0 }], vector }
+      const r3: Robot = { history: [{ x: 9, y: 0 }], vector }
+      const r4: Robot = { history: [{ x: 0, y: 2 }], vector }
+      const r5: Robot = { history: [{ x: 1, y: 3 }], vector }
+      const r6: Robot = { history: [{ x: 2, y: 3 }], vector }
+      const r7: Robot = { history: [{ x: 5, y: 4 }], vector }
+      const r8: Robot = { history: [{ x: 3, y: 5 }], vector }
+      const r9: Robot = { history: [{ x: 4, y: 5 }], vector }
+      const r10: Robot = { history: [{ x: 4, y: 5 }], vector }
+      const r11: Robot = { history: [{ x: 1, y: 6 }], vector }
+      const r12: Robot = { history: [{ x: 6, y: 6 }], vector }
+      const robots = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12]
+      const result = getRobotsPerQuadrant(robots, gridSizesExample)
+      const expected = [
+        // q1
+        [r4],
+        // q2
+        [r1, r2, r3],
+        // q3
+        [r8, r9, r10, r11],
+        // q4
+        [r12],
+      ]
+      assert.deepEqual(result, expected)
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample, gridSizesExample)
+      const expected = 12
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    it('real data', () => {
+      const result = solvePt1(inputReal, gridSizesReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 229980828
+      assert.strictEqual(result, expected)
+    })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {

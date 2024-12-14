@@ -5,20 +5,69 @@ export interface Coord {
   x: number
   y: number
 }
-
 export interface Robot {
   vector: Coord
   history: Coord[]
 }
-
 export type GridSizes = [width: number, height: number]
+export type Quadrant = Robot[]
+export type Quadrants = [Quadrant, Quadrant, Quadrant, Quadrant]
 
-export function solvePt1(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt1(input: string, gridSizes: GridSizes): number {
+  const robots = parseFile(input)
+  robots.forEach((robot) => {
+    moveRobotNTimes(robot, 100, gridSizes)
+  })
+  const quadrants = getRobotsPerQuadrant(robots, gridSizes)
+  const safetyFactor = getSafetyFactor(quadrants)
+  return safetyFactor
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
+}
+
+export function getSafetyFactor(quadrants: Quadrants): number {
+  return quadrants.map((q) => q.length).reduce((result, current) => result * current, 1)
+}
+
+export function getRobotsPerQuadrant(robots: Robot[], gridSizes: GridSizes): Quadrants {
+  const xMiddle = (gridSizes[0] - 1) / 2
+  const yMiddle = (gridSizes[1] - 1) / 2
+  const result: Quadrants = [[], [], [], []]
+  for (let i = 0; i <= robots.length - 1; i += 1) {
+    const robot = robots[i]
+    const { x, y } = robot.history[robot.history.length - 1]
+    let targetQIndex: number | undefined
+    if (y < yMiddle) {
+      if (x < xMiddle) targetQIndex = 0
+      else if (x > xMiddle) targetQIndex = 1
+    } else if (y > yMiddle) {
+      if (x < xMiddle) targetQIndex = 2
+      else if (x > xMiddle) targetQIndex = 3
+    }
+    if (targetQIndex == null) {
+      // lies on middle axis, ignore
+      continue
+    }
+    result[targetQIndex].push(robot)
+  }
+  return result
+}
+
+export function moveRobotNTimes(robot: Robot, n: number, gridSizes: GridSizes): void {
+  const newHistory = getHistoryAfterNTurns(robot, n, gridSizes)
+  robot.history = newHistory
+}
+
+export function getHistoryAfterNTurns(robot: Robot, n: number, gridSizes: GridSizes): Coord[] {
+  const historyCopy = [...robot.history]
+  const robotCopy = { ...robot, history: historyCopy }
+  for (let i = 0; i < n; i += 1) {
+    const next = getNextCoord(robotCopy, gridSizes)
+    historyCopy.push(next)
+  }
+  return historyCopy
 }
 
 export function getNextCoord(robot: Robot, gridSizes: GridSizes): Coord {
