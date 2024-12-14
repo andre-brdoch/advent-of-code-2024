@@ -1,11 +1,10 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
-  findIdenticalVectors,
-  getHistoryAfterNTurns,
   getNextCoord,
   getRobotsPerQuadrant,
   GridSizes,
+  moveRobotNTimes,
   parseFile,
   Robot,
   solvePt1,
@@ -62,38 +61,45 @@ describe('day-14', async () => {
       const next5 = { x: 1, y: 3 }
       assert.deepEqual(getNextCoord(robot, gridSizesExample), next5)
     })
-    it('getHistoryAfterNTurns', () => {
+    it('moveRobotNTimes()', () => {
       const start = { x: 2, y: 4 }
-      const robot = { vector: { x: 2, y: -3 }, history: [start] }
+      // eslint-disable-next-line func-style
+      const makeRobot = () => ({ vector: { x: 2, y: -3 }, history: [start] })
       const next1 = { x: 4, y: 1 }
       const next2 = { x: 6, y: 5 }
       const next3 = { x: 8, y: 2 }
       const next4 = { x: 10, y: 6 }
       const next5 = { x: 1, y: 3 }
-
-      assert.deepEqual(getHistoryAfterNTurns(robot, 1, gridSizesExample), [start, next1])
-      assert.deepEqual(getHistoryAfterNTurns(robot, 2, gridSizesExample), [start, next1, next2])
-      assert.deepEqual(getHistoryAfterNTurns(robot, 3, gridSizesExample), [
-        start,
-        next1,
-        next2,
-        next3,
-      ])
-      assert.deepEqual(getHistoryAfterNTurns(robot, 4, gridSizesExample), [
-        start,
-        next1,
-        next2,
-        next3,
-        next4,
-      ])
-      assert.deepEqual(getHistoryAfterNTurns(robot, 5, gridSizesExample), [
-        start,
-        next1,
-        next2,
-        next3,
-        next4,
-        next5,
-      ])
+      const robot1 = makeRobot()
+      moveRobotNTimes(robot1, 1, gridSizesExample)
+      assert.deepEqual(robot1, {
+        ...robot1,
+        history: [start, next1],
+      })
+      const robot2 = makeRobot()
+      moveRobotNTimes(robot2, 2, gridSizesExample)
+      assert.deepEqual(robot2, {
+        ...robot2,
+        history: [start, next1, next2],
+      })
+      const robot3 = makeRobot()
+      moveRobotNTimes(robot3, 3, gridSizesExample)
+      assert.deepEqual(robot3, {
+        ...robot3,
+        history: [start, next1, next2, next3],
+      })
+      const robot4 = makeRobot()
+      moveRobotNTimes(robot4, 4, gridSizesExample)
+      assert.deepEqual(robot4, {
+        ...robot4,
+        history: [start, next1, next2, next3, next4],
+      })
+      const robot5 = makeRobot()
+      moveRobotNTimes(robot5, 5, gridSizesExample)
+      assert.deepEqual(robot5, {
+        ...robot5,
+        history: [start, next1, next2, next3, next4, next5],
+      })
     })
     it('getRobotsPerQuadrant()', () => {
       const vector = { x: 0, y: 0 }
@@ -141,12 +147,11 @@ describe('day-14', async () => {
   })
 
   describe('part 2', () => {
-    // it('example data', () => {
-    //   const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
-
+    it('example data', () => {
+      const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
     it('real data', () => {
       const result = solvePt2(inputReal, gridSizesReal, 'outputReal.txt')
       consola.success(`=== Result pt. 2: ${result} ===`)

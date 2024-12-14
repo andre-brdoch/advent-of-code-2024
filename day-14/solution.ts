@@ -101,18 +101,10 @@ export function getRobotsPerQuadrant(robots: Robot[], gridSizes: GridSizes): Qua
 }
 
 export function moveRobotNTimes(robot: Robot, n: number, gridSizes: GridSizes): void {
-  const newHistory = getHistoryAfterNTurns(robot, n, gridSizes)
-  robot.history = newHistory
-}
-
-export function getHistoryAfterNTurns(robot: Robot, n: number, gridSizes: GridSizes): Coord[] {
-  const historyCopy = [...robot.history]
-  const robotCopy = { ...robot, history: historyCopy }
   for (let i = 0; i < n; i += 1) {
-    const next = getNextCoord(robotCopy, gridSizes)
-    historyCopy.push(next)
+    const next = getNextCoord(robot, gridSizes)
+    robot.history.push(next)
   }
-  return historyCopy
 }
 
 export function getNextCoord(robot: Robot, gridSizes: GridSizes): Coord {
