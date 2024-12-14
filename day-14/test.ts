@@ -8,7 +8,7 @@ import {
   parseFile,
   Robot,
   solvePt1,
-  solvePt2,
+  visualizePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
@@ -146,17 +146,12 @@ describe('day-14', async () => {
     })
   })
 
-  describe('part 2', () => {
+  describe('visualize part 2', () => {
     it('example data', () => {
-      const result = solvePt2(inputExample, gridSizesExample, 'outputExample.txt')
-      const expected = undefined
-      assert.strictEqual(result, expected)
+      visualizePt2(inputExample, gridSizesExample, 5, 'outputExample.txt')
     })
     it('real data', () => {
-      const result = solvePt2(inputReal, gridSizesReal, 'outputReal.txt')
-      consola.success(`=== Result pt. 2: ${result} ===`)
-      const expected = undefined
-      assert.strictEqual(result, expected)
+      visualizePt2(inputReal, gridSizesReal, 7131 + 1, 'outputReal.txt')
     })
   })
 })

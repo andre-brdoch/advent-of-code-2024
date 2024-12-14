@@ -26,9 +26,23 @@ export function solvePt1(input: string, gridSizes: GridSizes): number {
   return safetyFactor
 }
 
-export function solvePt2(input: string, gridSizes: GridSizes, outputFile: string): number {
+/**
+ * Since the task did not provide an example of how a valid easter egg will look like,
+ * we need to find it by eye. We therefore print the grid at different points of time.
+ * But after scrolling through the first few hundreds of prints, it becomes
+ * obvious that the number might be very high, and unfeasible to scroll through.
+ * However, a pattern becomes obvious: The robots cluster after all 103 seconds (starting from second 24),
+ * as well as after 101 seconds (starting from second 61).
+ * So we narrow our print logs to only those clusters, to reduce the amount of prints to check.
+ * After 7132s there is a very obvious tree being printed, see the `outputReal.txt`.
+ */
+export function visualizePt2(
+  input: string,
+  gridSizes: GridSizes,
+  n: number,
+  outputFile: string
+): void {
   const robots = parseFile(input)
-  const n = 12000
   const path = join(__dirname, 'output', outputFile)
   removeFileSync(path)
   createFileSync(path)
