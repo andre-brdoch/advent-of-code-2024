@@ -23,8 +23,44 @@ export function solvePt1(input: string, gridSizes: GridSizes): number {
   return safetyFactor
 }
 
-export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt2(input: string, gridSizes: GridSizes): number {
+  const robots = parseFile(input)
+  const n = 100
+  for (let i = 0; i <= n - 1; i += 1) {
+    robots.forEach((robot) => {
+      moveRobotNTimes(robot, 1, gridSizes)
+    })
+    console.log('=====================')
+    console.log(visualize(robots, gridSizes))
+  }
+}
+
+export function visualize(robots: Robot[], gridSizes: GridSizes): string {
+  const robotsByCoordinate = getRobotsByCoordinate(robots)
+  let result = ''
+  for (let y = 0; y <= gridSizes[1] - 1; y += 1) {
+    for (let x = 0; x <= gridSizes[0] - 1; x += 1) {
+      const key = stringifyCoord({ x, y })
+      if (key in robotsByCoordinate) {
+        result += robotsByCoordinate[key].length
+      } else {
+        result += '.'
+      }
+    }
+    if (y < gridSizes[1] - 1) result += '\n'
+  }
+  return result
+}
+
+export function getRobotsByCoordinate(robots: Robot[]): Record<string, Robot[]> {
+  const result: Record<string, Robot[]> = {}
+  robots.forEach((robot) => {
+    const current = robot.history[robot.history.length - 1]
+    const key = stringifyCoord(current)
+    if (!(key in result)) result[key] = []
+    result[key].push(robot)
+  })
+  return result
 }
 
 export function getSafetyFactor(quadrants: Quadrants): number {

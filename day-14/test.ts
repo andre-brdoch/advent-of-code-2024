@@ -9,6 +9,7 @@ import {
   parseFile,
   Robot,
   solvePt1,
+  solvePt2,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
@@ -139,18 +140,18 @@ describe('day-14', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 2', () => {
+    it('example data', () => {
+      const result = solvePt2(inputExample, gridSizesExample)
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    // it('real data', () => {
+    //   const result = solvePt2(inputReal)
+    //   consola.success(`=== Result pt. 2: ${result} ===`)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 })
