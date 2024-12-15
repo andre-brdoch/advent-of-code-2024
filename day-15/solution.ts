@@ -28,10 +28,8 @@ export function solvePt1(input: string): number {
     const [success, newPosition] = moveToken(map, PLAYER, position, instruction)
     if (success) position = newPosition
   })
-  console.log(stringifyMap(map))
   const boxCoordinates = getAllBoxCoordinates(map)
   const gpsValues = boxCoordinates.map((position) => getGps(map, position))
-  console.log('gpsValues', gpsValues)
   return getSum(gpsValues)
 }
 
@@ -110,10 +108,13 @@ export function parseFile(file: string): {
     return cells
   })
   if (!startPosition) throw new Error('No player token found on map')
-  const instructions: Instruction[] = instructionStr.split('').map((str) => {
-    if (!isValidInstruction(str)) throw new Error(`Invalid instruction: ${str}`)
-    return str
-  })
+  const instructions: Instruction[] = instructionStr.split('\n').flatMap((instrLine) =>
+    instrLine.split('').map((str) => {
+      if (!isValidInstruction(str)) throw new Error(`Invalid instruction: ${str}`)
+      return str
+    })
+  )
+
   return { map, startPosition, instructions }
 }
 
