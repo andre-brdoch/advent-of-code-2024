@@ -1,3 +1,4 @@
+import { getSum } from '../utils/array'
 import { addCoords, Coord } from '../utils/coordinates'
 
 export const WALL = '#' as const
@@ -21,11 +22,35 @@ const vectorByInstruction: Record<Instruction, Coord> = {
 }
 
 export function solvePt1(input: string): number {
-  const parsed = parseFile(input)
+  const { map, startPosition, instructions } = parseFile(input)
+  let position = startPosition
+  instructions.forEach((instruction) => {
+    const [success, newPosition] = moveToken(map, PLAYER, position, instruction)
+    if (success) position = newPosition
+  })
+  console.log(stringifyMap(map))
+  const boxCoordinates = getAllBoxCoordinates(map)
+  const gpsValues = boxCoordinates.map((position) => getGps(map, position))
+  console.log('gpsValues', gpsValues)
+  return getSum(gpsValues)
 }
 
 export function solvePt2(input: string): number {
   const parsed = parseFile(input)
+}
+
+export function getAllBoxCoordinates(map: Map): Coord[] {
+  const result: Coord[] = []
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      if (map[y][x] === BOX) result.push({ x, y })
+    }
+  }
+  return result
+}
+
+export function getGps(map: Map, position: Coord): number {
+  return position.y * 100 + position.x
 }
 
 export function moveToken(

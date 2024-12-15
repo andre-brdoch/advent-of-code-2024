@@ -1,6 +1,7 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
+  getGps,
   Instruction,
   LEFT,
   Map,
@@ -8,6 +9,7 @@ import {
   parseFile,
   PLAYER,
   RIGHT,
+  solvePt1,
   stringifyMap,
   UP,
 } from './solution'
@@ -96,22 +98,31 @@ describe('day-15', async () => {
       assert.strictEqual(success5, true)
       assert.deepEqual(position5, { x: 4, y: 1 })
     })
+    it('getGps()', () => {
+      assert.strictEqual(getGps(mapMini, { x: 4, y: 1 }), 104)
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('mini data', () => {
+      const result = solvePt1(inputMini)
+      const expected = 2028
+      assert.strictEqual(result, expected)
+    })
 
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+    // it('example data', () => {
+    //   const result = solvePt1(inputExample)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+
+    // it('real data', () => {
+    //   const result = solvePt1(inputReal)
+    //   consola.success(`=== Result pt. 1: ${result} ===`)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {
