@@ -9,6 +9,7 @@ import {
   parseFile,
   PLAYER,
   RIGHT,
+  scaleUpMap,
   solvePt1,
   stringifyMap,
   UP,
@@ -19,7 +20,7 @@ import { Coord } from '../utils/coordinates'
 
 describe('day-15', async () => {
   const reader = new InputReader(__dirname)
-  const { inputMini, inputExample, inputReal } = await reader.readAllInputFiles()
+  const { inputMini, inputMini2, inputExample, inputReal } = await reader.readAllInputFiles()
 
   let mapMini: Map
   let mapMiniString: string
@@ -100,6 +101,19 @@ describe('day-15', async () => {
     })
     it('getGps()', () => {
       assert.strictEqual(getGps(mapMini, { x: 4, y: 1 }), 104)
+    })
+    it('scaleUpMap()', () => {
+      const { map } = parseFile(inputMini2)
+      assert.strictEqual(
+        stringifyMap(scaleUpMap(map)),
+        `##############
+##......##..##
+##..........##
+##....[][]..##
+##....[]....##
+##..........##
+##############`
+      )
     })
   })
 

@@ -3,6 +3,8 @@ import { addCoords, Coord } from '../utils/coordinates'
 
 export const WALL = '#' as const
 export const BOX = 'O' as const
+export const BOX_LEFT = '[' as const
+export const BOX_RIGHT = ']' as const
 export const EMPTY = '.' as const
 export const PLAYER = '@' as const
 export const UP = '^' as const
@@ -10,9 +12,11 @@ export const RIGHT = '>' as const
 export const BOTTOM = 'v' as const
 export const LEFT = '<' as const
 
+export type Instruction = typeof UP | typeof RIGHT | typeof BOTTOM | typeof LEFT
 export type Cell = typeof WALL | typeof BOX | typeof EMPTY
 export type Map = Cell[][]
-export type Instruction = typeof UP | typeof RIGHT | typeof BOTTOM | typeof LEFT
+export type CellScaled = typeof BOX_LEFT | typeof BOX_RIGHT | typeof WALL | typeof EMPTY
+export type MapScaled = CellScaled[][]
 
 const vectorByInstruction: Record<Instruction, Coord> = {
   [UP]: { x: 0, y: -1 },
@@ -35,6 +39,21 @@ export function solvePt1(input: string): number {
 
 export function solvePt2(input: string): number {
   const parsed = parseFile(input)
+}
+
+export function scaleUpMap(map: Map): MapScaled {
+  const result: MapScaled = []
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    const row: MapScaled[number] = []
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      const val = map[y][x]
+      if (val === BOX) row.push(BOX_LEFT, BOX_RIGHT)
+      else if (val === WALL) row.push(WALL, WALL)
+      else if (val === EMPTY) row.push(EMPTY, EMPTY)
+    }
+    result.push(row)
+  }
+  return result
 }
 
 export function getAllBoxCoordinates(map: Map): Coord[] {
@@ -126,7 +145,7 @@ export function isValidInstruction(str: string): str is Instruction {
 
 // FOR TESTING / VISUALIZING
 
-export function stringifyMap(map: Map): string {
+export function stringifyMap(map: Map | MapScaled): string {
   let result = ''
   for (let y = 0; y <= map.length - 1; y += 1) {
     for (let x = 0; x <= map[0].length - 1; x += 1) {
