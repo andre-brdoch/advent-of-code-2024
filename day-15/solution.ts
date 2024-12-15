@@ -84,18 +84,6 @@ function updateMap(
   map[currentPosition.y][currentPosition.x] = EMPTY
 }
 
-export function stringifyMap(map: Map): string {
-  let result = ''
-  for (let y = 0; y <= map.length - 1; y += 1) {
-    for (let x = 0; x <= map[0].length - 1; x += 1) {
-      const token = map[y][x]
-      result += token
-    }
-    if (y < map.length - 1) result += '\n'
-  }
-  return result
-}
-
 export function parseFile(file: string): {
   map: Map
   startPosition: Coord
@@ -126,10 +114,26 @@ export function parseFile(file: string): {
   return { map, startPosition, instructions }
 }
 
+// TYPE NARROWING
+
 export function isValidToken(str: string): str is Cell {
   return str === WALL || str === BOX || str === EMPTY
 }
 
 export function isValidInstruction(str: string): str is Instruction {
   return str in vectorByInstruction
+}
+
+// FOR TESTING / VISUALIZING
+
+export function stringifyMap(map: Map): string {
+  let result = ''
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      const token = map[y][x]
+      result += token
+    }
+    if (y < map.length - 1) result += '\n'
+  }
+  return result
 }
