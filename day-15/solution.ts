@@ -62,18 +62,26 @@ export function moveToken(
   const next: Cell = map[nextCoord.y]?.[nextCoord.x]
   if (next === WALL) return [false, tokenPosition]
   if (next === EMPTY) {
-    map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : BOX
-    map[tokenPosition.y][tokenPosition.x] = EMPTY
+    updateMap(map, nextCoord, tokenPosition, token)
     return [true, nextCoord]
   }
-  // move box recursively
+  // try moving boxes recursively
   const [success] = moveToken(map, next, nextCoord, instruction)
   if (success) {
-    map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : BOX
-    map[tokenPosition.y][tokenPosition.x] = EMPTY
+    updateMap(map, nextCoord, tokenPosition, token)
     return [true, nextCoord]
   }
   return [false, tokenPosition]
+}
+
+function updateMap(
+  map: Map,
+  nextPosition: Coord,
+  currentPosition: Coord,
+  token: typeof PLAYER | typeof BOX
+): void {
+  map[nextPosition.y][nextPosition.x] = token === PLAYER ? EMPTY : BOX
+  map[currentPosition.y][currentPosition.x] = EMPTY
 }
 
 export function stringifyMap(map: Map): string {
