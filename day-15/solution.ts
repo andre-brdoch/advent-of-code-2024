@@ -1,3 +1,4 @@
+import consola from 'consola'
 import { getSum } from '../utils/array'
 import { addCoords, Coord } from '../utils/coordinates'
 
@@ -74,6 +75,36 @@ export function getGps(map: Map, position: Coord): number {
   return position.y * 100 + position.x
 }
 
+export function moveTokenScaled(
+  map: MapScaled,
+  token: typeof PLAYER | typeof BOX_LEFT | typeof BOX_RIGHT,
+  tokenPosition: Coord,
+  instruction: Instruction
+): [success: boolean, newTokenPosition: Coord] {
+  const vector = vectorByInstruction[instruction]
+  const nextCoord = addCoords(tokenPosition, vector)
+  const next: CellScaled = map[nextCoord.y]?.[nextCoord.x]
+  if (next === WALL) return [false, tokenPosition]
+  if (next === EMPTY) {
+    map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : token
+    map[tokenPosition.y][tokenPosition.x] = EMPTY
+    return [true, nextCoord]
+  }
+  // horizontal movement behaves the same like on a non-scaled map
+  if (isHorizontal(instruction)) {
+    // try moving boxes recursively
+    const [success] = moveTokenScaled(map, next, nextCoord, instruction)
+    if (success) {
+      map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : token
+      map[tokenPosition.y][tokenPosition.x] = EMPTY
+      return [true, nextCoord]
+    }
+    return [false, tokenPosition]
+  }
+  // vertical, need to consider that boxes in other columns might get involved
+  return [false, tokenPosition]
+}
+
 export function moveToken(
   map: Map,
   token: typeof PLAYER | typeof BOX,
@@ -145,6 +176,10 @@ export function isValidToken(str: string): str is Cell {
 
 export function isValidInstruction(str: string): str is Instruction {
   return str in vectorByInstruction
+}
+
+export function isHorizontal(instruction: Instruction): instruction is typeof LEFT | typeof RIGHT {
+  return instruction === LEFT || instruction === RIGHT
 }
 
 // FOR TESTING / VISUALIZING

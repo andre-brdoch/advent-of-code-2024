@@ -6,6 +6,7 @@ import {
   LEFT,
   Map,
   moveToken,
+  moveTokenScaled,
   parseFile,
   PLAYER,
   RIGHT,
@@ -114,6 +115,23 @@ describe('day-15', async () => {
 ##..........##
 ##############`
       )
+    })
+    it('moveTokenScaled()', () => {
+      const { map: mapNonScaled } = parseFile(inputMini2)
+      const map = scaleUpMap(mapNonScaled)
+      const [success1, position1] = moveTokenScaled(map, PLAYER, { x: 10, y: 3 }, LEFT)
+      assert.strictEqual(
+        stringifyMap(map),
+        `##############
+##......##..##
+##..........##
+##...[][]...##
+##....[]....##
+##..........##
+##############`
+      )
+      assert.strictEqual(success1, true)
+      assert.deepEqual(position1, { x: 9, y: 3 })
     })
   })
 
