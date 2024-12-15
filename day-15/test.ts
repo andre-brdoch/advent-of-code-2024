@@ -1,6 +1,16 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Instruction, Map, parseFile } from './solution'
+import {
+  Instruction,
+  LEFT,
+  Map,
+  moveToken,
+  parseFile,
+  PLAYER,
+  RIGHT,
+  stringifyMap,
+  UP,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 import { Coord } from '../utils/coordinates'
@@ -10,6 +20,7 @@ describe('day-15', async () => {
   const { inputMini, inputExample, inputReal } = await reader.readAllInputFiles()
 
   let mapMini: Map
+  let mapMiniString: string
   let startPositionMini: Coord
   let instructionsMini: Instruction[]
 
@@ -24,6 +35,14 @@ describe('day-15', async () => {
       ['#', '.', '.', '.', '.', '.', '.', '#'],
       ['#', '#', '#', '#', '#', '#', '#', '#'],
     ]
+    mapMiniString = `########
+#..O.O.#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########`
     startPositionMini = { x: 2, y: 2 }
     instructionsMini = ['<', '^', '^', '>', '>', '>', 'v', 'v', '<', 'v', '>', '>', 'v', '<', '<']
   })
@@ -34,6 +53,48 @@ describe('day-15', async () => {
       assert.deepEqual(map, mapMini)
       assert.deepEqual(startPosition, startPositionMini)
       assert.deepEqual(instructions, instructionsMini)
+    })
+    it('moveToken()', () => {
+      const [success1, position1] = moveToken(mapMini, PLAYER, startPositionMini, LEFT)
+      assert.strictEqual(stringifyMap(mapMini), mapMiniString)
+      assert.strictEqual(success1, false)
+      assert.deepEqual(position1, startPositionMini)
+      const [success2, position2] = moveToken(mapMini, PLAYER, position1, UP)
+      assert.strictEqual(stringifyMap(mapMini), mapMiniString)
+      assert.strictEqual(success2, true)
+      assert.deepEqual(position2, { x: 2, y: 1 })
+      const [success3, position3] = moveToken(mapMini, PLAYER, position2, UP)
+      assert.strictEqual(stringifyMap(mapMini), mapMiniString)
+      assert.strictEqual(success3, false)
+      assert.deepEqual(position3, position2)
+      const [success4, position4] = moveToken(mapMini, PLAYER, position3, RIGHT)
+      assert.strictEqual(
+        stringifyMap(mapMini),
+        `########
+#...OO.#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########`
+      )
+      assert.strictEqual(success4, true)
+      assert.deepEqual(position4, { x: 3, y: 1 })
+      const [success5, position5] = moveToken(mapMini, PLAYER, position4, RIGHT)
+      assert.strictEqual(
+        stringifyMap(mapMini),
+        `########
+#....OO#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########`
+      )
+      assert.strictEqual(success5, true)
+      assert.deepEqual(position5, { x: 4, y: 1 })
     })
   })
 

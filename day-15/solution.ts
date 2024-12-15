@@ -1,13 +1,13 @@
-import { Coord } from '../utils/coordinates'
+import { addCoords, Coord } from '../utils/coordinates'
 
-const WALL = '#' as const
-const BOX = 'O' as const
-const EMPTY = '.' as const
-const PLAYER = '@' as const
-const UP = '^' as const
-const RIGHT = '>' as const
-const BOTTOM = 'v' as const
-const LEFT = '<' as const
+export const WALL = '#' as const
+export const BOX = 'O' as const
+export const EMPTY = '.' as const
+export const PLAYER = '@' as const
+export const UP = '^' as const
+export const RIGHT = '>' as const
+export const BOTTOM = 'v' as const
+export const LEFT = '<' as const
 
 export type Cell = typeof WALL | typeof BOX | typeof EMPTY
 export type Map = Cell[][]
@@ -28,6 +28,43 @@ export function solvePt2(input: string): number {
   const parsed = parseFile(input)
 }
 
+export function moveToken(
+  map: Map,
+  token: typeof PLAYER | typeof BOX,
+  tokenPosition: Coord,
+  instruction: Instruction
+): [success: boolean, newTokenPosition: Coord] {
+  const vector = vectorByInstruction[instruction]
+  const nextCoord = addCoords(tokenPosition, vector)
+  const next: Cell = map[nextCoord.y]?.[nextCoord.x]
+  if (next === WALL) return [false, tokenPosition]
+  if (next === EMPTY) {
+    map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : BOX
+    map[tokenPosition.y][tokenPosition.x] = EMPTY
+    return [true, nextCoord]
+  }
+  // move box recursively
+  const [success] = moveToken(map, next, nextCoord, instruction)
+  if (success) {
+    map[nextCoord.y][nextCoord.x] = token === PLAYER ? EMPTY : BOX
+    map[tokenPosition.y][tokenPosition.x] = EMPTY
+    return [true, nextCoord]
+  }
+  return [false, tokenPosition]
+}
+
+export function stringifyMap(map: Map): string {
+  let result = ''
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      const token = map[y][x]
+      result += token
+    }
+    if (y < map.length - 1) result += '\n'
+  }
+  return result
+}
+
 export function parseFile(file: string): {
   map: Map
   startPosition: Coord
@@ -42,12 +79,12 @@ export function parseFile(file: string): {
         startPosition = { x, y }
         return EMPTY
       }
-      if (!isValidSymbol(str)) throw new Error(`Invalid symbol: ${str}`)
+      if (!isValidToken(str)) throw new Error(`Invalid token : ${str}`)
       return str
     })
     return cells
   })
-  if (!startPosition) throw new Error('No player symbol found on map')
+  if (!startPosition) throw new Error('No player token found on map')
   const instructions: Instruction[] = instructionStr.split('').map((str) => {
     if (!isValidInstruction(str)) throw new Error(`Invalid instruction: ${str}`)
     return str
@@ -55,7 +92,7 @@ export function parseFile(file: string): {
   return { map, startPosition, instructions }
 }
 
-export function isValidSymbol(str: string): str is Cell {
+export function isValidToken(str: string): str is Cell {
   return str === WALL || str === BOX || str === EMPTY
 }
 
