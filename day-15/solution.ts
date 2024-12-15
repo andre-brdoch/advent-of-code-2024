@@ -41,6 +41,10 @@ export function solvePt2(input: string): number {
   const parsed = parseFile(input)
 }
 
+export function getScaledUpStartPosition(startPosition: Coord): Coord {
+  return { x: startPosition.x * 2, y: startPosition.y }
+}
+
 export function scaleUpMap(map: Map): MapScaled {
   const result: MapScaled = []
   for (let y = 0; y <= map.length - 1; y += 1) {
