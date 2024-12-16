@@ -1,4 +1,3 @@
-import consola from 'consola'
 import { addCoords, Coord, stringifyCoord } from '../utils/coordinates'
 
 export const WALL = '#' as const
@@ -20,6 +19,7 @@ export type Direction = typeof UP | typeof RIGHT | typeof BOTTOM | typeof LEFT
 export interface Position extends Coord {
   direction: Direction
 }
+export type CameFrom = Record<string, Set<string>>
 
 const VECTOR_BY_DIRECTION: Record<Direction, Coord> = {
   [UP]: { x: 0, y: -1 },
@@ -36,12 +36,15 @@ const OPPOSITE_DIRECTIONS: Record<Direction, Direction> = {
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
-  return findCostForShortestWay(map)
+  const [cost] = findShortestWays(map, 'single')
+  return cost
 }
 
 export function solvePt2(input: string): number {
   const map = parseFile(input)
-  return findAllShortestWays(map)
+  const [, cameFrom, endPosition] = findShortestWays(map)
+  const allBestPaths = reconstructPaths(cameFrom, [endPosition])
+  return countUniqueCoords(allBestPaths)
 }
 
 export class PriorityQueue<T> {
@@ -68,13 +71,16 @@ export class PriorityQueue<T> {
   }
 }
 
-export function findAllShortestWays(map: Token[][]): number {
+export function findShortestWays(
+  map: Token[][],
+  mode: 'all' | 'single' = 'all'
+): [lowestCost: number, cameFrom: CameFrom, endPosition: Position] {
   const queue = new PriorityQueue<Position>()
   const startPosition: Position = { ...findToken(map, START), direction: RIGHT }
   let endPosition: Position | undefined
   const startKey = stringifyPosition(startPosition)
   queue.add(startPosition, 0)
-  const cameFrom: Record<string, Set<string>> = { [startKey]: new Set([]) }
+  const cameFrom: CameFrom = { [startKey]: new Set([]) }
   const costSoFar: Record<string, number> = { [startKey]: 0 }
   let lowestCost: number | undefined
 
@@ -90,7 +96,8 @@ export function findAllShortestWays(map: Token[][]): number {
         lowestCost = costSoFar[currentKey]
         endPosition = currentPos
       }
-      continue
+      if (mode === 'single') break
+      else continue
     }
     const neighbors = getNeighbors(map, currentPos)
     for (let i = 0; i <= neighbors.length - 1; i += 1) {
@@ -110,15 +117,10 @@ export function findAllShortestWays(map: Token[][]): number {
     }
   }
   if (lowestCost == null || !endPosition) throw new Error('No end in sight!')
-  const allBestPaths = reconstructPaths(cameFrom, [endPosition])
-  const uniqueCoords = countUniqueCoords(allBestPaths)
-  return uniqueCoords
+  return [lowestCost, cameFrom, endPosition]
 }
 
-export function reconstructPaths(
-  cameFrom: Record<string, Set<string>>,
-  positions: Position[]
-): Position[][] {
+export function reconstructPaths(cameFrom: CameFrom, positions: Position[]): Position[][] {
   const earliest = positions[0]
   const earliestKey = stringifyPosition(earliest)
   const ancestors = Array.from(cameFrom[earliestKey]).map(unStringifyPosition)
@@ -137,41 +139,6 @@ function countUniqueCoords(paths: Position[][]): number {
     })
   })
   return set.size
-}
-
-export function findCostForShortestWay(map: Token[][]): number {
-  const queue = new PriorityQueue<Position>()
-  const startPosition: Position = { ...findToken(map, START), direction: RIGHT }
-  const startKey = stringifyPosition(startPosition)
-  queue.add(startPosition, 0)
-  const cameFrom: Record<string, Position | null> = { [startKey]: null }
-  const costSoFar: Record<string, number> = { [startKey]: 0 }
-  let result: number | undefined
-
-  while (queue.length > 0) {
-    const currentPos = queue.get()
-    if (currentPos == null) throw new Error('Not possible')
-    const currentKey = stringifyPosition(currentPos)
-    const current = map[currentPos.y][currentPos.x]
-    if (current === END) {
-      consola.success('found end')
-      result = costSoFar[currentKey]
-      break
-    }
-    const neighbors = getNeighbors(map, currentPos)
-    for (let i = 0; i <= neighbors.length - 1; i += 1) {
-      const nextPos = neighbors[i]
-      const nextKey = stringifyPosition(nextPos)
-      const newCost = costSoFar[currentKey] + getCost(currentPos, nextPos)
-      if (!(nextKey in costSoFar) || newCost < costSoFar[nextKey]) {
-        costSoFar[nextKey] = newCost
-        queue.add(nextPos, newCost)
-        cameFrom[nextKey] = currentPos
-      }
-    }
-  }
-  if (result == null) throw new Error('No end in sight!')
-  return result
 }
 
 export function getNeighbors(map: Token[][], currentPosition: Position): Position[] {

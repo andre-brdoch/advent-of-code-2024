@@ -30,7 +30,7 @@ https://adventofcode.com/2024
 13. TBD
 14. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-14) ⭐⭐
 15. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-14) ⭐
-16. TBD
+16. [Solution](https://github.com/andre-brdoch/advent-of-code-2024/tree/main/day-14) ⭐⭐
 17. TBD
 18. TBD
 19. TBD
