@@ -10,12 +10,12 @@ const COST_ROTATE = 1000
 
 export const UP = '^' as const
 export const RIGHT = '>' as const
-export const BOTTOM = 'v' as const
+export const DOWN = 'v' as const
 export const LEFT = '<' as const
-const DIRECTIONS = [UP, RIGHT, BOTTOM, LEFT] as const
+const DIRECTIONS = [UP, RIGHT, DOWN, LEFT] as const
 
 export type Token = typeof WALL | typeof FREE | typeof START | typeof END
-export type Direction = typeof UP | typeof RIGHT | typeof BOTTOM | typeof LEFT
+export type Direction = (typeof DIRECTIONS)[number]
 export interface Position extends Coord {
   direction: Direction
 }
@@ -24,13 +24,13 @@ export type CameFrom = Record<string, Set<string>>
 const VECTOR_BY_DIRECTION: Record<Direction, Coord> = {
   [UP]: { x: 0, y: -1 },
   [RIGHT]: { x: 1, y: 0 },
-  [BOTTOM]: { x: 0, y: 1 },
+  [DOWN]: { x: 0, y: 1 },
   [LEFT]: { x: -1, y: 0 },
 }
 const OPPOSITE_DIRECTIONS: Record<Direction, Direction> = {
-  [UP]: BOTTOM,
+  [UP]: DOWN,
   [RIGHT]: LEFT,
-  [BOTTOM]: UP,
+  [DOWN]: UP,
   [LEFT]: RIGHT,
 }
 
@@ -198,5 +198,5 @@ export function isToken(str: string): str is Token {
 }
 
 export function isDirection(str: string): str is Direction {
-  return str === UP || str === RIGHT || str === BOTTOM || str === LEFT
+  return str === UP || str === RIGHT || str === DOWN || str === LEFT
 }
