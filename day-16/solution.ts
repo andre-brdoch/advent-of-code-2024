@@ -1,3 +1,5 @@
+import { Coord } from '../utils/coordinates'
+
 export const WALL = '#' as const
 export const FREE = '.' as const
 export const START = 'S' as const
@@ -11,10 +13,6 @@ export function solvePt1(input: string): any {
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
-}
-
-export function findShortestWay(map: Token[][]): void {
-  //
 }
 
 export class PriorityQueue<T> {
@@ -39,6 +37,21 @@ export class PriorityQueue<T> {
   public get length() {
     return this.sortedValues.length
   }
+}
+
+export function findShortestWay(map: Token[][]): void {
+  const queue = new PriorityQueue<Coord>()
+  const startPosition = findToken(map, START)
+  queue.add(startPosition, 0)
+}
+
+export function findToken(map: Token[][], token: Token): Coord {
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      if (map[y][x] === token) return { x, y }
+    }
+  }
+  throw new Error(`Token does not exist: ${token}`)
 }
 
 export function parseFile(file: string): Token[][] {
