@@ -1,30 +1,24 @@
 // Part 2 is solved with brute force unfortunately.
 // Did not have time to optimize.
 
-export const GUARD_UP = '^' as const
-export const GUARD_DOWN = 'v' as const
-export const GUARD_LEFT = '<' as const
-export const GUARD_RIGHT = '>' as const
+import {
+  Coord,
+  Direction,
+  DOWN,
+  getUniqueCoordinates,
+  LEFT,
+  RIGHT,
+  UP,
+  VECTOR_BY_DIRECTION,
+} from '../utils/coordinates'
+
 export const FREE = '.' as const
 export const VISITED = 'X' as const
 export const BARRIER = '#' as const
 
-export type Guard = typeof GUARD_UP | typeof GUARD_DOWN | typeof GUARD_LEFT | typeof GUARD_RIGHT
-export type Cell = Guard | typeof FREE | typeof BARRIER | typeof VISITED
-export interface Point {
-  x: number
-  y: number
-}
-export interface HistoryEntry extends Point {
-  guard: Guard | null
-}
-export type Vector = Point
-
-const VECTOR_BY_GUARD: Record<Guard, Vector> = {
-  '^': { x: 0, y: -1 },
-  'v': { x: 0, y: 1 },
-  '<': { x: -1, y: 0 },
-  '>': { x: 1, y: 0 },
+export type Cell = Direction | typeof FREE | typeof BARRIER | typeof VISITED
+export interface HistoryEntry extends Coord {
+  guard: Direction | null
 }
 
 export function solvePt1(input: string): number {
@@ -55,8 +49,8 @@ export function solvePt2(input: string): number {
   return possibleBarriers.length
 }
 
-export function historyToUniquePoints(history: HistoryEntry[]): Point[] {
-  const uniquePoints = [...removeDuplicatePositions(history)]
+export function historyToUniquePoints(history: HistoryEntry[]): Coord[] {
+  const uniquePoints = [...getUniqueCoordinates(history)]
   // need to remove final off-board position
   uniquePoints.pop()
   return uniquePoints
@@ -65,7 +59,7 @@ export function historyToUniquePoints(history: HistoryEntry[]): Point[] {
 export function barrierWouldCauseLoop(
   inputMap: Cell[][],
   firstHistoryEntry: HistoryEntry,
-  barrierPosition: Point
+  barrierPosition: Coord
 ): boolean {
   // modify map
   const mapCopy = inputMap.map((row) => [...row])
@@ -96,16 +90,6 @@ export function historyHasLoop(history: HistoryEntry[]): boolean {
   )
 }
 
-export function removeDuplicatePositions(points: Point[]): Point[] {
-  const stringified = points.map((point) => `${point.x}/${point.y}`)
-  const set = new Set(stringified)
-  const stringifiedNoDupes = Array.from(set)
-  return stringifiedNoDupes.map((str) => {
-    const [x, y] = str.split('/').map((n) => Number(n))
-    return { x, y }
-  })
-}
-
 export function moveUntilConditionMeet(
   map: Cell[][],
   firstHistoryEntry: HistoryEntry,
@@ -124,7 +108,7 @@ export function moveGuard(map: Cell[][], history: HistoryEntry[]): HistoryEntry 
   if (latestHistory.guard == null) {
     throw new Error('Can not move guard that is already off map')
   }
-  const moveVector = VECTOR_BY_GUARD[latestHistory.guard]
+  const moveVector = VECTOR_BY_DIRECTION[latestHistory.guard]
   const targetPosition = addPoints(latestHistory, moveVector)
   if (!isOnMap(map, targetPosition)) {
     return {
@@ -145,7 +129,7 @@ export function moveGuard(map: Cell[][], history: HistoryEntry[]): HistoryEntry 
   }
 }
 
-export function turnGuard(guard: Guard): Guard {
+export function turnGuard(guard: Direction): Direction {
   switch (guard) {
     case '^':
       return '>'
@@ -160,19 +144,19 @@ export function turnGuard(guard: Guard): Guard {
   }
 }
 
-export function addPoints(a: Point, b: Point): Point {
+export function addPoints(a: Coord, b: Coord): Coord {
   return { x: a.x + b.x, y: a.y + b.y }
 }
 
-export function isSamePosition(a: Point, b: Point): boolean {
+export function isSamePosition(a: Coord, b: Coord): boolean {
   return a.x === b.x && a.y === b.y
 }
 
-export function getCell(map: Cell[][], point: Point): Cell {
+export function getCell(map: Cell[][], point: Coord): Cell {
   return map[point.y][point.x]
 }
 
-export function findGuardPosition(map: Cell[][]): Point {
+export function findGuardPosition(map: Cell[][]): Coord {
   for (let y = 0; y <= map.length - 1; y += 1) {
     for (let x = 0; x <= map[0].length - 1; x += 1) {
       if (isGuard(map[y][x])) {
@@ -183,15 +167,15 @@ export function findGuardPosition(map: Cell[][]): Point {
   throw new Error('No guard on the map!')
 }
 
-export function isGuard(cell: Cell): cell is Guard {
-  return cell === GUARD_UP || cell === GUARD_DOWN || cell === GUARD_LEFT || cell === GUARD_RIGHT
+export function isGuard(cell: Cell): cell is Direction {
+  return cell === UP || cell === DOWN || cell === LEFT || cell === RIGHT
 }
 
 export function isFree(cell: Cell): cell is typeof FREE | typeof VISITED {
   return cell === FREE || cell === VISITED
 }
 
-export function isOnMap(map: Cell[][], point: Point): boolean {
+export function isOnMap(map: Cell[][], point: Coord): boolean {
   return Boolean(map[point.y]?.[point.x])
 }
 

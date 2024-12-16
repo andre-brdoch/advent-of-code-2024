@@ -1,9 +1,5 @@
 import { getSum } from '../utils/array'
-
-interface Coordinate {
-  x: number
-  y: number
-}
+import { Coord } from '../utils/coordinates'
 
 const XMAS = 'XMAS'
 const CENTER_LETTER = 'A'
@@ -25,7 +21,7 @@ export function countAllCrossMas(table: string[][]): number {
   return hits.length
 }
 
-export function hasCrossMasAroundPoint(table: string[][], { x, y }: Coordinate): boolean {
+export function hasCrossMasAroundPoint(table: string[][], { x, y }: Coord): boolean {
   const dirs = ['down', 'up'] as const
   const pointsToCheck = [
     { x: x - 1, y: y - 1, dir: 'down' as const },
@@ -42,8 +38,8 @@ export function hasCrossMasAroundPoint(table: string[][], { x, y }: Coordinate):
   })
 }
 
-export function findAllCenterPoints(table: string[][]): Coordinate[] {
-  const result: Coordinate[] = []
+export function findAllCenterPoints(table: string[][]): Coord[] {
+  const result: Coord[] = []
   for (let x = 0; x <= table[0].length - 1; x += 1) {
     for (let y = 0; y <= table.length - 1; y += 1) {
       if (table[y][x] === CENTER_LETTER) {
