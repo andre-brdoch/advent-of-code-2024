@@ -1,4 +1,4 @@
-import { Coord } from '../utils/coordinates'
+import { Coord, stringifyCoord } from '../utils/coordinates'
 
 export const WALL = '#' as const
 export const FREE = '.' as const
@@ -42,7 +42,24 @@ export class PriorityQueue<T> {
 export function findShortestWay(map: Token[][]): void {
   const queue = new PriorityQueue<Coord>()
   const startPosition = findToken(map, START)
+  const startKey = stringifyCoord(startPosition)
   queue.add(startPosition, 0)
+  const cameFrom: Record<string, Coord | null> = { [startKey]: null }
+  const costSoFar: Record<string, number> = { [startKey]: 0 }
+
+  while (queue.length > 0) {
+    const { value: currentPos, priority: currentPrio } = queue.get()
+    const currentKey = stringifyCoord(currentPos)
+    if (currentPos == null) throw new Error('Not possible')
+    const current = map[currentPos.y][currentPos.x]
+    if (current === END) break
+    const neighbors = []
+    for (let i = 0; i <= neighbors.length - 1; i += 1) {
+      const next = neighbors[i]
+      const nextKey = stringifyCoord(next.position)
+      const newCost = costSoFar[currentPos] + next.cost
+    }
+  }
 }
 
 export function findToken(map: Token[][], token: Token): Coord {
