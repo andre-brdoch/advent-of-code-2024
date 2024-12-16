@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { END, findToken, parseFile, PriorityQueue, START, Token } from './solution'
+import { END, findToken, parseFile, PriorityQueue, solvePt1, START, Token } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -43,9 +43,9 @@ describe('day-16', async () => {
       queue.add('b', 20)
       queue.add('c', 15)
       assert.strictEqual(queue.length, 3)
-      assert.deepEqual(queue.get(), { value: 'b', priority: 20 })
-      assert.deepEqual(queue.get(), { value: 'c', priority: 15 })
-      assert.deepEqual(queue.get(), { value: 'a', priority: 10 })
+      assert.deepEqual(queue.get(), 'a')
+      assert.deepEqual(queue.get(), 'c')
+      assert.deepEqual(queue.get(), 'b')
       assert.strictEqual(queue.length, 0)
     })
     it('findToken()', () => {
@@ -54,20 +54,19 @@ describe('day-16', async () => {
     })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
-
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+  describe('part 1', () => {
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 7036
+      assert.strictEqual(result, expected)
+    })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = undefined
+      assert.strictEqual(result, expected)
+    })
+  })
 
   // describe('part 2', () => {
   //   it('example data', () => {
