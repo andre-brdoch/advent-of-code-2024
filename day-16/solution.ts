@@ -122,7 +122,7 @@ export function getNeighbors(map: Token[][], currentPosition: Position): Positio
 export function getCost(posA: Position, posB: Position): number {
   let cost = COST_MOVEMENT
   if (posA.direction === OPPOSITE_DIRECTIONS[posB.direction]) cost += COST_ROTATE * 2
-  if (posA.direction !== posB.direction) cost += COST_ROTATE
+  else if (posA.direction !== posB.direction) cost += COST_ROTATE
   return cost
 }
 
