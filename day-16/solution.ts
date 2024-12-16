@@ -40,7 +40,9 @@ export function solvePt1(input: string): number {
 }
 
 export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+  const map = parseFile(input)
+  const x = findAllShortestWays(map)
+  console.log('amount shortest paths', x)
 }
 
 export class PriorityQueue<T> {
@@ -65,6 +67,50 @@ export class PriorityQueue<T> {
   public get length() {
     return this.sortedValues.length
   }
+}
+
+export function findAllShortestWays(map: Token[][]): number {
+  const queue = new PriorityQueue<Position>()
+  const startPosition: Position = { ...findToken(map, START), direction: RIGHT }
+  const startKey = stringifyPosition(startPosition)
+  queue.add(startPosition, 0)
+  const cameFrom: Record<string, Position[]> = { [startKey]: [] }
+  const costSoFar: Record<string, number> = { [startKey]: 0 }
+  let lowestCost: number | undefined
+  let amountShortestPaths = 0
+
+  while (queue.length > 0) {
+    const currentPos = queue.get()
+    if (currentPos == null) throw new Error('Not possible')
+    const currentKey = stringifyPosition(currentPos)
+    const currentCost = costSoFar[currentKey]
+    if (lowestCost && currentCost > lowestCost) continue
+    const current = map[currentPos.y][currentPos.x]
+    if (current === END) {
+      lowestCost = costSoFar[currentKey]
+      consola.success('found lowest cost', lowestCost)
+      amountShortestPaths += 1
+      continue
+    }
+    const neighbors = getNeighbors(map, currentPos)
+    for (let i = 0; i <= neighbors.length - 1; i += 1) {
+      const nextPos = neighbors[i]
+      const nextKey = stringifyPosition(nextPos)
+      const newCost = currentCost + getCost(currentPos, nextPos)
+      if (
+        (!(nextKey in costSoFar) || newCost <= costSoFar[nextKey]) &&
+        // no point in continuing if already over budget
+        (!lowestCost || newCost <= lowestCost)
+      ) {
+        costSoFar[nextKey] = newCost
+        queue.add(nextPos, newCost)
+        if (!(nextKey in cameFrom)) cameFrom[nextKey] = []
+        cameFrom[nextKey].push(currentPos)
+      }
+    }
+  }
+  if (lowestCost == null) throw new Error('No end in sight!')
+  return amountShortestPaths
 }
 
 export function findCostForShortestWay(map: Token[][]): number {
