@@ -80,15 +80,15 @@ describe('day-16', async () => {
   describe('part 2', () => {
     it('example data', () => {
       const result = solvePt2(inputExample)
-      const expected = undefined
+      const expected = 45
       assert.strictEqual(result, expected)
     })
 
-    // it('real data', () => {
-    //   const result = solvePt2(inputReal)
-    //   consola.success(`=== Result pt. 2: ${result} ===`)
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
+    it('real data', () => {
+      const result = solvePt2(inputReal)
+      consola.success(`=== Result pt. 2: ${result} ===`)
+      const expected = 508
+      assert.strictEqual(result, expected)
+    })
   })
 })

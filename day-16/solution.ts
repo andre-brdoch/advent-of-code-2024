@@ -1,5 +1,5 @@
 import consola from 'consola'
-import { addCoords, Coord } from '../utils/coordinates'
+import { addCoords, Coord, stringifyCoord } from '../utils/coordinates'
 
 export const WALL = '#' as const
 export const FREE = '.' as const
@@ -39,10 +39,9 @@ export function solvePt1(input: string): number {
   return findCostForShortestWay(map)
 }
 
-export function solvePt2(input: string): any {
+export function solvePt2(input: string): number {
   const map = parseFile(input)
-  const x = findAllShortestWays(map)
-  console.log('amount shortest paths', x)
+  return findAllShortestWays(map)
 }
 
 export class PriorityQueue<T> {
@@ -72,12 +71,12 @@ export class PriorityQueue<T> {
 export function findAllShortestWays(map: Token[][]): number {
   const queue = new PriorityQueue<Position>()
   const startPosition: Position = { ...findToken(map, START), direction: RIGHT }
+  let endPosition: Position | undefined
   const startKey = stringifyPosition(startPosition)
   queue.add(startPosition, 0)
-  const cameFrom: Record<string, Position[]> = { [startKey]: [] }
+  const cameFrom: Record<string, Set<string>> = { [startKey]: new Set([]) }
   const costSoFar: Record<string, number> = { [startKey]: 0 }
   let lowestCost: number | undefined
-  let amountShortestPaths = 0
 
   while (queue.length > 0) {
     const currentPos = queue.get()
@@ -87,9 +86,10 @@ export function findAllShortestWays(map: Token[][]): number {
     if (lowestCost && currentCost > lowestCost) continue
     const current = map[currentPos.y][currentPos.x]
     if (current === END) {
-      lowestCost = costSoFar[currentKey]
-      consola.success('found lowest cost', lowestCost)
-      amountShortestPaths += 1
+      if (!lowestCost) {
+        lowestCost = costSoFar[currentKey]
+        endPosition = currentPos
+      }
       continue
     }
     const neighbors = getNeighbors(map, currentPos)
@@ -104,13 +104,39 @@ export function findAllShortestWays(map: Token[][]): number {
       ) {
         costSoFar[nextKey] = newCost
         queue.add(nextPos, newCost)
-        if (!(nextKey in cameFrom)) cameFrom[nextKey] = []
-        cameFrom[nextKey].push(currentPos)
+        if (!(nextKey in cameFrom)) cameFrom[nextKey] = new Set([])
+        cameFrom[nextKey].add(stringifyPosition(currentPos))
       }
     }
   }
-  if (lowestCost == null) throw new Error('No end in sight!')
-  return amountShortestPaths
+  if (lowestCost == null || !endPosition) throw new Error('No end in sight!')
+  const allBestPaths = reconstructPaths(cameFrom, [endPosition])
+  const uniqueCoords = countUniqueCoords(allBestPaths)
+  return uniqueCoords
+}
+
+export function reconstructPaths(
+  cameFrom: Record<string, Set<string>>,
+  positions: Position[]
+): Position[][] {
+  const earliest = positions[0]
+  const earliestKey = stringifyPosition(earliest)
+  const ancestors = Array.from(cameFrom[earliestKey]).map(unStringifyPosition)
+  if (ancestors.length === 0) {
+    return [positions]
+  }
+  return ancestors.flatMap((a) => reconstructPaths(cameFrom, [a, ...positions]))
+}
+
+function countUniqueCoords(paths: Position[][]): number {
+  const set = new Set<string>()
+  paths.forEach((path) => {
+    path.forEach((pos) => {
+      const coordKey = stringifyCoord(pos)
+      set.add(coordKey)
+    })
+  })
+  return set.size
 }
 
 export function findCostForShortestWay(map: Token[][]): number {
@@ -185,6 +211,12 @@ export function stringifyPosition(pos: Position): string {
   return `${pos.x}/${pos.y}/${pos.direction}`
 }
 
+export function unStringifyPosition(posStr: string): Position {
+  const [x, y, dir] = posStr.split('/')
+  if (!isDirection(dir)) throw new Error(`Not a direction: ${dir}`)
+  return { x: Number(x), y: Number(y), direction: dir }
+}
+
 export function parseFile(file: string): Token[][] {
   return file.split('\n').map((line) =>
     line.split('').map((token) => {
@@ -196,4 +228,8 @@ export function parseFile(file: string): Token[][] {
 
 export function isToken(str: string): str is Token {
   return str === WALL || str === FREE || str === START || str === END
+}
+
+export function isDirection(str: string): str is Direction {
+  return str === UP || str === RIGHT || str === BOTTOM || str === LEFT
 }
