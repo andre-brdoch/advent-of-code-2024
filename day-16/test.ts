@@ -1,15 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import {
-  END,
-  findToken,
-  parseFile,
-  PriorityQueue,
-  solvePt1,
-  solvePt2,
-  START,
-  Token,
-} from './solution'
+import { END, findToken, parseFile, solvePt1, solvePt2, START, Token } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -44,18 +35,6 @@ describe('day-16', async () => {
       const result = parseFile(inputExample)
       const expected = mapExample
       assert.deepEqual(result, expected)
-    })
-    it('PriorityQueue', () => {
-      const queue = new PriorityQueue<string>()
-      assert.strictEqual(queue.length, 0)
-      queue.add('a', 10)
-      queue.add('b', 20)
-      queue.add('c', 15)
-      assert.strictEqual(queue.length, 3)
-      assert.deepEqual(queue.get(), 'a')
-      assert.deepEqual(queue.get(), 'c')
-      assert.deepEqual(queue.get(), 'b')
-      assert.strictEqual(queue.length, 0)
     })
     it('findToken()', () => {
       assert.deepEqual(findToken(mapExample, START), { x: 1, y: 13 })

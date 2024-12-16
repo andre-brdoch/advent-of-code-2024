@@ -9,6 +9,7 @@ import {
   RIGHT,
   VECTOR_BY_DIRECTION,
 } from '../utils/coordinates'
+import { PriorityQueue } from '../utils/queue'
 
 export const WALL = '#' as const
 export const FREE = '.' as const
@@ -39,35 +40,11 @@ export function solvePt2(input: string): number {
   return countUniqueCoords(allBestPaths)
 }
 
-export class PriorityQueue<T> {
-  private sortedValues: { value: T; priority: number }[] = []
-
-  public add(value: T, priority: number): void {
-    for (let i = 0; i <= this.sortedValues.length - 1; i += 1) {
-      const current = this.sortedValues[i]
-      if (priority < current.priority) {
-        this.sortedValues.splice(i, 0, { value, priority })
-        return
-      }
-    }
-    this.sortedValues.push({ value, priority })
-  }
-
-  public get(): T | null {
-    const hit = this.sortedValues.shift()
-    return hit?.value ?? null
-  }
-
-  public get length() {
-    return this.sortedValues.length
-  }
-}
-
 export function findShortestWays(
   map: Token[][],
   mode: 'all' | 'single' = 'all'
 ): [lowestCost: number, cameFrom: CameFrom, endPosition: Position] {
-  const queue = new PriorityQueue<Position>()
+  const queue = new PriorityQueue<Position>('lowToHigh')
   const startPosition: Position = { ...findToken(map, START), direction: START_DIRECTION }
   let endPosition: Position | undefined
   const startKey = stringifyPosition(startPosition)
