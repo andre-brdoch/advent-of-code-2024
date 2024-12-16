@@ -13,6 +13,34 @@ export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
+export function findShortestWay(map: Token[][]): void {
+  //
+}
+
+export class PriorityQueue<T> {
+  private sortedValues: { value: T; priority: number }[] = []
+
+  public add(value: T, priority: number): void {
+    for (let i = 0; i <= this.sortedValues.length - 1; i += 1) {
+      const current = this.sortedValues[i]
+      if (priority > current.priority) {
+        this.sortedValues.splice(i, 0, { value, priority })
+        return
+      }
+    }
+    this.sortedValues.push({ value, priority })
+  }
+
+  public get(): { value: T; priority: number } | null {
+    const hit = this.sortedValues.shift()
+    return hit ?? null
+  }
+
+  public get length() {
+    return this.sortedValues.length
+  }
+}
+
 export function parseFile(file: string): Token[][] {
   return file.split('\n').map((line) =>
     line.split('').map((token) => {

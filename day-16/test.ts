@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { parseFile, PriorityQueue } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -29,6 +29,18 @@ describe('day-16', async () => {
         ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
       ]
       assert.deepEqual(result, expected)
+    })
+    it('PriorityQueue', () => {
+      const queue = new PriorityQueue<string>()
+      assert.strictEqual(queue.length, 0)
+      queue.add('a', 10)
+      queue.add('b', 20)
+      queue.add('c', 15)
+      assert.strictEqual(queue.length, 3)
+      assert.deepEqual(queue.get(), { value: 'b', priority: 20 })
+      assert.deepEqual(queue.get(), { value: 'c', priority: 15 })
+      assert.deepEqual(queue.get(), { value: 'a', priority: 10 })
+      assert.strictEqual(queue.length, 0)
     })
   })
 
