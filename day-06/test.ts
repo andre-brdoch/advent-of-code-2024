@@ -8,8 +8,6 @@ import {
   moveGuard,
   moveUntilConditionMeet,
   parseFile,
-  Point,
-  removeDuplicatePositions,
   removeGuardFromMap,
   solvePt1,
   barrierWouldCauseLoop,
@@ -17,6 +15,7 @@ import {
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
+import { Coord } from '../utils/coordinates'
 
 describe('day-06', async () => {
   const reader = new InputReader(__dirname)
@@ -25,7 +24,7 @@ describe('day-06', async () => {
   describe('helpers', () => {
     let exampleMap: Cell[][]
     let exampleMapNoGuard: Cell[][]
-    let guardStartPoint: Point
+    let guardStartPoint: Coord
     let startHistoryEntry: HistoryEntry
 
     beforeEach(() => {
@@ -164,19 +163,6 @@ describe('day-06', async () => {
           { x: 0, y: 0, guard: '>' },
         ]),
         false
-      )
-    })
-    it('removeDuplicatePositions()', () => {
-      assert.deepEqual(
-        removeDuplicatePositions([
-          { x: 0, y: 0 },
-          { x: 1, y: 0 },
-          { x: 0, y: 0 },
-        ]),
-        [
-          { x: 0, y: 0 },
-          { x: 1, y: 0 },
-        ]
       )
     })
     it('barrierWouldCauseLoop()', () => {

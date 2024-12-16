@@ -1,8 +1,5 @@
-interface Coord {
-  x: number
-  y: number
-}
-type Vector = Coord
+import { addCoords, Coord, getUniqueCoordinates, vectorBetween } from '../utils/coordinates'
+
 type Lookup = Record<string, Coord[]>
 
 export function solvePt1(input: string): number {
@@ -10,7 +7,7 @@ export function solvePt1(input: string): number {
   const lookup = mapToLookup(parsed)
   const allPairs = getAllPairs(lookup)
   const antinodes = allPairs.flatMap(([a, b]) => getAntinodesBetween(parsed, a, b))
-  const unique = uniqueCoordinates(antinodes)
+  const unique = getUniqueCoordinates(antinodes)
   return unique.length
 }
 
@@ -19,17 +16,8 @@ export function solvePt2(input: string): number {
   const lookup = mapToLookup(parsed)
   const allPairs = getAllPairs(lookup)
   const antinodes = allPairs.flatMap(([a, b]) => getAntinodesBetweenPt2(parsed, a, b))
-  const unique = uniqueCoordinates(antinodes)
+  const unique = getUniqueCoordinates(antinodes)
   return unique.length
-}
-
-export function uniqueCoordinates(coords: Coord[]): Coord[] {
-  const strings = coords.map((c) => `${c.x}/${c.y}`)
-  const set = new Set(strings)
-  return Array.from(set).map((s) => {
-    const [x, y] = s.split('/')
-    return { x: Number(x), y: Number(y) }
-  })
 }
 
 export function getAllPairs(lookup: Lookup): [Coord, Coord][] {
@@ -53,7 +41,7 @@ export function getPairsOfSameFreq(sameFreqAntennas: Coord[]): [Coord, Coord][] 
 export function getAntinodesBetween(map: string[][], a: Coord, b: Coord): Coord[] {
   const vectorPlus = vectorBetween(b, a)
   const vectorMinus = vectorBetween(a, b)
-  const coords = [applyVector(a, vectorPlus), applyVector(b, vectorMinus)]
+  const coords = [addCoords(a, vectorPlus), addCoords(b, vectorMinus)]
   // filter out off board coords
   return coords.filter((c) => map[c.y]?.[c.x] != null)
 }
@@ -72,7 +60,7 @@ export function getAntinodesBetweenPt2(map: string[][], a: Coord, b: Coord): Coo
     let j = 0
     while (!isOffMap) {
       if (j === 0) coords.push(point)
-      const newCoord = applyVector(coords[coords.length - 1], vector)
+      const newCoord = addCoords(coords[coords.length - 1], vector)
       if (map[newCoord.y]?.[newCoord.x] != null) {
         coords.push(newCoord)
       } else {
@@ -82,14 +70,6 @@ export function getAntinodesBetweenPt2(map: string[][], a: Coord, b: Coord): Coo
     }
   }
   return coords
-}
-
-export function applyVector(coord: Coord, vector: Vector): Coord {
-  return { x: coord.x + vector.x, y: coord.y + vector.y }
-}
-
-export function vectorBetween(a: Coord, b: Coord): Vector {
-  return { x: b.x - a.x, y: b.y - a.y }
 }
 
 export function mapToLookup(map: string[][]): Lookup {

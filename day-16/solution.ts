@@ -1,38 +1,30 @@
-import { addCoords, Coord, stringifyCoord } from '../utils/coordinates'
+import {
+  addCoords,
+  Coord,
+  Direction,
+  DIRECTIONS,
+  getUniqueCoordinates,
+  isDirection,
+  OPPOSITE_DIRECTIONS,
+  RIGHT,
+  VECTOR_BY_DIRECTION,
+} from '../utils/coordinates'
 
 export const WALL = '#' as const
 export const FREE = '.' as const
 export const START = 'S' as const
 export const END = 'E' as const
 
+const START_DIRECTION = RIGHT
+
 const COST_MOVEMENT = 1
 const COST_ROTATE = 1000
 
-export const UP = '^' as const
-export const RIGHT = '>' as const
-export const DOWN = 'v' as const
-export const LEFT = '<' as const
-const DIRECTIONS = [UP, RIGHT, DOWN, LEFT] as const
-
 export type Token = typeof WALL | typeof FREE | typeof START | typeof END
-export type Direction = (typeof DIRECTIONS)[number]
 export interface Position extends Coord {
   direction: Direction
 }
 export type CameFrom = Record<string, Set<string>>
-
-const VECTOR_BY_DIRECTION: Record<Direction, Coord> = {
-  [UP]: { x: 0, y: -1 },
-  [RIGHT]: { x: 1, y: 0 },
-  [DOWN]: { x: 0, y: 1 },
-  [LEFT]: { x: -1, y: 0 },
-}
-const OPPOSITE_DIRECTIONS: Record<Direction, Direction> = {
-  [UP]: DOWN,
-  [RIGHT]: LEFT,
-  [DOWN]: UP,
-  [LEFT]: RIGHT,
-}
 
 export function solvePt1(input: string): number {
   const map = parseFile(input)
@@ -76,7 +68,7 @@ export function findShortestWays(
   mode: 'all' | 'single' = 'all'
 ): [lowestCost: number, cameFrom: CameFrom, endPosition: Position] {
   const queue = new PriorityQueue<Position>()
-  const startPosition: Position = { ...findToken(map, START), direction: RIGHT }
+  const startPosition: Position = { ...findToken(map, START), direction: START_DIRECTION }
   let endPosition: Position | undefined
   const startKey = stringifyPosition(startPosition)
   queue.add(startPosition, 0)
@@ -131,14 +123,9 @@ export function reconstructPaths(cameFrom: CameFrom, positions: Position[]): Pos
 }
 
 function countUniqueCoords(paths: Position[][]): number {
-  const set = new Set<string>()
-  paths.forEach((path) => {
-    path.forEach((pos) => {
-      const coordKey = stringifyCoord(pos)
-      set.add(coordKey)
-    })
-  })
-  return set.size
+  const flatPaths = paths.flatMap((p) => p)
+  const unique = getUniqueCoordinates(flatPaths)
+  return unique.length
 }
 
 export function getNeighbors(map: Token[][], currentPosition: Position): Position[] {
@@ -195,8 +182,4 @@ export function parseFile(file: string): Token[][] {
 
 export function isToken(str: string): str is Token {
   return str === WALL || str === FREE || str === START || str === END
-}
-
-export function isDirection(str: string): str is Direction {
-  return str === UP || str === RIGHT || str === DOWN || str === LEFT
 }

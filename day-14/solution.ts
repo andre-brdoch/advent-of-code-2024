@@ -1,4 +1,3 @@
-import { appendFileSync } from 'fs'
 import { addCoords, stringifyCoord } from '../utils/coordinates'
 import { getTypedKeys } from '../utils/object'
 import { join } from 'path'

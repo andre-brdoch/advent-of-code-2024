@@ -2,22 +2,18 @@ import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
   getGps,
-  Instruction,
-  LEFT,
   Map,
   moveToken,
   moveTokenScaled,
   parseFile,
   PLAYER,
-  RIGHT,
   scaleUpMap,
   solvePt1,
   stringifyMap,
-  UP,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
-import { Coord } from '../utils/coordinates'
+import { Coord, Direction, LEFT, RIGHT, UP } from '../utils/coordinates'
 
 describe('day-15', async () => {
   const reader = new InputReader(__dirname)
@@ -26,7 +22,7 @@ describe('day-15', async () => {
   let mapMini: Map
   let mapMiniString: string
   let startPositionMini: Coord
-  let instructionsMini: Instruction[]
+  let instructionsMini: Direction[]
 
   beforeEach(() => {
     mapMini = [

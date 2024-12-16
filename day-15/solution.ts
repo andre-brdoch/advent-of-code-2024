@@ -1,6 +1,11 @@
-import consola from 'consola'
 import { getSum } from '../utils/array'
-import { addCoords, Coord } from '../utils/coordinates'
+import {
+  addCoords,
+  Coord,
+  Direction,
+  isHorizontal,
+  VECTOR_BY_DIRECTION,
+} from '../utils/coordinates'
 
 export const WALL = '#' as const
 export const BOX = 'O' as const
@@ -8,23 +13,11 @@ export const BOX_LEFT = '[' as const
 export const BOX_RIGHT = ']' as const
 export const EMPTY = '.' as const
 export const PLAYER = '@' as const
-export const UP = '^' as const
-export const RIGHT = '>' as const
-export const BOTTOM = 'v' as const
-export const LEFT = '<' as const
 
-export type Instruction = typeof UP | typeof RIGHT | typeof BOTTOM | typeof LEFT
 export type Cell = typeof WALL | typeof BOX | typeof EMPTY
 export type Map = Cell[][]
 export type CellScaled = typeof BOX_LEFT | typeof BOX_RIGHT | typeof WALL | typeof EMPTY
 export type MapScaled = CellScaled[][]
-
-const vectorByInstruction: Record<Instruction, Coord> = {
-  [UP]: { x: 0, y: -1 },
-  [RIGHT]: { x: 1, y: 0 },
-  [BOTTOM]: { x: 0, y: 1 },
-  [LEFT]: { x: -1, y: 0 },
-}
 
 export function solvePt1(input: string): number {
   const { map, startPosition, instructions } = parseFile(input)
@@ -79,9 +72,9 @@ export function moveTokenScaled(
   map: MapScaled,
   token: typeof PLAYER | typeof BOX_LEFT | typeof BOX_RIGHT,
   tokenPosition: Coord,
-  instruction: Instruction
+  instruction: Direction
 ): [success: boolean, newTokenPosition: Coord] {
-  const vector = vectorByInstruction[instruction]
+  const vector = VECTOR_BY_DIRECTION[instruction]
   const nextCoord = addCoords(tokenPosition, vector)
   const next: CellScaled = map[nextCoord.y]?.[nextCoord.x]
   if (next === WALL) return [false, tokenPosition]
@@ -109,9 +102,9 @@ export function moveToken(
   map: Map,
   token: typeof PLAYER | typeof BOX,
   tokenPosition: Coord,
-  instruction: Instruction
+  instruction: Direction
 ): [success: boolean, newTokenPosition: Coord] {
-  const vector = vectorByInstruction[instruction]
+  const vector = VECTOR_BY_DIRECTION[instruction]
   const nextCoord = addCoords(tokenPosition, vector)
   const next: Cell = map[nextCoord.y]?.[nextCoord.x]
   if (next === WALL) return [false, tokenPosition]
@@ -141,7 +134,7 @@ function updateMap(
 export function parseFile(file: string): {
   map: Map
   startPosition: Coord
-  instructions: Instruction[]
+  instructions: Direction[]
 } {
   const [mapStr, instructionStr] = file.split('\n\n')
   let startPosition: Coord | undefined
@@ -158,7 +151,7 @@ export function parseFile(file: string): {
     return cells
   })
   if (!startPosition) throw new Error('No player token found on map')
-  const instructions: Instruction[] = instructionStr.split('\n').flatMap((instrLine) =>
+  const instructions: Direction[] = instructionStr.split('\n').flatMap((instrLine) =>
     instrLine.split('').map((str) => {
       if (!isValidInstruction(str)) throw new Error(`Invalid instruction: ${str}`)
       return str
@@ -174,12 +167,8 @@ export function isValidToken(str: string): str is Cell {
   return str === WALL || str === BOX || str === EMPTY
 }
 
-export function isValidInstruction(str: string): str is Instruction {
-  return str in vectorByInstruction
-}
-
-export function isHorizontal(instruction: Instruction): instruction is typeof LEFT | typeof RIGHT {
-  return instruction === LEFT || instruction === RIGHT
+export function isValidInstruction(str: string): str is Direction {
+  return str in VECTOR_BY_DIRECTION
 }
 
 // FOR TESTING / VISUALIZING
