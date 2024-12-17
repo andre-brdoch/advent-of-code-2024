@@ -12,11 +12,16 @@ export type TypeDict = Record<string, Coord[]>
 export function solvePt1(input: string): any {
   const map = parseFile(input)
   const typeDict = getTypeDict(map)
-  return getAllRegionCosts(map, typeDict)
+  const allRegions = getAllRegions(typeDict)
+  return getAllRegionCosts(map, allRegions)
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
+}
+
+export function getAllRegions(typeDict: TypeDict): Coord[][] {
+  return Object.keys(typeDict).flatMap((type) => divideTypeIntoRegions(typeDict[type]))
 }
 
 export function divideTypeIntoRegions(typePoints: Coord[]): Coord[][] {
@@ -42,8 +47,8 @@ export function divideTypeIntoRegions(typePoints: Coord[]): Coord[][] {
   return regions
 }
 
-export function getAllRegionCosts(map: string[][], typeDict: TypeDict): number {
-  const costs = Object.keys(typeDict).map((region) => getRegionCost(map, typeDict[region]))
+export function getAllRegionCosts(map: string[][], regions: Coord[][]): number {
+  const costs = regions.map((region) => getRegionCost(map, region))
   return getSum(costs)
 }
 

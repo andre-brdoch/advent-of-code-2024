@@ -125,15 +125,16 @@ describe('day-12', async () => {
       const expected = 140
       assert.strictEqual(result, expected)
     })
-    // it('mini 2 data', () => {
-    //   const result = solvePt1(inputMini2)
-    //   const expected = 772
-    //   assert.strictEqual(result, expected)
-    // })
-    // it('example data', () => {
-    //   const result = solvePt1(inputExample)
-    //   const expected = 1930
-    //   assert.strictEqual(result, expected)
+    it('mini 2 data', () => {
+      const result = solvePt1(inputMini2)
+      const expected = 772
+      assert.strictEqual(result, expected)
+    })
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 1930
+      assert.strictEqual(result, expected)
+    })
   })
 
   //   // it('real data', () => {
