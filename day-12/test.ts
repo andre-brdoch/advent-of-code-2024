@@ -1,4 +1,4 @@
-import { describe, it } from 'node:test'
+import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import { parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
@@ -8,10 +8,21 @@ describe('day-12', async () => {
   const reader = new InputReader(__dirname)
   const { inputMini1, inputMini2, inputExample, inputReal } = await reader.readAllInputFiles()
 
+  let mapMini1: string[][]
+
+  beforeEach(() => {
+    mapMini1 = [
+      ['A', 'A', 'A', 'A'],
+      ['B', 'B', 'C', 'D'],
+      ['B', 'B', 'C', 'C'],
+      ['E', 'E', 'E', 'C'],
+    ]
+  })
+
   describe('helpers', () => {
     it('parseFile()', () => {
-      const result = parseFile(inputExample)
-      const expected = undefined
+      const result = parseFile(inputMini1)
+      const expected = mapMini1
       assert.deepEqual(result, expected)
     })
   })
