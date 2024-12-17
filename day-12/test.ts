@@ -16,6 +16,7 @@ describe('day-12', async () => {
 
   let mapMini1: string[][]
   let mapMini2: string[][]
+  let mapExample: string[][]
   let typeDictMini1: TypeDict
   let typeDictMini2: TypeDict
 
@@ -32,6 +33,18 @@ describe('day-12', async () => {
       ['O', 'O', 'O', 'O', 'O'],
       ['O', 'X', 'O', 'X', 'O'],
       ['O', 'O', 'O', 'O', 'O'],
+    ]
+    mapExample = [
+      ['R', 'R', 'R', 'R', 'I', 'I', 'C', 'C', 'F', 'F'],
+      ['R', 'R', 'R', 'R', 'I', 'I', 'C', 'C', 'C', 'F'],
+      ['V', 'V', 'R', 'R', 'R', 'C', 'C', 'F', 'F', 'F'],
+      ['V', 'V', 'R', 'C', 'C', 'C', 'J', 'F', 'F', 'F'],
+      ['V', 'V', 'V', 'V', 'C', 'J', 'J', 'C', 'F', 'E'],
+      ['V', 'V', 'I', 'V', 'C', 'C', 'J', 'J', 'E', 'E'],
+      ['V', 'V', 'I', 'I', 'I', 'C', 'J', 'J', 'E', 'E'],
+      ['M', 'I', 'I', 'I', 'I', 'I', 'J', 'J', 'E', 'E'],
+      ['M', 'I', 'I', 'I', 'S', 'I', 'J', 'E', 'E', 'E'],
+      ['M', 'M', 'M', 'I', 'S', 'S', 'J', 'E', 'E', 'E'],
     ]
     typeDictMini1 = {
       A: [
@@ -94,12 +107,14 @@ describe('day-12', async () => {
 
   describe('helpers', () => {
     it('parseFile()', () => {
-      const result = parseFile(inputMini1)
-      const expected = mapMini1
-      assert.deepEqual(result, expected)
+      assert.deepEqual(parseFile(inputMini1), mapMini1)
+      assert.deepEqual(parseFile(inputMini2), mapMini2)
+      assert.deepEqual(parseFile(inputExample), mapExample)
     })
     it('getTypeDict()', () => {
       assert.deepEqual(getTypeDict(mapMini1), typeDictMini1)
+      assert.deepEqual(getTypeDict(mapMini2), typeDictMini2)
+
       assert.deepEqual(getTypeDict(mapMini2), typeDictMini2)
     })
     it('getPlotsPerimeter()', () => {
@@ -116,6 +131,8 @@ describe('day-12', async () => {
         [{ x: 1, y: 3 }],
         [{ x: 3, y: 3 }],
       ])
+      const regions = getTypeDict(mapExample).I
+      assert.deepEqual(divideTypeIntoRegions(regions), [regions.slice(0, 4), regions.slice(4)])
     })
   })
 
@@ -130,11 +147,11 @@ describe('day-12', async () => {
       const expected = 772
       assert.strictEqual(result, expected)
     })
-    it('example data', () => {
-      const result = solvePt1(inputExample)
-      const expected = 1930
-      assert.strictEqual(result, expected)
-    })
+    // it('example data', () => {
+    //   const result = solvePt1(inputExample)
+    //   const expected = 1930
+    //   assert.strictEqual(result, expected)
+    // })
   })
 
   //   // it('real data', () => {

@@ -4,6 +4,7 @@ import {
   areCoordsAdjacent,
   Coord,
   DIRECTIONS,
+  stringifyCoord,
   VECTOR_BY_DIRECTION,
 } from '../utils/coordinates'
 
@@ -25,26 +26,68 @@ export function getAllRegions(typeDict: TypeDict): Coord[][] {
 }
 
 export function divideTypeIntoRegions(typePoints: Coord[]): Coord[][] {
-  const regions: Coord[][] = [[typePoints[0]]]
-  points: for (let i = 1; i <= typePoints.length - 1; i += 1) {
+  const lookup = typePoints.reduce(
+    (result, point) => {
+      const key = stringifyCoord(point)
+      return { ...result, [key]: point }
+    },
+    {} as Record<string, Coord>
+  )
+  // find all neighbors for every type point
+  const typePointsWithNeighbors: { typePoint: Coord; neighbors: Cord[] }[] = []
+  for (let i = 0; i <= typePoints.length - 1; i += 1) {
     const typePoint = typePoints[i]
+    const neighbors = DIRECTIONS.map((dir) => {
+      const vector = VECTOR_BY_DIRECTION[dir]
+      const neighbor = addCoords(typePoint, vector)
+      const neighborKey = stringifyCoord(neighbor)
+      return neighborKey
+    })
+      .filter((neighborKey) => neighborKey in lookup)
+      .map((neighborKey) => lookup[neighborKey])
+    typePointsWithNeighbors.push({ typePoint, neighbors })
     // console.log('typePoint', typePoint)
 
-    regions: for (let j = 0; j <= regions.length - 1; j += 1) {
-      const region = regions[j]
-      // console.log('region', region)
+    // regions: for (let j = 0; j <= regions.length - 1; j += 1) {
+    //   const region = regions[j]
+    //   // console.log('region', region)
 
-      const isPartOfRegion = region.some((point) => areCoordsAdjacent(point, typePoint))
-      // console.log(' ==== are adjacent', typePoint)
+    //   const isPartOfRegion = region.some((point) => areCoordsAdjacent(point, typePoint))
+    //   // console.log(' ==== are adjacent', typePoint)
 
-      if (isPartOfRegion) {
-        region.push(typePoint)
-        continue points
-      }
-    }
-    regions.push([typePoint])
+    //   if (isPartOfRegion) {
+    //     region.push(typePoint)
+    //     continue points
+    //   }
+    // }
+    // regions.push([typePoint])
+  }
+  // group neighbors into regions
+  const regions: Coord[][] = []
+  while (typePointsWithNeighbors.length) {
+    const current = typePointsWithNeighbors.shift()
   }
   return regions
+  // const regions: Coord[][] = [[typePoints[0]]]
+  // points: for (let i = 1; i <= typePoints.length - 1; i += 1) {
+  //   const typePoint = typePoints[i]
+  //   // console.log('typePoint', typePoint)
+
+  //   regions: for (let j = 0; j <= regions.length - 1; j += 1) {
+  //     const region = regions[j]
+  //     // console.log('region', region)
+
+  //     const isPartOfRegion = region.some((point) => areCoordsAdjacent(point, typePoint))
+  //     // console.log(' ==== are adjacent', typePoint)
+
+  //     if (isPartOfRegion) {
+  //       region.push(typePoint)
+  //       continue points
+  //     }
+  //   }
+  //   regions.push([typePoint])
+  // }
+  // return regions
 }
 
 export function getAllRegionCosts(map: string[][], regions: Coord[][]): number {
