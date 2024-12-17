@@ -28,6 +28,10 @@ export function vectorBetween(a: Coord, b: Coord): Coord {
   return { x: b.x - a.x, y: b.y - a.y }
 }
 
+export function coordsMatch(a: Coord, b: Coord): boolean {
+  return a.x === b.x && a.y === b.y
+}
+
 export const UP = '^' as const
 export const RIGHT = '>' as const
 export const DOWN = 'v' as const
