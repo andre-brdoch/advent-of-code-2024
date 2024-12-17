@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getRegionsDict, parseFile } from './solution'
+import { getPlotsPerimeter, getRegionsDict, parseFile, solvePt1 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -53,14 +53,28 @@ describe('day-12', async () => {
         ],
       })
     })
+    it('getPlotsPerimeter()', () => {
+      assert.strictEqual(getPlotsPerimeter(mapMini1, { x: 0, y: 0 }), 3)
+      assert.strictEqual(getPlotsPerimeter(mapMini1, { x: 3, y: 1 }), 4)
+    })
   })
 
-  // describe('part 1', () => {
-  //   it('example data', () => {
-  //     const result = solvePt1(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
+  describe('part 1', () => {
+    it('mini 1 data', () => {
+      const result = solvePt1(inputMini1)
+      const expected = 140
+      assert.strictEqual(result, expected)
+    })
+    // it('mini 2 data', () => {
+    //   const result = solvePt1(inputMini2)
+    //   const expected = 772
+    //   assert.strictEqual(result, expected)
+    // })
+    // it('example data', () => {
+    //   const result = solvePt1(inputExample)
+    //   const expected = 1930
+    //   assert.strictEqual(result, expected)
+  })
 
   //   // it('real data', () => {
   //   //   const result = solvePt1(inputReal)
