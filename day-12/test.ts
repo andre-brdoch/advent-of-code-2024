@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { parseFile } from './solution'
+import { getRegionsDict, parseFile } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -24,6 +24,34 @@ describe('day-12', async () => {
       const result = parseFile(inputMini1)
       const expected = mapMini1
       assert.deepEqual(result, expected)
+    })
+    it('getRegionsDict()', () => {
+      assert.deepEqual(getRegionsDict(mapMini1), {
+        A: [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 3, y: 0 },
+        ],
+        B: [
+          { x: 0, y: 1 },
+          { x: 1, y: 1 },
+          { x: 0, y: 2 },
+          { x: 1, y: 2 },
+        ],
+        C: [
+          { x: 2, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 2 },
+          { x: 3, y: 3 },
+        ],
+        D: [{ x: 3, y: 1 }],
+        E: [
+          { x: 0, y: 3 },
+          { x: 1, y: 3 },
+          { x: 2, y: 3 },
+        ],
+      })
     })
   })
 
