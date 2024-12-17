@@ -79,17 +79,17 @@ export function findCheapest(
   let cost: number | undefined
   let clicksA: number | undefined
   let clicksB: number | undefined
-  if (isDividable(price, b)) {
+  if (getDivisor(price, b)) {
     clicksA = 0
     clicksB = price.x / b.x
     cost = COST_B * clicksA
-  } else if (isDividable(price, a)) {
+  } else if (getDivisor(price, a)) {
     clicksA = price.x / a.x
     clicksB = 0
     cost = COST_A * clicksA
   } else {
     while (current.x <= price.x && current.y <= price.y) {
-      if (isDividable(price, current)) {
+      if (getDivisor(price, current)) {
         //
       }
     }
@@ -98,12 +98,12 @@ export function findCheapest(
   return [cost, clicksA, clicksB]
 }
 
-export function isDividable(target: Coord, current: Coord): boolean {
-  return (
-    target.x / current.x === target.y / current.y &&
-    target.x % current.x === 0 &&
-    target.y % current.y === 0
-  )
+export function getDivisor(target: Coord, current: Coord): number | null {
+  const xDivisor = target.x / current.x
+  const yDivisor = target.y / current.y
+  const isDividable =
+    xDivisor === yDivisor && target.x % current.x === 0 && target.y % current.y === 0
+  return isDividable ? xDivisor : null
 }
 
 export function parseFile(file: string): Machine[] {

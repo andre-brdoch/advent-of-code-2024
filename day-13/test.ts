@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { findCheapest, isDividable, Machine, parseFile, solvePt1 } from './solution'
+import { findCheapest, getDivisor, Machine, parseFile, solvePt1 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -26,9 +26,9 @@ describe('day-13', async () => {
       const expected = machinesExample
       assert.deepEqual(result, expected)
     })
-    it('isDividable()', () => {
-      assert.strictEqual(isDividable({ x: 100, y: 10 }, { x: 10, y: 1 }), true)
-      assert.strictEqual(isDividable({ x: 100, y: 10 }, { x: 10, y: 2 }), false)
+    it('getDivisor()', () => {
+      assert.strictEqual(getDivisor({ x: 100, y: 10 }, { x: 10, y: 1 }), 10)
+      assert.strictEqual(getDivisor({ x: 100, y: 10 }, { x: 10, y: 2 }), null)
     })
     // it('findCheapest()', () => {
     //   assert.deepEqual(findCheapest(machinesExample[0]), [280, 80, 40])
