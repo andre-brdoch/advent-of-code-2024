@@ -1,20 +1,49 @@
 import { getSum } from '../utils/array'
-import { addCoords, Coord, DIRECTIONS, VECTOR_BY_DIRECTION } from '../utils/coordinates'
+import {
+  addCoords,
+  areCoordsAdjacent,
+  Coord,
+  DIRECTIONS,
+  VECTOR_BY_DIRECTION,
+} from '../utils/coordinates'
 
-type RegionsDict = Record<string, Coord[]>
+export type TypeDict = Record<string, Coord[]>
 
 export function solvePt1(input: string): any {
   const map = parseFile(input)
-  const regionsDict = getRegionsDict(map)
-  return getAllRegionCosts(map, regionsDict)
+  const typeDict = getTypeDict(map)
+  return getAllRegionCosts(map, typeDict)
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-export function getAllRegionCosts(map: string[][], regionsDict: RegionsDict): number {
-  const costs = Object.keys(regionsDict).map((region) => getRegionCost(map, regionsDict[region]))
+export function divideTypeIntoRegions(typePoints: Coord[]): Coord[][] {
+  const regions: Coord[][] = [[typePoints[0]]]
+  points: for (let i = 1; i <= typePoints.length - 1; i += 1) {
+    const typePoint = typePoints[i]
+    // console.log('typePoint', typePoint)
+
+    regions: for (let j = 0; j <= regions.length - 1; j += 1) {
+      const region = regions[j]
+      // console.log('region', region)
+
+      const isPartOfRegion = region.some((point) => areCoordsAdjacent(point, typePoint))
+      // console.log(' ==== are adjacent', typePoint)
+
+      if (isPartOfRegion) {
+        region.push(typePoint)
+        continue points
+      }
+    }
+    regions.push([typePoint])
+  }
+  return regions
+}
+
+export function getAllRegionCosts(map: string[][], typeDict: TypeDict): number {
+  const costs = Object.keys(typeDict).map((region) => getRegionCost(map, typeDict[region]))
   return getSum(costs)
 }
 
@@ -30,25 +59,25 @@ export function getRegionsPerimeter(map: string[][], regionPoints: Coord[]): num
 }
 
 export function getPlotsPerimeter(map: string[][], point: Coord): number {
-  const region = map[point.y][point.x]
+  const type = map[point.y][point.x]
   let perimeter = 0
   for (let i = 0; i <= DIRECTIONS.length - 1; i += 1) {
     const dir = DIRECTIONS[i]
     const vector = VECTOR_BY_DIRECTION[dir]
     const targetPoint = addCoords(point, vector)
-    const targetRegion = map[targetPoint.y]?.[targetPoint.x]
-    if (region !== targetRegion) perimeter += 1
+    const targetType = map[targetPoint.y]?.[targetPoint.x]
+    if (type !== targetType) perimeter += 1
   }
   return perimeter
 }
 
-export function getRegionsDict(map: string[][]): RegionsDict {
-  const dict: RegionsDict = {}
+export function getTypeDict(map: string[][]): TypeDict {
+  const dict: TypeDict = {}
   for (let y = 0; y <= map.length - 1; y += 1) {
     for (let x = 0; x <= map[0].length - 1; x += 1) {
-      const region = map[y][x]
-      if (!(region in dict)) dict[region] = []
-      dict[region].push({ x, y })
+      const type = map[y][x]
+      if (!(type in dict)) dict[type] = []
+      dict[type].push({ x, y })
     }
   }
   return dict

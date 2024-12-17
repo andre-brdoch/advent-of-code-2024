@@ -1,6 +1,12 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { getPlotsPerimeter, getRegionsDict, parseFile, solvePt1 } from './solution'
+import {
+  divideTypeIntoRegions,
+  getPlotsPerimeter,
+  getTypeDict,
+  parseFile,
+  solvePt1,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -9,6 +15,9 @@ describe('day-12', async () => {
   const { inputMini1, inputMini2, inputExample, inputReal } = await reader.readAllInputFiles()
 
   let mapMini1: string[][]
+  let mapMini2: string[][]
+  let typeDictMini1: TypeDict
+  let typeDictMini2: TypeDict
 
   beforeEach(() => {
     mapMini1 = [
@@ -17,6 +26,70 @@ describe('day-12', async () => {
       ['B', 'B', 'C', 'C'],
       ['E', 'E', 'E', 'C'],
     ]
+    mapMini2 = [
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'X', 'O', 'X', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+      ['O', 'X', 'O', 'X', 'O'],
+      ['O', 'O', 'O', 'O', 'O'],
+    ]
+    typeDictMini1 = {
+      A: [
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 3, y: 0 },
+      ],
+      B: [
+        { x: 0, y: 1 },
+        { x: 1, y: 1 },
+        { x: 0, y: 2 },
+        { x: 1, y: 2 },
+      ],
+      C: [
+        { x: 2, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 2 },
+        { x: 3, y: 3 },
+      ],
+      D: [{ x: 3, y: 1 }],
+      E: [
+        { x: 0, y: 3 },
+        { x: 1, y: 3 },
+        { x: 2, y: 3 },
+      ],
+    }
+    typeDictMini2 = {
+      O: [
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 2, y: 0 },
+        { x: 3, y: 0 },
+        { x: 4, y: 0 },
+        { x: 0, y: 1 },
+        { x: 2, y: 1 },
+        { x: 4, y: 1 },
+        { x: 0, y: 2 },
+        { x: 1, y: 2 },
+        { x: 2, y: 2 },
+        { x: 3, y: 2 },
+        { x: 4, y: 2 },
+        { x: 0, y: 3 },
+        { x: 2, y: 3 },
+        { x: 4, y: 3 },
+        { x: 0, y: 4 },
+        { x: 1, y: 4 },
+        { x: 2, y: 4 },
+        { x: 3, y: 4 },
+        { x: 4, y: 4 },
+      ],
+      X: [
+        { x: 1, y: 1 },
+        { x: 3, y: 1 },
+        { x: 1, y: 3 },
+        { x: 3, y: 3 },
+      ],
+    }
   })
 
   describe('helpers', () => {
@@ -25,37 +98,24 @@ describe('day-12', async () => {
       const expected = mapMini1
       assert.deepEqual(result, expected)
     })
-    it('getRegionsDict()', () => {
-      assert.deepEqual(getRegionsDict(mapMini1), {
-        A: [
-          { x: 0, y: 0 },
-          { x: 1, y: 0 },
-          { x: 2, y: 0 },
-          { x: 3, y: 0 },
-        ],
-        B: [
-          { x: 0, y: 1 },
-          { x: 1, y: 1 },
-          { x: 0, y: 2 },
-          { x: 1, y: 2 },
-        ],
-        C: [
-          { x: 2, y: 1 },
-          { x: 2, y: 2 },
-          { x: 3, y: 2 },
-          { x: 3, y: 3 },
-        ],
-        D: [{ x: 3, y: 1 }],
-        E: [
-          { x: 0, y: 3 },
-          { x: 1, y: 3 },
-          { x: 2, y: 3 },
-        ],
-      })
+    it('getTypeDict()', () => {
+      assert.deepEqual(getTypeDict(mapMini1), typeDictMini1)
+      assert.deepEqual(getTypeDict(mapMini2), typeDictMini2)
     })
     it('getPlotsPerimeter()', () => {
       assert.strictEqual(getPlotsPerimeter(mapMini1, { x: 0, y: 0 }), 3)
       assert.strictEqual(getPlotsPerimeter(mapMini1, { x: 3, y: 1 }), 4)
+      assert.strictEqual(getPlotsPerimeter(mapMini2, { x: 1, y: 1 }), 4)
+      assert.strictEqual(getPlotsPerimeter(mapMini2, { x: 1, y: 0 }), 2)
+    })
+    it('divideTypeIntoRegions()', () => {
+      assert.deepEqual(divideTypeIntoRegions(typeDictMini2.O), [typeDictMini2.O])
+      assert.deepEqual(divideTypeIntoRegions(typeDictMini2.X), [
+        [{ x: 1, y: 1 }],
+        [{ x: 3, y: 1 }],
+        [{ x: 1, y: 3 }],
+        [{ x: 3, y: 3 }],
+      ])
     })
   })
 
