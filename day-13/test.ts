@@ -11,7 +11,12 @@ describe('day-13', async () => {
   describe('helpers', () => {
     it('parseFile()', () => {
       const result = parseFile(inputExample)
-      const expected = undefined
+      const expected = [
+        { a: { x: 94, y: 34 }, b: { x: 22, y: 67 }, price: { x: 8400, y: 5400 } },
+        { a: { x: 26, y: 66 }, b: { x: 67, y: 21 }, price: { x: 12748, y: 12176 } },
+        { a: { x: 17, y: 86 }, b: { x: 84, y: 37 }, price: { x: 7870, y: 6450 } },
+        { a: { x: 69, y: 23 }, b: { x: 27, y: 71 }, price: { x: 18641, y: 10279 } },
+      ]
       assert.deepEqual(result, expected)
     })
   })
