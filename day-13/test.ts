@@ -1,6 +1,14 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
-import { findCheapest, getDivisor, Machine, parseFile, solvePt1 } from './solution'
+import {
+  adjustPricePositions,
+  findCheapest,
+  getDivisor,
+  Machine,
+  parseFile,
+  solvePt1,
+  solvePt2,
+} from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
 
@@ -36,6 +44,13 @@ describe('day-13', async () => {
       assert.deepEqual(findCheapest(machinesExample[2]), [200, 38, 86])
       assert.deepEqual(findCheapest(machinesExample[3]), null)
     })
+    it('findCheapest() after adjustment', () => {
+      adjustPricePositions(machinesExample)
+      assert.deepEqual(findCheapest(machinesExample[0]), null)
+      // assert.deepEqual(findCheapest(machinesExample[1]), null)
+      // assert.deepEqual(findCheapest(machinesExample[2]), [200, 38, 86])
+      // assert.deepEqual(findCheapest(machinesExample[3]), null)
+    })
   })
 
   describe('part 1', () => {
@@ -52,18 +67,17 @@ describe('day-13', async () => {
     })
   })
 
-  // describe('part 2', () => {
-  //   it('example data', () => {
-  //     const result = solvePt2(inputExample)
-  //     const expected = undefined
-  //     assert.strictEqual(result, expected)
-  //   })
-
-  //   // it('real data', () => {
-  //   //   const result = solvePt2(inputReal)
-  //   //   consola.success(`=== Result pt. 2: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
+  describe('part 2', () => {
+    // it('example data', () => {
+    //   const result = solvePt2(inputExample)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+    // it('real data', () => {
+    //   const result = solvePt2(inputReal)
+    //   consola.success(`=== Result pt. 2: ${result} ===`)
+    //   const expected = undefined
+    //   assert.strictEqual(result, expected)
+    // })
+  })
 })

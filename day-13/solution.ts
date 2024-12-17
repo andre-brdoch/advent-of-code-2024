@@ -3,6 +3,9 @@ import { Coord, subtractCords, vectorBetween } from '../utils/coordinates'
 const COST_A = 3
 const COST_B = 1
 
+/** introduced by pt 2 */
+const POSITION_ADJUSTMENT = 10000000000000
+
 const MAX_PER_BUTTON = 100
 
 export interface Machine {
@@ -16,8 +19,17 @@ export function solvePt1(input: string): number {
   return getMinimumCostForMaximumWins(machines)
 }
 
-export function solvePt2(input: string): any {
-  const parsed = parseFile(input)
+export function solvePt2(input: string): number {
+  const machines = parseFile(input)
+  adjustPricePositions(machines)
+  return getMinimumCostForMaximumWins(machines)
+}
+
+export function adjustPricePositions(machines: Machine[]): void {
+  machines.forEach((machine) => {
+    machine.price.x += POSITION_ADJUSTMENT
+    machine.price.y += POSITION_ADJUSTMENT
+  })
 }
 
 export function getMinimumCostForMaximumWins(machines: Machine[]): number {
