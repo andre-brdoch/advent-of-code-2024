@@ -1,6 +1,4 @@
-import consola from 'consola'
-import { addCoords, Coord, coordsMatch, stringifyCoord } from '../utils/coordinates'
-import { PriorityQueue } from '../utils/queue'
+import { Coord, subtractCords, vectorBetween } from '../utils/coordinates'
 
 const COST_A = 3
 const COST_B = 1
@@ -12,90 +10,65 @@ export interface Machine {
   b: Coord
   price: Coord
 }
-type CameFrom = Record<string, Set<Coord>>
-type CostSoFar = Record<string, number>
 
 export function solvePt1(input: string): number {
-  const parsed = parseFile(input)
-  const [lowestCost] = findCheapestPathToPrice(parsed[0])
-  return lowestCost
+  const machines = parseFile(input)
+  return getMinimumCostForMaximumWins(machines)
 }
 
 export function solvePt2(input: string): any {
   const parsed = parseFile(input)
 }
 
-export function findCheapestPathToPrice(
-  machine: Machine
-): [lowestCost: number | null, cameFrom: CameFrom] {
-  const queue = new PriorityQueue<Coord>('lowToHigh')
-  const start: Coord = { x: 0, y: 0 }
-  const startKey = stringifyCoord(start)
-  queue.add(start, 0)
-  const cameFrom: CameFrom = { [startKey]: new Set<Coord>() }
-  const costSoFar: CostSoFar = { [startKey]: 0 }
-  let lowestCost: number | null = null
-
-  while (queue.length > 0) {
-    const current = queue.get()
-    if (current == null) break
-    const currentKey = stringifyCoord(current)
-    if (coordsMatch(current, machine.price)) {
-      lowestCost = costSoFar[currentKey]
-      consola.success('Found a match!', lowestCost)
-      break
-    }
-    const nextOptions = getNextOptions(machine, current)
-    for (let i = 0; i < nextOptions.length - 1; i += 1) {
-      const { position: next, cost: nextCost } = nextOptions[i]
-      const nextKey = stringifyCoord(next)
-      const newCost = costSoFar[currentKey] + nextCost
-      const isReachable = next.x > machine.price.x || next.y > machine.price.y
-      if (isReachable && (!(nextKey in costSoFar) || newCost < costSoFar[nextKey])) {
-        costSoFar[nextKey] = newCost
-        queue.add(next, newCost)
-        if (!(nextKey in cameFrom)) cameFrom[nextKey] = new Set()
-        cameFrom[nextKey].add(next)
-      }
-    }
-  }
-  return [lowestCost, cameFrom]
-}
-
-export function getNextOptions(
-  machine: Machine,
-  position: Coord
-): { position: Coord; cost: number }[] {
-  return [machine.a, machine.b].map((button, i) => ({
-    position: addCoords(position, button),
-    cost: i === 0 ? COST_A : COST_B,
-  }))
+export function getMinimumCostForMaximumWins(machines: Machine[]): number {
+  return machines.reduce((total, machine) => {
+    const result = findCheapest(machine)
+    const add = result?.[0] ?? 0
+    return total + add
+  }, 0)
 }
 
 export function findCheapest(
   machine: Machine
 ): [cheapestCost: number, aPressed: number, bPressed: number] | null {
   const { a, b, price } = machine
-  let cost: number | undefined
   let clicksA: number | undefined
   let clicksB: number | undefined
-  if (getDivisor(price, b)) {
-    clicksA = 0
-    clicksB = price.x / b.x
-    cost = COST_B * clicksA
-  } else if (getDivisor(price, a)) {
-    clicksA = price.x / a.x
-    clicksB = 0
-    cost = COST_A * clicksA
-  } else {
-    while (current.x <= price.x && current.y <= price.y) {
-      if (getDivisor(price, current)) {
-        //
-      }
-    }
+
+  const bDivisor = getDivisor(price, b)
+  if (bDivisor) {
+    // can be achieved by only pressing the cheaper B button
+    return [bDivisor * COST_B, 0, bDivisor]
   }
-  if (cost == null || clicksA == null || clicksB == null) return null
+
+  // press B as often as possible, then take away 1 B click at a time, trying to fill up with A clicks
+  const xDivisor = price.x / b.x
+  const yDivisor = price.y / b.y
+  const [lowerDivisor] = [xDivisor, yDivisor].sort((a, b) => a - b)
+  clicksB = Math.floor(lowerDivisor)
+  let current: Coord = { x: b.x * clicksB, y: b.y * clicksB }
+  while (isLower(price, current) && clicksB >= 0) {
+    const diff = vectorBetween(current, price)
+    const aDivisor = getDivisor(diff, a)
+    if (aDivisor != null) {
+      // hit!
+      clicksA = aDivisor
+      break
+    }
+    current = subtractCords(current, b)
+    clicksB -= 1
+  }
+  if (clicksA == null || clicksB == null) return null
+  const cost = calcCost(clicksA, clicksB)
   return [cost, clicksA, clicksB]
+}
+
+export function calcCost(clicksA: number, clicksB: number): number {
+  return clicksA * COST_A + clicksB * COST_B
+}
+
+export function isLower(target: Coord, current: Coord): boolean {
+  return current.x <= target.x && current.y <= target.y
 }
 
 export function getDivisor(target: Coord, current: Coord): number | null {

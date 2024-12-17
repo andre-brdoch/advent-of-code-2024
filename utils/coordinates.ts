@@ -24,6 +24,12 @@ export function addCoords(a: Coord, b: Coord): Coord {
   return { x, y }
 }
 
+export function subtractCords(a: Coord, b: Coord): Coord {
+  const x = a.x - b.x
+  const y = a.y - b.y
+  return { x, y }
+}
+
 export function vectorBetween(a: Coord, b: Coord): Coord {
   return { x: b.x - a.x, y: b.y - a.y }
 }

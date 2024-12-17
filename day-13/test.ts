@@ -30,23 +30,26 @@ describe('day-13', async () => {
       assert.strictEqual(getDivisor({ x: 100, y: 10 }, { x: 10, y: 1 }), 10)
       assert.strictEqual(getDivisor({ x: 100, y: 10 }, { x: 10, y: 2 }), null)
     })
-    // it('findCheapest()', () => {
-    //   assert.deepEqual(findCheapest(machinesExample[0]), [280, 80, 40])
-    // })
+    it('findCheapest()', () => {
+      assert.deepEqual(findCheapest(machinesExample[0]), [280, 80, 40])
+      assert.deepEqual(findCheapest(machinesExample[1]), null)
+      assert.deepEqual(findCheapest(machinesExample[2]), [200, 38, 86])
+      assert.deepEqual(findCheapest(machinesExample[3]), null)
+    })
   })
 
   describe('part 1', () => {
-    // it('example data', () => {
-    //   const result = solvePt1(inputExample)
-    //   const expected = 280
-    //   assert.strictEqual(result, expected)
-    // })
-    // it('real data', () => {
-    //   const result = solvePt1(inputReal)
-    //   consola.success(`=== Result pt. 1: ${result} ===`)
-    //   const expected = undefined
-    //   assert.strictEqual(result, expected)
-    // })
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 480
+      assert.strictEqual(result, expected)
+    })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 35255
+      assert.strictEqual(result, expected)
+    })
   })
 
   // describe('part 2', () => {
