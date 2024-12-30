@@ -11,11 +11,10 @@ import { Queue } from '../utils/queue'
 
 export type TypeDict = Record<string, Coord[]>
 
-export function solvePt1(input: string): any {
+export function solvePt1(input: string): number {
   const map = parseFile(input)
-  const typeDict = getTypeDict(map)
-  const allRegions = getAllRegions(typeDict)
-  return getAllRegionCosts(map, allRegions)
+  const regionsByType = getRegionsByType(map)
+  return getTotalCost(map, regionsByType)
 }
 
 export function solvePt2(input: string): any {
@@ -121,29 +120,29 @@ export function getRegionsByType(map: string[][]): Record<string, Coord[][]> {
       if (region.length) result[type].push(region)
     }
   }
-  console.log(result.A)
-  console.log(result.B)
-  console.log(result.C)
-  console.log(result.D)
-  console.log(result.E)
-
   return result
 }
 
-export function getAllRegionCosts(map: string[][], regions: Coord[][]): number {
-  const costs = regions.map((region) => getRegionCost(map, region))
+export function getTotalCost(map: string[][], regionsDict: Record<string, Coord[][]>): number {
+  return Object.keys(regionsDict).reduce(
+    (result, type) => result + getCostForRegions(map, regionsDict[type]),
+    0
+  )
+  const costs = regions.map((region) => getCostForRegions(map, region))
   return getSum(costs)
 }
 
-export function getRegionCost(map: string[][], regionPoints: Coord[]): number {
-  const areaCost = regionPoints.length
-  const perimeterCost = getRegionsPerimeter(map, regionPoints)
-  return areaCost * perimeterCost
+export function getCostForRegions(map: string[][], regions: Coord[][]): number {
+  const costs = regions.map((region) => {
+    const area = region.length
+    const perimeters = getSum(region.map((point) => getPlotsPerimeter(map, point)))
+    return area * perimeters
+  })
+  return getSum(costs)
 }
 
-export function getRegionsPerimeter(map: string[][], regionPoints: Coord[]): number {
-  const perimeters = regionPoints.map((point) => getPlotsPerimeter(map, point))
-  return getSum(perimeters)
+export function getPerimetersForRegions(map: string[][], regions: Coord[][]): number[] {
+  return regions.flatMap((region) => region.map((point) => getPlotsPerimeter(map, point)))
 }
 
 export function getPlotsPerimeter(map: string[][], point: Coord): number {

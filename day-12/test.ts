@@ -2,6 +2,7 @@ import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
   divideTypeIntoRegions,
+  getCostForRegions,
   getPlotsPerimeter,
   getRegionsByType,
   getTypeDict,
@@ -193,6 +194,15 @@ describe('day-12', async () => {
       assert.deepEqual(getRegionsByType(mapMini1), regionsDictMini1)
       assert.deepEqual(getRegionsByType(mapMini2), regionsDictMini2)
     })
+    it('getCostForRegions()', () => {
+      assert.strictEqual(getCostForRegions(mapMini1, regionsDictMini1.A), 40)
+      assert.strictEqual(getCostForRegions(mapMini1, regionsDictMini1.B), 32)
+      assert.strictEqual(getCostForRegions(mapMini1, regionsDictMini1.C), 40)
+      assert.strictEqual(getCostForRegions(mapMini1, regionsDictMini1.D), 4)
+      assert.strictEqual(getCostForRegions(mapMini1, regionsDictMini1.E), 24)
+      assert.strictEqual(getCostForRegions(mapMini2, regionsDictMini2.O), 756)
+      assert.strictEqual(getCostForRegions(mapMini2, regionsDictMini2.X), 16)
+    })
     // it('divideTypeIntoRegions()', () => {
     //   assert.deepEqual(divideTypeIntoRegions(typeDictMini2.O), [typeDictMini2.O])
     //   assert.deepEqual(divideTypeIntoRegions(typeDictMini2.X), [
@@ -207,30 +217,28 @@ describe('day-12', async () => {
   })
 
   describe('part 1', () => {
-    // it('mini 1 data', () => {
-    //   const result = solvePt1(inputMini1)
-    //   const expected = 140
-    //   assert.strictEqual(result, expected)
-    // })
-    // it('mini 2 data', () => {
-    //   const result = solvePt1(inputMini2)
-    //   const expected = 772
-    //   assert.strictEqual(result, expected)
-    // })
-    // it('example data', () => {
-    //   const result = solvePt1(inputExample)
-    //   const expected = 1930
-    //   assert.strictEqual(result, expected)
-    // })
+    it('mini 1 data', () => {
+      const result = solvePt1(inputMini1)
+      const expected = 140
+      assert.strictEqual(result, expected)
+    })
+    it('mini 2 data', () => {
+      const result = solvePt1(inputMini2)
+      const expected = 772
+      assert.strictEqual(result, expected)
+    })
+    it('example data', () => {
+      const result = solvePt1(inputExample)
+      const expected = 1930
+      assert.strictEqual(result, expected)
+    })
+    it('real data', () => {
+      const result = solvePt1(inputReal)
+      consola.success(`=== Result pt. 1: ${result} ===`)
+      const expected = 1450816
+      assert.strictEqual(result, expected)
+    })
   })
-
-  //   // it('real data', () => {
-  //   //   const result = solvePt1(inputReal)
-  //   //   consola.success(`=== Result pt. 1: ${result} ===`)
-  //   //   const expected = undefined
-  //   //   assert.strictEqual(result, expected)
-  //   // })
-  // })
 
   // describe('part 2', () => {
   //   it('example data', () => {
