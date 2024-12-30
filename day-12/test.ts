@@ -1,11 +1,9 @@
 import { beforeEach, describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
-  divideTypeIntoRegions,
   getCostForRegions,
   getPlotsPerimeter,
   getRegionsByType,
-  getTypeDict,
   parseFile,
   solvePt1,
 } from './solution'
@@ -22,8 +20,6 @@ describe('day-12', async () => {
   let mapExample: string[][]
   let regionsDictMini1: Record<string, Coord[][]>
   let regionsDictMini2: Record<string, Coord[][]>
-  let typeDictMini1: TypeDict
-  let typeDictMini2: TypeDict
 
   beforeEach(() => {
     mapMini1 = [
@@ -113,63 +109,6 @@ describe('day-12', async () => {
       ],
       X: [[{ x: 1, y: 1 }], [{ x: 3, y: 1 }], [{ x: 1, y: 3 }], [{ x: 3, y: 3 }]],
     }
-    typeDictMini1 = {
-      A: [
-        { x: 0, y: 0 },
-        { x: 1, y: 0 },
-        { x: 2, y: 0 },
-        { x: 3, y: 0 },
-      ],
-      B: [
-        { x: 0, y: 1 },
-        { x: 1, y: 1 },
-        { x: 0, y: 2 },
-        { x: 1, y: 2 },
-      ],
-      C: [
-        { x: 2, y: 1 },
-        { x: 2, y: 2 },
-        { x: 3, y: 2 },
-        { x: 3, y: 3 },
-      ],
-      D: [{ x: 3, y: 1 }],
-      E: [
-        { x: 0, y: 3 },
-        { x: 1, y: 3 },
-        { x: 2, y: 3 },
-      ],
-    }
-    typeDictMini2 = {
-      O: [
-        { x: 0, y: 0 },
-        { x: 1, y: 0 },
-        { x: 2, y: 0 },
-        { x: 3, y: 0 },
-        { x: 4, y: 0 },
-        { x: 0, y: 1 },
-        { x: 2, y: 1 },
-        { x: 4, y: 1 },
-        { x: 0, y: 2 },
-        { x: 1, y: 2 },
-        { x: 2, y: 2 },
-        { x: 3, y: 2 },
-        { x: 4, y: 2 },
-        { x: 0, y: 3 },
-        { x: 2, y: 3 },
-        { x: 4, y: 3 },
-        { x: 0, y: 4 },
-        { x: 1, y: 4 },
-        { x: 2, y: 4 },
-        { x: 3, y: 4 },
-        { x: 4, y: 4 },
-      ],
-      X: [
-        { x: 1, y: 1 },
-        { x: 3, y: 1 },
-        { x: 1, y: 3 },
-        { x: 3, y: 3 },
-      ],
-    }
   })
 
   describe('helpers', () => {
@@ -177,12 +116,6 @@ describe('day-12', async () => {
       assert.deepEqual(parseFile(inputMini1), mapMini1)
       assert.deepEqual(parseFile(inputMini2), mapMini2)
       assert.deepEqual(parseFile(inputExample), mapExample)
-    })
-    it('getTypeDict()', () => {
-      assert.deepEqual(getTypeDict(mapMini1), typeDictMini1)
-      assert.deepEqual(getTypeDict(mapMini2), typeDictMini2)
-
-      assert.deepEqual(getTypeDict(mapMini2), typeDictMini2)
     })
     it('getPlotsPerimeter()', () => {
       assert.strictEqual(getPlotsPerimeter(mapMini1, { x: 0, y: 0 }), 3)
