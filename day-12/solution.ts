@@ -7,6 +7,7 @@ import {
   stringifyCoord,
   VECTOR_BY_DIRECTION,
 } from '../utils/coordinates'
+import { Queue } from '../utils/queue'
 
 export type TypeDict = Record<string, Coord[]>
 
@@ -88,6 +89,45 @@ export function divideTypeIntoRegions(typePoints: Coord[]): Coord[][] {
   //   regions.push([typePoint])
   // }
   // return regions
+}
+
+export function getRegionsByType(map: string[][]): Record<string, Coord[][]> {
+  const result: Record<string, Coord[][]> = {}
+  const visited: Record<string, true> = {}
+  for (let y = 0; y <= map.length - 1; y += 1) {
+    for (let x = 0; x <= map[0].length - 1; x += 1) {
+      const queue = new Queue<Coord>()
+      const type = map[y][x]
+      queue.add({ x, y })
+      const region: Coord[] = []
+      while (queue.length) {
+        const current = queue.get()
+        if (!current) break
+        const currentType = map[current.y][current.x]
+        const key = stringifyCoord(current)
+        if (key in visited || currentType !== type) continue
+        visited[key] = true
+        region.push(current)
+        const startVal: Coord[] = []
+        DIRECTIONS.forEach((dir) => {
+          const vector = VECTOR_BY_DIRECTION[dir]
+          const neighbor = addCoords(current, vector)
+          const sameType = map[neighbor.y]?.[neighbor.x] === type
+          if (!sameType) return
+          queue.add(neighbor)
+        }, startVal)
+      }
+      if (!(type in result)) result[type] = []
+      if (region.length) result[type].push(region)
+    }
+  }
+  console.log(result.A)
+  console.log(result.B)
+  console.log(result.C)
+  console.log(result.D)
+  console.log(result.E)
+
+  return result
 }
 
 export function getAllRegionCosts(map: string[][], regions: Coord[][]): number {

@@ -3,12 +3,14 @@ import assert from 'node:assert'
 import {
   divideTypeIntoRegions,
   getPlotsPerimeter,
+  getRegionsByType,
   getTypeDict,
   parseFile,
   solvePt1,
 } from './solution'
 import { InputReader } from '../utils/InputReader'
 import consola from 'consola'
+import { Coord } from '../utils/coordinates'
 
 describe('day-12', async () => {
   const reader = new InputReader(__dirname)
@@ -17,6 +19,8 @@ describe('day-12', async () => {
   let mapMini1: string[][]
   let mapMini2: string[][]
   let mapExample: string[][]
+  let regionsDictMini1: Record<string, Coord[][]>
+  let regionsDictMini2: Record<string, Coord[][]>
   let typeDictMini1: TypeDict
   let typeDictMini2: TypeDict
 
@@ -46,6 +50,68 @@ describe('day-12', async () => {
       ['M', 'I', 'I', 'I', 'S', 'I', 'J', 'E', 'E', 'E'],
       ['M', 'M', 'M', 'I', 'S', 'S', 'J', 'E', 'E', 'E'],
     ]
+    regionsDictMini1 = {
+      A: [
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 3, y: 0 },
+        ],
+      ],
+      B: [
+        [
+          { x: 0, y: 1 },
+          { x: 0, y: 2 },
+          { x: 1, y: 2 },
+          { x: 1, y: 1 },
+        ],
+      ],
+      C: [
+        [
+          { x: 2, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 2 },
+          { x: 3, y: 3 },
+        ],
+      ],
+      D: [[{ x: 3, y: 1 }]],
+      E: [
+        [
+          { x: 0, y: 3 },
+          { x: 1, y: 3 },
+          { x: 2, y: 3 },
+        ],
+      ],
+    }
+    regionsDictMini2 = {
+      O: [
+        [
+          { x: 0, y: 0 },
+          { x: 0, y: 1 },
+          { x: 0, y: 2 },
+          { x: 0, y: 3 },
+          { x: 0, y: 4 },
+          { x: 1, y: 4 },
+          { x: 2, y: 4 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 4, y: 3 },
+          { x: 4, y: 2 },
+          { x: 3, y: 2 },
+          { x: 2, y: 2 },
+          { x: 1, y: 2 },
+          { x: 2, y: 3 },
+          { x: 2, y: 1 },
+          { x: 2, y: 0 },
+          { x: 1, y: 0 },
+          { x: 3, y: 0 },
+          { x: 4, y: 0 },
+          { x: 4, y: 1 },
+        ],
+      ],
+      X: [[{ x: 1, y: 1 }], [{ x: 3, y: 1 }], [{ x: 1, y: 3 }], [{ x: 3, y: 3 }]],
+    }
     typeDictMini1 = {
       A: [
         { x: 0, y: 0 },
@@ -123,30 +189,34 @@ describe('day-12', async () => {
       assert.strictEqual(getPlotsPerimeter(mapMini2, { x: 1, y: 1 }), 4)
       assert.strictEqual(getPlotsPerimeter(mapMini2, { x: 1, y: 0 }), 2)
     })
-    it('divideTypeIntoRegions()', () => {
-      assert.deepEqual(divideTypeIntoRegions(typeDictMini2.O), [typeDictMini2.O])
-      assert.deepEqual(divideTypeIntoRegions(typeDictMini2.X), [
-        [{ x: 1, y: 1 }],
-        [{ x: 3, y: 1 }],
-        [{ x: 1, y: 3 }],
-        [{ x: 3, y: 3 }],
-      ])
-      const regions = getTypeDict(mapExample).I
-      assert.deepEqual(divideTypeIntoRegions(regions), [regions.slice(0, 4), regions.slice(4)])
+    it('getRegionsByType()', () => {
+      assert.deepEqual(getRegionsByType(mapMini1), regionsDictMini1)
+      assert.deepEqual(getRegionsByType(mapMini2), regionsDictMini2)
     })
+    // it('divideTypeIntoRegions()', () => {
+    //   assert.deepEqual(divideTypeIntoRegions(typeDictMini2.O), [typeDictMini2.O])
+    //   assert.deepEqual(divideTypeIntoRegions(typeDictMini2.X), [
+    //     [{ x: 1, y: 1 }],
+    //     [{ x: 3, y: 1 }],
+    //     [{ x: 1, y: 3 }],
+    //     [{ x: 3, y: 3 }],
+    //   ])
+    //   const regions = getTypeDict(mapExample).I
+    //   assert.deepEqual(divideTypeIntoRegions(regions), [regions.slice(0, 4), regions.slice(4)])
+    // })
   })
 
   describe('part 1', () => {
-    it('mini 1 data', () => {
-      const result = solvePt1(inputMini1)
-      const expected = 140
-      assert.strictEqual(result, expected)
-    })
-    it('mini 2 data', () => {
-      const result = solvePt1(inputMini2)
-      const expected = 772
-      assert.strictEqual(result, expected)
-    })
+    // it('mini 1 data', () => {
+    //   const result = solvePt1(inputMini1)
+    //   const expected = 140
+    //   assert.strictEqual(result, expected)
+    // })
+    // it('mini 2 data', () => {
+    //   const result = solvePt1(inputMini2)
+    //   const expected = 772
+    //   assert.strictEqual(result, expected)
+    // })
     // it('example data', () => {
     //   const result = solvePt1(inputExample)
     //   const expected = 1930

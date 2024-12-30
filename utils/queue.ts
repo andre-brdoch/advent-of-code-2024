@@ -43,3 +43,19 @@ export class PriorityQueue<T> {
     throw new Error(`Unsupported sorting: ${this.sorting}`)
   }
 }
+
+export class Queue<T> {
+  private values: T[] = []
+
+  public add(v: T) {
+    this.values.push(v)
+  }
+
+  public get(): T | null {
+    return this.values.pop() ?? null
+  }
+
+  public get length() {
+    return this.values.length
+  }
+}
